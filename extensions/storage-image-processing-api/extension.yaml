@@ -1,0 +1,128 @@
+name: storage-image-processing-api
+version: 0.0.0
+specVersion: v1beta
+
+displayName: Image Processing API
+description: TODO
+
+license: Apache-2.0
+
+sourceUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions/storage-image-processing-api
+releaseNotesUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions/storage-image-processing-api/CHANGELOG.md
+
+author:
+  authorName: Invertase
+  url: https://invertase.io
+
+contributors:
+  - authorName: Invertase
+    email: oss@invertase.io
+    url: https://github.com/invertase
+
+billingRequired: true
+
+apis:
+  - apiName: storage-component.googleapis.com
+    reason: Needed to use Cloud Storage
+
+roles:
+  - role: storage.admin
+    reason: Allows the extension to store resized images in Cloud Storage
+
+resources:
+  - name: api
+    type: firebaseextensions.v1beta.function
+    description: >-
+      TODO
+    properties:
+      location: ${param:LOCATION}
+      runtime: nodejs14
+      availableMemoryMb: 1024
+
+params:
+  - param: LOCATION
+    label: Cloud Functions location
+    description: >-
+      Where do you want to deploy the functions created for this extension?
+      You usually want a location close to your Storage bucket. For help selecting a
+      location, refer to the [location selection
+      guide](https://firebase.google.com/docs/functions/locations).
+    type: select
+    options:
+      - label: Iowa (us-central1)
+        value: us-central1
+      - label: South Carolina (us-east1)
+        value: us-east1
+      - label: Northern Virginia (us-east4)
+        value: us-east4
+      - label: Los Angeles (us-west2)
+        value: us-west2
+      - label: Salt Lake City (us-west3)
+        value: us-west3
+      - label: Las Vegas (us-west4)
+        value: us-west4
+      - label: Warsaw (europe-central2)
+        value: europe-central2
+      - label: Belgium (europe-west1)
+        value: europe-west1
+      - label: London (europe-west2)
+        value: europe-west2
+      - label: Frankfurt (europe-west3)
+        value: europe-west3
+      - label: Zurich (europe-west6)
+        value: europe-west6
+      - label: Hong Kong (asia-east2)
+        value: asia-east2
+      - label: Tokyo (asia-northeast1)
+        value: asia-northeast1
+      - label: Osaka (asia-northeast2)
+        value: asia-northeast2
+      - label: Seoul (asia-northeast3)
+        value: asia-northeast3
+      - label: Mumbai (asia-south1)
+        value: asia-south1
+      - label: Jakarta (asia-southeast2)
+        value: asia-southeast2
+      - label: Montreal (northamerica-northeast1)
+        value: northamerica-northeast1
+      - label: Sao Paulo (southamerica-east1)
+        value: southamerica-east1
+      - label: Sydney (australia-southeast1)
+        value: australia-southeast1
+    default: us-central1
+    required: true
+    immutable: true
+
+  - param: CLOUD_STORAGE_BUCKET
+    label: Cloud Storage bucket for images
+    description: >
+      The Cloud Storage bucket where images that are to be processed are located.
+      API requests with input urls or paths that are not inside this bucket will be
+      dropped.
+    type: string
+    example: my-project-12345.appspot.com
+    validationRegex: ^([0-9a-z_.-]*)$
+    validationErrorMessage: Invalid storage bucket
+    default: ${STORAGE_BUCKET}
+    required: true
+
+  - param: CORS_ORIGIN_ALLOW_LIST
+    label: Allowed CORS origins.
+    description: >
+      A comma delimited value of allowed CORS origins. Use the default of '*'
+      to allow all origins. This is useful to lockdown your API and only allow
+      your own website to embed the images directly. Note this will not
+      prevent non-browser requests from accessing your API.
+    type: string
+    example: '*.example.com,invertase.io'
+    default: '*'
+    required: true
+
+  - param: CACHED_IMAGES_PATH
+    label: Cloud Storage path where processed images will be cached.
+    description: >
+      A relative path in which to store cached images. For example,
+      `cache`. If you prefer to store resized images at the default
+      location, leave this field empty.
+    example: processed_images_cache
+    required: false

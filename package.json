@@ -18,16 +18,14 @@
     "@types/jest": "^26.0.23"
   },
   "scripts": {
-    "prepare": "yarn run lerna:link && lerna run prepare --parallel",
+    "prepare": "npm run lerna:bootstrap && npm run lerna:link",
     "test": "lerna run test",
-    "build:all:clean": "lerna run build:clean",
-    "build:all:build": "lerna run build",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,mdx}\"",
     "check:linting": "eslint . --max-warnings=0",
     "check:formatting": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md,mdx}\"",
     "check:typescript": "lerna run check:typescript",
     "check:spelling": "spellchecker --quiet --files=\"docs/**/*.{md,mdx}\" --dictionaries=\"./dictionary.js\" --reports=\"spelling.json\" --plugins spell indefinite-article repeated-words syntax-mentions syntax-urls frontmatter",
-    "lerna:bootstrap": "lerna bootstrap",
+    "lerna:bootstrap": "lerna bootstrap --no-ci",
     "lerna:link": "lerna link",
     "lerna:clean": "lerna clean"
   }
