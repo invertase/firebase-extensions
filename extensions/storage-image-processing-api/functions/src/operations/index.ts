@@ -33,12 +33,14 @@ import { operationExtract } from './extract';
 import { operationExtend } from './extend';
 import { operationBlur } from './blur';
 import { operationTrim } from './trim';
+import { operationRotate } from './rotate';
 
 export * from './resize';
 export * from './extract';
 export * from './extend';
 export * from './blur';
 export * from './trim';
+export * from './rotate';
 
 const builders: { [key: string]: OperationBuilder } = {
   resize: operationResize,
@@ -47,6 +49,7 @@ const builders: { [key: string]: OperationBuilder } = {
   extend: operationExtend,
   blur: operationBlur,
   trim: operationTrim,
+  rotate: operationRotate,
 };
 
 export function builderForOperation(operation: Operation): OperationBuilder {
