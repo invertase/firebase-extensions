@@ -19,11 +19,6 @@ import sharp from 'sharp';
 import superstruct from 'superstruct';
 
 import { omitKey, omitUndefinedValues } from '../utils';
-
-import { operationResize } from './resize';
-import { operationExtract } from './extract';
-import { operationExtend } from './extend';
-import { operationBlur } from './blur';
 import {
   ActionBuilder,
   BuiltOperation,
@@ -33,10 +28,17 @@ import {
   ValidatedOperation,
 } from '../types';
 
+import { operationResize } from './resize';
+import { operationExtract } from './extract';
+import { operationExtend } from './extend';
+import { operationBlur } from './blur';
+import { operationTrim } from './trim';
+
 export * from './resize';
 export * from './extract';
 export * from './extend';
 export * from './blur';
+export * from './trim';
 
 const builders: { [key: string]: OperationBuilder } = {
   resize: operationResize,
@@ -44,6 +46,7 @@ const builders: { [key: string]: OperationBuilder } = {
   crop: operationExtract, // alias
   extend: operationExtend,
   blur: operationBlur,
+  trim: operationTrim,
 };
 
 export function builderForOperation(operation: Operation): OperationBuilder {
