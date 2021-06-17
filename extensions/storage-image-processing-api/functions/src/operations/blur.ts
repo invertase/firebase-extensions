@@ -52,10 +52,11 @@ export const operationBlur: OperationBuilder = {
    * for blur..
    */
   build(operation) {
+    const options = operation.options as OperationBlur;
     return [
       {
         method: name,
-        arguments: operation.options.sigma ? [operation.options.sigma] : [],
+        arguments: options.sigma ? [options.sigma] : [],
       },
     ];
   },
