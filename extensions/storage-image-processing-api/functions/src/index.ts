@@ -124,6 +124,9 @@ app.use(
   }),
 );
 
+// Express requires the function to have 4 arguments for a handler
+// to be treated as an error handler.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use(function (error, req, res, next) {
   if (error instanceof StructError || error instanceof AssertionError) {
     functions.logger.warn(error.message, {
