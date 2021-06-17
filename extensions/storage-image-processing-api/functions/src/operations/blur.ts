@@ -49,7 +49,7 @@ export const operationBlur: OperationBuilder = {
 
   /**
    * Custom action builder since Sharp does not accept an object of options
-   * for blur..
+   * for blur.
    */
   build(operation) {
     const options = operation.options as OperationBlur;

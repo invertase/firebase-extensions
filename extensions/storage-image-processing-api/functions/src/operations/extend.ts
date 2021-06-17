@@ -72,7 +72,7 @@ const struct = superstruct.object({
   ),
 
   /**
-   * Background color as a string to extend with..
+   * Background color as a string to extend with.
    * See the [color npm library](https://www.npmjs.com/package/color) for supported string formats.
    * Defaults to black without transparency.
    */
