@@ -17,6 +17,12 @@
 import * as superstruct from 'superstruct';
 import express from 'express';
 
+/**
+ * Keys in sharp file metadata that contain buffers. Used for
+ * excluding from logging.
+ */
+export const fileMetadataBufferKeys = ['xmp', 'iptc', 'exif', 'icc'];
+
 export function coerceStringToInt<T>(
   struct: superstruct.Struct<T>,
 ): superstruct.Struct<T> {

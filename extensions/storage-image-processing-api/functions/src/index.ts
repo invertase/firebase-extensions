@@ -27,7 +27,12 @@ import express from 'express';
 import helmet from 'helmet';
 import * as functions from 'firebase-functions';
 import { StructError } from 'superstruct';
-import { expressAsyncHandlerWrapper, hasOwnProperty, omitKeys } from './utils';
+import {
+  expressAsyncHandlerWrapper,
+  fileMetadataBufferKeys,
+  hasOwnProperty,
+  omitKeys,
+} from './utils';
 import { ValidatedOperation } from './types';
 
 const app = express();
@@ -77,7 +82,7 @@ app.use(
       }
       return res.json({
         operations: validatedOperations,
-        metadata: omitKeys(fileMetadata, ['xmp', 'iptc', 'exif', 'icc']),
+        metadata: omitKeys(fileMetadata, fileMetadataBufferKeys),
       });
     }
 
