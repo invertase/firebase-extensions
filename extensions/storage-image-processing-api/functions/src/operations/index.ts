@@ -39,6 +39,7 @@ import { operationComposite } from './composite';
 import { operationFlip } from './flip';
 import { operationFlop } from './flop';
 import { operationSharpen } from './sharpen';
+import { operationMedian } from './median';
 
 export * from './resize';
 export * from './extract';
@@ -51,6 +52,7 @@ export * from './composite';
 export * from './flip';
 export * from './flop';
 export * from './sharpen';
+export * from './median';
 
 const builders: { [key: string]: OperationBuilder } = {
   resize: operationResize,
@@ -65,6 +67,7 @@ const builders: { [key: string]: OperationBuilder } = {
   flip: operationFlip,
   flop: operationFlop,
   sharpen: operationSharpen,
+  median: operationMedian,
 };
 
 export function builderForOperation(operation: Operation): OperationBuilder {
