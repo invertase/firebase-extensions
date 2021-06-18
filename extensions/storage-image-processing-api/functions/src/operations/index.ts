@@ -38,6 +38,7 @@ import { operationText } from './text';
 import { operationComposite } from './composite';
 import { operationFlip } from './flip';
 import { operationFlop } from './flop';
+import { operationSharpen } from './sharpen';
 
 export * from './resize';
 export * from './extract';
@@ -49,6 +50,7 @@ export * from './text';
 export * from './composite';
 export * from './flip';
 export * from './flop';
+export * from './sharpen';
 
 const builders: { [key: string]: OperationBuilder } = {
   resize: operationResize,
@@ -62,6 +64,7 @@ const builders: { [key: string]: OperationBuilder } = {
   composite: operationComposite,
   flip: operationFlip,
   flop: operationFlop,
+  sharpen: operationSharpen,
 };
 
 export function builderForOperation(operation: Operation): OperationBuilder {
