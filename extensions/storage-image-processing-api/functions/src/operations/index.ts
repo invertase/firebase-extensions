@@ -36,7 +36,7 @@ import { operationTrim } from './trim';
 import { operationRotate } from './rotate';
 import { operationText } from './text';
 import { operationComposite } from './composite';
-import a2a from 'a2a';
+import { operationFlip } from './flip';
 
 export * from './resize';
 export * from './extract';
@@ -46,6 +46,7 @@ export * from './trim';
 export * from './rotate';
 export * from './text';
 export * from './composite';
+export * from './flip';
 
 const builders: { [key: string]: OperationBuilder } = {
   resize: operationResize,
@@ -57,6 +58,7 @@ const builders: { [key: string]: OperationBuilder } = {
   rotate: operationRotate,
   text: operationText,
   composite: operationComposite,
+  flip: operationFlip,
 };
 
 export function builderForOperation(operation: Operation): OperationBuilder {
