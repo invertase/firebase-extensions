@@ -124,7 +124,7 @@ export function asValidatedOperations(input: string): ValidatedOperation[] {
 
   for (let i = 0; i < operationSegments.length; i++) {
     const source = operationSegments[i].trim();
-    const [operation, ...optionSegments] = source.split(',');
+    const [operation, ...optionSegments] = source.split('~');
 
     // Parse raw options.
     const rawOptions: Operation = {
