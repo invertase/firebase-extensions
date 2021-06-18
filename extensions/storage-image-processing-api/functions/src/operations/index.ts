@@ -41,6 +41,7 @@ import { operationFlop } from './flop';
 import { operationSharpen } from './sharpen';
 import { operationMedian } from './median';
 import { operationFlatten } from './flatten';
+import { operationGamma } from './gamma';
 
 export * from './resize';
 export * from './extract';
@@ -55,6 +56,7 @@ export * from './flop';
 export * from './sharpen';
 export * from './median';
 export * from './flatten';
+export * from './gamma';
 
 const builders: { [key: string]: OperationBuilder } = {
   resize: operationResize,
@@ -70,6 +72,7 @@ const builders: { [key: string]: OperationBuilder } = {
   sharpen: operationSharpen,
   median: operationMedian,
   flatten: operationFlatten,
+  gamma: operationGamma,
 };
 
 export function builderForOperation(operation: Operation): OperationBuilder {
