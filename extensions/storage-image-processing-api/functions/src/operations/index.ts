@@ -42,6 +42,7 @@ import { operationSharpen } from './sharpen';
 import { operationMedian } from './median';
 import { operationFlatten } from './flatten';
 import { operationGamma } from './gamma';
+import { operationNegate } from './negate';
 
 export * from './resize';
 export * from './extract';
@@ -57,6 +58,7 @@ export * from './sharpen';
 export * from './median';
 export * from './flatten';
 export * from './gamma';
+export * from './negate';
 
 const builders: { [key: string]: OperationBuilder } = {
   resize: operationResize,
@@ -73,6 +75,7 @@ const builders: { [key: string]: OperationBuilder } = {
   median: operationMedian,
   flatten: operationFlatten,
   gamma: operationGamma,
+  negate: operationNegate,
 };
 
 export function builderForOperation(operation: Operation): OperationBuilder {
