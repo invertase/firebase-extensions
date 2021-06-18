@@ -19,7 +19,7 @@ import sharp from 'sharp';
 export type ActionBuilder = (
   validatedOperation: ValidatedOperation,
   imageMetadata: sharp.Metadata,
-) => OperationAction[];
+) => OperationAction[] | Promise<OperationAction[]>;
 
 export type OperationBuilder = {
   name: string;

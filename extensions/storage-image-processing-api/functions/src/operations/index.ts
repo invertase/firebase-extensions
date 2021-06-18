@@ -35,6 +35,7 @@ import { operationBlur } from './blur';
 import { operationTrim } from './trim';
 import { operationRotate } from './rotate';
 import { operationText } from './text';
+import { operationComposite } from './composite';
 
 export * from './resize';
 export * from './extract';
@@ -43,6 +44,7 @@ export * from './blur';
 export * from './trim';
 export * from './rotate';
 export * from './text';
+export * from './composite';
 
 const builders: { [key: string]: OperationBuilder } = {
   resize: operationResize,
@@ -53,6 +55,7 @@ const builders: { [key: string]: OperationBuilder } = {
   trim: operationTrim,
   rotate: operationRotate,
   text: operationText,
+  composite: operationComposite,
 };
 
 export function builderForOperation(operation: Operation): OperationBuilder {
@@ -94,7 +97,6 @@ export const defaultActionsBuilder: ActionBuilder = (
 
 export function asValidatedOperations(input: string): ValidatedOperation[] {
   const output: ValidatedOperation[] = [];
-
   const operationSegments = input.split('/');
 
   for (let i = 0; i < operationSegments.length; i++) {
@@ -112,7 +114,7 @@ export function asValidatedOperations(input: string): ValidatedOperation[] {
         // An option without a value is treated as a flag.
         rawOptions[key] = 'true';
       } else {
-        rawOptions[key] = value;
+        rawOptions[key] = decodeURIComponent(value);
       }
     }
 
@@ -126,7 +128,7 @@ export function asValidatedOperations(input: string): ValidatedOperation[] {
         options,
       });
     } catch (error) {
-      error.message = `Bad Request: Image operation '${operation}' at position ${i}: ${error.message}`;
+      error.message = `Options for the '${operation}' operation (at position ${i}) are invalid: ${error.message}`;
       throw error;
     }
   }
@@ -134,16 +136,19 @@ export function asValidatedOperations(input: string): ValidatedOperation[] {
   return output;
 }
 
-export function asBuiltOperations(
+export async function asBuiltOperations(
   validatedOperations: ValidatedOperation[],
   fileMetadata: sharp.Metadata,
-): BuiltOperation[] {
+): Promise<BuiltOperation[]> {
   const output: BuiltOperation[] = [];
   for (let i = 0; i < validatedOperations.length; i++) {
     const validatedOperation = validatedOperations[i];
     const actionBuilder =
       builderForOperation(validatedOperation)?.build || defaultActionsBuilder;
-    const builtActions = actionBuilder(validatedOperation, fileMetadata);
+    let builtActions = actionBuilder(validatedOperation, fileMetadata);
+    if (builtActions instanceof Promise) {
+      builtActions = await builtActions;
+    }
     output.push({
       ...validatedOperation,
       actions: builtActions,

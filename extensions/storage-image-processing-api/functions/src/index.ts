@@ -49,7 +49,7 @@ app.use(
 app.use(
   '/process/**',
   expressAsyncHandlerWrapper(async (req, res, next) => {
-    const operationsString = req.params[0];
+    const operationsString = req.baseUrl.replace('/process/', '');
     const queryParams = req.query;
 
     // 404 if no operations
@@ -65,17 +65,22 @@ app.use(
     const fileName = path.basename(queryParams.input as string);
 
     // TODO replace this and actually get file from GCP storage (queryParams.input);
+    // TODO check file actually exists
+    // TODO if input is a GCS bucket path then check bucket object is actually public
+    // TODO if input is http url, check it's actually a GCS getDownloadUrl
     const fileInputBuffer = readFileSync(
       `${process.cwd()}${queryParams.input}`,
     );
 
+    // TODO this should probably be updated after every operation action is applied
+    // TODO since each of the actions causes metadata to change.
     const [metadataError, fileMetadata] = await a2a(
       sharp.default(fileInputBuffer).metadata(),
     );
     if (metadataError) {
       return next(metadataError);
     }
-    const builtOperations = asBuiltOperations(
+    const builtOperations = await asBuiltOperations(
       validatedOperations,
       fileMetadata,
     );
@@ -117,7 +122,7 @@ app.use(
       headers[`ext-output-info-${entry[0].toLowerCase()}`] = `${entry[1]}`;
     });
 
-    // TODO attach headers using fileMetadata
+    // TODO attach headers using final fileMetadata
 
     res.writeHead(200, headers);
     res.end(data);

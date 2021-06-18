@@ -20,6 +20,7 @@ import * as superstruct from 'superstruct';
 import * as utils from '../utils';
 import { OperationBuilder } from '../types';
 import { imageBlend, imageGravity } from './types';
+import { AssertionError } from 'assert';
 
 /**
  * The user visible name of this operation.
@@ -128,18 +129,13 @@ const struct = superstruct.object({
 
   /**
    * Zero-indexed offset in pixels from the top edge.
-   * Defaults to 0.
    */
-  top: superstruct.defaulted(utils.coerceStringToInt(superstruct.integer()), 0),
+  top: superstruct.optional(utils.coerceStringToInt(superstruct.integer())),
 
   /**
    * Zero-indexed offset in pixels from the left edge.
-   * Defaults to 0.
    */
-  left: superstruct.defaulted(
-    utils.coerceStringToInt(superstruct.integer()),
-    0,
-  ),
+  left: superstruct.optional(utils.coerceStringToInt(superstruct.integer())),
 });
 
 export type OperationText = superstruct.Infer<typeof struct>;
@@ -156,6 +152,19 @@ export const operationText: OperationBuilder = {
     const textSvg = textToSvg(options.value, {
       ...options,
     });
+
+    if (options.left && options.top == undefined) {
+      throw new AssertionError({
+        message: `Options for the '${operation.operation}' operation are invalid: if 'left' is specified then 'top' must also be provided.`,
+      });
+    }
+
+    if (options.top && options.left == undefined) {
+      throw new AssertionError({
+        message: `Options for the '${operation.operation}' operation are invalid: if 'top' is specified then 'left' must also be provided.`,
+      });
+    }
+
     return [
       {
         method: 'composite',
