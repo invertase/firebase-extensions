@@ -18,7 +18,8 @@
     "firebase-functions": "^3.14.1",
     "helmet": "^4.6.0",
     "sharp": "0.28.3",
-    "superstruct": "^0.15.2"
+    "superstruct": "^0.15.2",
+    "text-svg": "^1.0.3"
   },
   "nodemonConfig": {
     "watch": [

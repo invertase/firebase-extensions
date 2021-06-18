@@ -16,6 +16,7 @@
 
 import * as superstruct from 'superstruct';
 import * as utils from '../utils';
+import { imageGravity } from './types';
 import { OperationBuilder } from '../types';
 
 /**
@@ -70,23 +71,6 @@ export const operationResizePosition = [
   'left top',
 ] as const;
 export type OperationResizePosition = typeof operationResizePosition;
-
-/**
- * Weighting to apply when resizing and using a contain/cover fit.
- */
-export const operationResizeGravity = [
-  'center',
-  'centre',
-  'north',
-  'east',
-  'south',
-  'west',
-  'northeast',
-  'southeast',
-  'southwest',
-  'northwest',
-] as const;
-export type OperationResizeGravity = typeof operationResizeGravity;
 
 /**
  * The kernel to use for image reduction.
@@ -163,7 +147,7 @@ const struct = superstruct.object({
   position: superstruct.optional(
     superstruct.enums([
       ...operationResizePosition,
-      ...operationResizeGravity,
+      ...imageGravity,
       ...operationResizeStrategy,
     ]),
   ),
