@@ -36,6 +36,7 @@ import { operationTrim } from './trim';
 import { operationRotate } from './rotate';
 import { operationText } from './text';
 import { operationComposite } from './composite';
+import a2a from 'a2a';
 
 export * from './resize';
 export * from './extract';
@@ -136,34 +137,34 @@ export function asValidatedOperations(input: string): ValidatedOperation[] {
   return output;
 }
 
-export async function asBuiltOperations(
-  validatedOperations: ValidatedOperation[],
+export async function asBuiltOperation(
+  validatedOperation: ValidatedOperation,
   fileMetadata: sharp.Metadata,
-): Promise<BuiltOperation[]> {
-  const output: BuiltOperation[] = [];
-  for (let i = 0; i < validatedOperations.length; i++) {
-    const validatedOperation = validatedOperations[i];
-    const actionBuilder =
-      builderForOperation(validatedOperation)?.build || defaultActionsBuilder;
-    let builtActions = actionBuilder(validatedOperation, fileMetadata);
-    if (builtActions instanceof Promise) {
-      builtActions = await builtActions;
-    }
-    output.push({
-      ...validatedOperation,
-      actions: builtActions,
-    });
+): Promise<BuiltOperation> {
+  const actionBuilder =
+    builderForOperation(validatedOperation)?.build || defaultActionsBuilder;
+  let builtActions = actionBuilder(validatedOperation, fileMetadata);
+  if (builtActions instanceof Promise) {
+    builtActions = await builtActions;
   }
-  return output;
+  return {
+    ...validatedOperation,
+    actions: builtActions,
+  };
 }
 
-export async function applyBuiltOperation(
+export async function applyValidatedOperation(
   instance: sharp.Sharp,
-  operation: BuiltOperation,
+  validatedOperation: ValidatedOperation,
 ): Promise<sharp.Sharp> {
   let currentInstance = instance;
-  for (let i = 0; i < operation.actions.length; i++) {
-    const action = operation.actions[i];
+  const currentMetadata = await currentInstance.metadata();
+  const builtOperation = await asBuiltOperation(
+    validatedOperation,
+    currentMetadata,
+  );
+  for (let i = 0; i < builtOperation.actions.length; i++) {
+    const action = builtOperation.actions[i];
     currentInstance = (
       currentInstance[action.method] as (...args: unknown[]) => sharp.Sharp
     )(...action.arguments);

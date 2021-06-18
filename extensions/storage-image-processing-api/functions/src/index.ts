@@ -20,18 +20,14 @@ import { AssertionError } from 'assert';
 
 import a2a from 'a2a';
 import * as sharp from 'sharp';
-import {
-  applyBuiltOperation,
-  asBuiltOperations,
-  asValidatedOperations,
-} from './operations';
+import { applyValidatedOperation, asValidatedOperations } from './operations';
 
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import * as functions from 'firebase-functions';
 import { StructError } from 'superstruct';
-import { expressAsyncHandlerWrapper, hasOwnProperty } from './utils';
+import { expressAsyncHandlerWrapper, hasOwnProperty, omitKeys } from './utils';
 import { ValidatedOperation } from './types';
 
 const app = express();
@@ -72,28 +68,24 @@ app.use(
       `${process.cwd()}${queryParams.input}`,
     );
 
-    // TODO this should probably be updated after every operation action is applied
-    // TODO since each of the actions causes metadata to change.
-    const [metadataError, fileMetadata] = await a2a(
-      sharp.default(fileInputBuffer).metadata(),
-    );
-    if (metadataError) {
-      return next(metadataError);
-    }
-    const builtOperations = await asBuiltOperations(
-      validatedOperations,
-      fileMetadata,
-    );
-
     if (hasOwnProperty(queryParams, 'debug')) {
-      return res.json(builtOperations);
+      const [metadataError, fileMetadata] = await a2a(
+        sharp.default(fileInputBuffer).metadata(),
+      );
+      if (metadataError) {
+        return next(metadataError);
+      }
+      return res.json({
+        operations: validatedOperations,
+        metadata: omitKeys(fileMetadata, ['xmp', 'iptc', 'exif', 'icc']),
+      });
     }
 
     // Apply operations.
     let instance = sharp.default(fileInputBuffer);
-    for (let i = 0; i < builtOperations.length; i++) {
-      const builtOperation = builtOperations[i];
-      instance = await applyBuiltOperation(instance, builtOperation);
+    for (let i = 0; i < validatedOperations.length; i++) {
+      const validatedOperation = validatedOperations[i];
+      instance = await applyValidatedOperation(instance, validatedOperation);
     }
 
     // TODO output option handling, e.g. png, quality etc
@@ -109,7 +101,7 @@ app.use(
 
     functions.logger.debug(
       `Processed a request for image '${fileName}'.`,
-      builtOperations,
+      validatedOperations,
     );
 
     const headers = {

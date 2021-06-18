@@ -64,9 +64,16 @@ export function omitUndefinedValues<T>(object: T): T {
   return object;
 }
 
+export function omitKeys<T>(object: T, keys: string[]): T {
+  const output = Object.assign({}, object);
+  for (let i = 0; i < keys.length; i++) {
+    delete output[keys[i]];
+  }
+  return output;
+}
+
 export function omitKey<T>(object: T, key: string): T {
-  delete object[key];
-  return object;
+  return omitKeys<T>(object, [key]);
 }
 
 export function hasOwnProperty(target: unknown, property: string): boolean {
