@@ -40,6 +40,7 @@ import { operationFlip } from './flip';
 import { operationFlop } from './flop';
 import { operationSharpen } from './sharpen';
 import { operationMedian } from './median';
+import { operationFlatten } from './flatten';
 
 export * from './resize';
 export * from './extract';
@@ -53,11 +54,11 @@ export * from './flip';
 export * from './flop';
 export * from './sharpen';
 export * from './median';
+export * from './flatten';
 
 const builders: { [key: string]: OperationBuilder } = {
   resize: operationResize,
   extract: operationExtract,
-  crop: operationExtract, // alias
   extend: operationExtend,
   blur: operationBlur,
   trim: operationTrim,
@@ -68,6 +69,7 @@ const builders: { [key: string]: OperationBuilder } = {
   flop: operationFlop,
   sharpen: operationSharpen,
   median: operationMedian,
+  flatten: operationFlatten,
 };
 
 export function builderForOperation(operation: Operation): OperationBuilder {
