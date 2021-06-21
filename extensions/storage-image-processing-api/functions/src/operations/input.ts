@@ -25,23 +25,15 @@ import { AssertionError } from 'assert';
 const name = 'input';
 
 /**
- * Use a path to a file in a GCS bucket as an input. This file
+ * a) use a path to a file in a GCS bucket as an input. This file
  * must be publicly readable for this to work.
- */
-const structFromGcsFile = superstruct.object({
-  operation: superstruct.literal(name),
-  type: superstruct.literal('gcs-file'),
-  path: superstruct.pattern(superstruct.string(), /(\/[^\s\/,]+)+/),
-});
-
-/**
- * Use a GCS download url as an input. e.g., from `getDownloadUrl` on the Firebase
+ * b) use a GCS download url as an input. e.g., from `getDownloadUrl` on the Firebase
  * client SDKS. This URL must be to a file in the same storage bucket as defined in options.
  */
-const structFromGcsUrl = superstruct.object({
+const structFromGcs = superstruct.object({
   operation: superstruct.literal(name),
-  type: superstruct.literal('gcs-url'),
-  url: superstruct.string(),
+  type: superstruct.literal('gcs'),
+  source: superstruct.string(),
 });
 
 /**
@@ -113,8 +105,7 @@ const structCreateNewImage = superstruct.object({
  * An operation that defines specifying an input image that all future operations will be applied to.
  */
 const struct = superstruct.union([
-  structFromGcsFile,
-  structFromGcsUrl,
+  structFromGcs,
   structFromUrl,
   structCreateNewImage,
 ]);
@@ -128,10 +119,8 @@ export const operationInput: OperationBuilder = {
     switch (rawOptions.type) {
       case 'create':
         return structCreateNewImage.create(rawOptions);
-      case 'gcs-file':
-        return structFromGcsFile.create(rawOptions);
-      case 'gcs-url':
-        return structFromGcsUrl.create(rawOptions);
+      case 'gcs':
+        return structFromGcs.create(rawOptions);
       case 'url':
         return structFromUrl.create(rawOptions);
     }
@@ -145,26 +134,13 @@ export const operationInput: OperationBuilder = {
     switch (options.type) {
       case 'create':
         return newImageOptions(options);
-      case 'gcs-file':
+      case 'gcs':
         return await fetchGcsFile(options);
-      case 'gcs-url':
-        return await fetchGcsUrl(options);
       case 'url':
         return await fetchUrl(options);
     }
   },
 };
-
-async function fetchGcsUrl(
-  options: OperationInput,
-): Promise<OperationAction[]> {
-  if (options.type !== 'gcs-url') return;
-  // TODO validations:
-  //  - is url
-  //  - bucket in url is same as options
-  //  - fetch meta and check is image
-  return fetchUrl(options);
-}
 
 async function fetchUrl(options: OperationInput): Promise<OperationAction[]> {
   if (options.type !== 'url') return;
@@ -181,10 +157,16 @@ async function fetchUrl(options: OperationInput): Promise<OperationAction[]> {
 async function fetchGcsFile(
   options: OperationInput,
 ): Promise<OperationAction[]> {
-  if (options.type !== 'gcs-file') return;
-  // TODO validations:
-  //  - check image is public
+  if (options.type !== 'gcs') return;
+  // TODO validations if PATH:
+  //  - check file is public
   //  - fetch meta and check is image
+
+  // TODO validations if URL:
+  //  - is url
+  //  - bucket in url is same as options
+  //  - fetch meta and check is image
+  // TODO if url and validations ok then can just return `fetchUrl(options.source)`
   return [
     {
       method: 'constructor',
