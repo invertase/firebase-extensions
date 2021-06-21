@@ -18,6 +18,8 @@ import * as superstruct from 'superstruct';
 import * as utils from '../utils';
 import { Operation, OperationAction, OperationBuilder } from '../types';
 import { AssertionError } from 'assert';
+import { fetchImageBufferFromUrl } from '../utils';
+import { extensionConfiguration } from '../config';
 
 /**
  * The user visible name of this operation.
@@ -144,12 +146,15 @@ export const operationInput: OperationBuilder = {
 
 async function fetchUrl(options: OperationInput): Promise<OperationAction[]> {
   if (options.type !== 'url') return;
-  // TODO validations:
-  //  - is url
+  if (!options.url.startsWith('http')) {
+    throw new AssertionError({
+      message: `'${options.url}' does not appear to be a valid http url.`,
+    });
+  }
   return [
     {
       method: 'constructor',
-      arguments: [Buffer.from('')],
+      arguments: [await fetchImageBufferFromUrl(options.url)],
     },
   ];
 }
@@ -158,15 +163,32 @@ async function fetchGcsFile(
   options: OperationInput,
 ): Promise<OperationAction[]> {
   if (options.type !== 'gcs') return;
+  if (options.source.startsWith('https')) {
+    if (
+      // default bucket
+      !options.source.startsWith(
+        `https://firebasestorage.googleapis.com/v0/b/${extensionConfiguration.bucket}.appspot.com/o`,
+      ) &&
+      // secondary buckets
+      !options.source.startsWith(
+        `https://firebasestorage.googleapis.com/v0/b/${extensionConfiguration.bucket}/o`,
+      )
+    ) {
+      throw new AssertionError({
+        message: `Input 'source' does not appear to be a valid storage download url or is not specifically for the bucket '${extensionConfiguration.bucket}'`,
+      });
+    }
+    return fetchUrl({ ...options, url: options.source, type: 'url' });
+  }
+
+  if (!options.source.startsWith('/')) {
+    // bad
+  }
+
   // TODO validations if PATH:
   //  - check file is public
   //  - fetch meta and check is image
 
-  // TODO validations if URL:
-  //  - is url
-  //  - bucket in url is same as options
-  //  - fetch meta and check is image
-  // TODO if url and validations ok then can just return `fetchUrl(options.source)`
   return [
     {
       method: 'constructor',

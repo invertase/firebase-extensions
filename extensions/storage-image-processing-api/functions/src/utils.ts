@@ -15,7 +15,12 @@
  */
 
 import * as superstruct from 'superstruct';
+import * as axios from 'axios';
+import * as fileType from 'file-type';
+
 import express from 'express';
+import a2a from 'a2a';
+import { AssertionError } from 'assert';
 
 /**
  * Keys in sharp file metadata that contain buffers. Used for
@@ -108,4 +113,38 @@ export function expressAsyncHandlerWrapper(
   ) => {
     return Promise.resolve(handler(req, res, next)).catch(next);
   };
+}
+
+export async function isImageFileType(buffer: Buffer): Promise<boolean> {
+  const type = await fileType.fromBuffer(buffer);
+  if (!type) return false;
+  return type.mime.startsWith('image/');
+}
+
+export async function fetchImageBufferFromUrl(url: string): Promise<Buffer> {
+  const [possibleError, possibleResponse] = await a2a(
+    axios.default.get(url, {
+      responseType: 'arraybuffer',
+    }),
+  );
+  let response: axios.AxiosResponse = possibleResponse;
+  if (possibleError) {
+    response = possibleError.response;
+  }
+
+  if (response.data && response.status == 200) {
+    const isImage = await isImageFileType(response.data);
+    if (!isImage) {
+      throw new AssertionError({
+        message: `The file returned from url "${url}" does not seem to be a valid image type.`,
+      });
+    }
+
+    return response.data;
+  }
+
+  const errorMessage = `Unable to fetch image from url "${url}", the url returned a non-successful status code of "${response.status}".`;
+  throw new AssertionError({
+    message: `${errorMessage} The returned error was: ${possibleError.message}`,
+  });
 }
