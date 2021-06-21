@@ -44,6 +44,7 @@ import { operationFlatten } from './flatten';
 import { operationGamma } from './gamma';
 import { operationNegate } from './negate';
 import { operationNormalize } from './normalize';
+import { operationAffine } from './affine';
 
 export * from './resize';
 export * from './extract';
@@ -61,6 +62,7 @@ export * from './flatten';
 export * from './gamma';
 export * from './negate';
 export * from './normalize';
+export * from './affine';
 
 const builders: { [key: string]: OperationBuilder } = {
   resize: operationResize,
@@ -79,6 +81,7 @@ const builders: { [key: string]: OperationBuilder } = {
   gamma: operationGamma,
   negate: operationNegate,
   normalize: operationNormalize,
+  affine: operationAffine,
 };
 
 export function builderForOperation(operation: Operation): OperationBuilder {

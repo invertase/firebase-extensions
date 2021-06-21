@@ -63,6 +63,18 @@ export function coerceStringToBoolean(): superstruct.Struct<boolean, null> {
   );
 }
 
+export function coerceStringToArray<T>(
+  struct: superstruct.Struct<T>,
+): superstruct.Struct<T> {
+  return superstruct.coerce(struct, superstruct.string(), value => {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return null;
+    }
+  });
+}
+
 export function omitUndefinedValues<T>(object: T): T {
   Object.keys(object).forEach(key =>
     object[key] === undefined ? delete object[key] : {},
