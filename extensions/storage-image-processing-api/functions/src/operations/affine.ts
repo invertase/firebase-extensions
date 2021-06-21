@@ -48,6 +48,7 @@ const struct = superstruct.object({
   matrix: utils.coerceStringToArray(
     superstruct.size(superstruct.array(superstruct.number()), 4, 4),
   ),
+
   /**
    * Background color to fill new pixels with.
    * See the [color npm library](https://www.npmjs.com/package/color) for supported string formats.

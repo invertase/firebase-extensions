@@ -28,6 +28,8 @@ import {
   ValidatedOperation,
 } from '../types';
 
+import { operationInput } from './input';
+import { operationOutput } from './output';
 import { operationResize } from './resize';
 import { operationExtract } from './extract';
 import { operationExtend } from './extend';
@@ -47,6 +49,8 @@ import { operationNormalize } from './normalize';
 import { operationAffine } from './affine';
 import { operationClahe } from './clahe';
 
+export * from './input';
+export * from './output';
 export * from './resize';
 export * from './extract';
 export * from './extend';
@@ -67,6 +71,8 @@ export * from './affine';
 export * from './clahe';
 
 const builders: { [key: string]: OperationBuilder } = {
+  input: operationInput,
+  output: operationOutput,
   resize: operationResize,
   extract: operationExtract,
   extend: operationExtend,
@@ -105,8 +111,17 @@ export function asValidatedOperationOptions(
     });
   }
 
-  const struct = operationBuilder.struct as superstruct.Struct<Operation>;
+  // Use the custom validator if set.
+  if (operationBuilder.validate) {
+    const validatedOperation = operationBuilder.validate(input);
+    return omitKey(
+      omitUndefinedValues<Operation>(validatedOperation),
+      'operation',
+    );
+  }
 
+  // Use the struct for default validation.
+  const struct = operationBuilder.struct as superstruct.Struct<Operation>;
   return omitKey(
     omitUndefinedValues<Operation>(struct.create(operation)),
     'operation',
@@ -167,7 +182,7 @@ export function asValidatedOperations(input: string): ValidatedOperation[] {
 
 export async function asBuiltOperation(
   validatedOperation: ValidatedOperation,
-  fileMetadata: sharp.Metadata,
+  fileMetadata: sharp.Metadata | null,
 ): Promise<BuiltOperation> {
   const actionBuilder =
     builderForOperation(validatedOperation)?.build || defaultActionsBuilder;
@@ -182,22 +197,28 @@ export async function asBuiltOperation(
 }
 
 export async function applyValidatedOperation(
-  instance: sharp.Sharp,
+  instance: sharp.Sharp | null,
   validatedOperation: ValidatedOperation,
 ): Promise<sharp.Sharp> {
   let currentInstance = instance;
-  const currentMetadata = await currentInstance.metadata();
+  const currentMetadata = currentInstance
+    ? await currentInstance.metadata()
+    : null;
   const builtOperation = await asBuiltOperation(
     validatedOperation,
     currentMetadata,
   );
   for (let i = 0; i < builtOperation.actions.length; i++) {
     const action = builtOperation.actions[i];
-    currentInstance = (
-      currentInstance[action.method] as (...args: unknown[]) => sharp.Sharp
-    )(...action.arguments);
-    const newBuffer = await currentInstance.toBuffer();
-    currentInstance = sharp(newBuffer);
+    if (action.method == 'constructor') {
+      currentInstance = sharp(...action.arguments);
+    } else {
+      currentInstance = (
+        currentInstance[action.method] as (...args: unknown[]) => sharp.Sharp
+      )(...action.arguments);
+      const newBuffer = await currentInstance.toBuffer();
+      currentInstance = sharp(newBuffer);
+    }
   }
   return currentInstance;
 }

@@ -18,7 +18,7 @@ import sharp from 'sharp';
 
 export type ActionBuilder = (
   validatedOperation: ValidatedOperation,
-  imageMetadata: sharp.Metadata,
+  imageMetadata: sharp.Metadata | null,
 ) => OperationAction[] | Promise<OperationAction[]>;
 
 export type OperationBuilder = {
@@ -28,6 +28,11 @@ export type OperationBuilder = {
    * The superstruct definition for this operation
    */
   struct: superstruct.Struct;
+
+  /**
+   * Optionally provide a custom validator.
+   */
+  validate?: (rawOptions: Operation) => Operation;
 
   /**
    * Override usage of the defaultActionBuilder.
@@ -53,6 +58,10 @@ export interface BuiltOperation extends ValidatedOperation {
 }
 
 export interface OperationAction {
+  /**
+   * The method name on the Sharp instance that will be called. This is required for non
+   * input operations.
+   */
   method: string;
   arguments: unknown[];
 }

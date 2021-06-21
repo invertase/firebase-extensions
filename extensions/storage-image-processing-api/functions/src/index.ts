@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-import path from 'path';
-import { readFileSync } from 'fs';
 import { AssertionError } from 'assert';
 
 import a2a from 'a2a';
-import * as sharp from 'sharp';
 import { applyValidatedOperation, asValidatedOperations } from './operations';
 
 import cors from 'cors';
@@ -34,16 +31,15 @@ import {
   omitKeys,
 } from './utils';
 import { ValidatedOperation } from './types';
+import { extensionConfiguration } from './config';
 
 const app = express();
-
-// TODO make extension configuration
 
 app.use(helmet());
 app.use(
   cors({
-    // TODO cors options from extension configuration
-    origin: '*',
+    origin: extensionConfiguration.corsAllowList,
+    methods: ['GET', 'POST'],
   }),
 );
 
@@ -61,22 +57,31 @@ app.use(
     const validatedOperations: ValidatedOperation[] =
       asValidatedOperations(operationsString);
 
-    // TODO this won't work for full https storage urls, extract the file name
-    // TODO from the http url
-    const fileName = path.basename(queryParams.input as string);
+    // Ensure input is the first operation.
+    if (validatedOperations[0].operation != 'input') {
+      throw new AssertionError({
+        message: `An input operation must be the first operation.`,
+      });
+    }
 
-    // TODO replace this and actually get file from GCP storage (queryParams.input);
-    // TODO check file actually exists
-    // TODO if input is a GCS bucket path then check bucket object is actually public
-    // TODO if input is http url, check it's actually a GCS getDownloadUrl
-    const fileInputBuffer = readFileSync(
-      `${process.cwd()}${queryParams.input}`,
-    );
+    // Ensure output is the last operation.
+    if (
+      validatedOperations[validatedOperations.length - 1].operation != 'output'
+    ) {
+      throw new AssertionError({
+        message: `An output operation must be the last operation.`,
+      });
+    }
+
+    // Apply operations.
+    let instance = null;
+    for (let i = 0; i < validatedOperations.length; i++) {
+      const validatedOperation = validatedOperations[i];
+      instance = await applyValidatedOperation(instance, validatedOperation);
+    }
 
     if (hasOwnProperty(queryParams, 'debug')) {
-      const [metadataError, fileMetadata] = await a2a(
-        sharp.default(fileInputBuffer).metadata(),
-      );
+      const [metadataError, fileMetadata] = await a2a(instance.metadata());
       if (metadataError) {
         return next(metadataError);
       }
@@ -85,15 +90,6 @@ app.use(
         metadata: omitKeys(fileMetadata, fileMetadataBufferKeys),
       });
     }
-
-    // Apply operations.
-    let instance = sharp.default(fileInputBuffer);
-    for (let i = 0; i < validatedOperations.length; i++) {
-      const validatedOperation = validatedOperations[i];
-      instance = await applyValidatedOperation(instance, validatedOperation);
-    }
-
-    // TODO output option handling, e.g. png, quality etc
 
     const [outputError, output] = await a2a(
       instance.toBuffer({ resolveWithObject: true }),
@@ -104,15 +100,12 @@ app.use(
 
     const { data, info } = output;
 
-    functions.logger.debug(
-      `Processed a request for image '${fileName}'.`,
-      validatedOperations,
-    );
+    functions.logger.debug(`Processed a new request.`, validatedOperations);
 
     const headers = {
       'Content-Type': `image/${info.format}`,
       'Content-Length': data.length,
-      'Content-Disposition': `inline; filename=${fileName}`,
+      'Content-Disposition': `inline; filename=image.${info.format}`,
     };
 
     Object.entries(info).forEach(entry => {

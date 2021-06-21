@@ -1,0 +1,235 @@
+/*
+ * Copyright (c) 2016-present Invertase Limited
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this library except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import * as superstruct from 'superstruct';
+import * as utils from '../utils';
+import { Operation, OperationAction, OperationBuilder } from '../types';
+import { AssertionError } from 'assert';
+
+/**
+ * The user visible name of this operation.
+ */
+const name = 'input';
+
+/**
+ * Use a path to a file in a GCS bucket as an input. This file
+ * must be publicly readable for this to work.
+ */
+const structFromGcsFile = superstruct.object({
+  operation: superstruct.literal(name),
+  type: superstruct.literal('gcs-file'),
+  path: superstruct.pattern(superstruct.string(), /(\/[^\s\/,]+)+/),
+});
+
+/**
+ * Use a GCS download url as an input. e.g., from `getDownloadUrl` on the Firebase
+ * client SDKS. This URL must be to a file in the same storage bucket as defined in options.
+ */
+const structFromGcsUrl = superstruct.object({
+  operation: superstruct.literal(name),
+  type: superstruct.literal('gcs-url'),
+  url: superstruct.string(),
+});
+
+/**
+ * A web url of an image.
+ */
+const structFromUrl = superstruct.object({
+  operation: superstruct.literal(name),
+  type: superstruct.literal('url'),
+  url: superstruct.string(),
+});
+
+/**
+ * Create a new image.
+ */
+const structCreateNewImage = superstruct.object({
+  operation: superstruct.literal(name),
+  type: superstruct.literal('create'),
+
+  /**
+   * Integer width of new image.
+   */
+  width: utils.coerceStringToInt(superstruct.min(superstruct.integer(), 1)),
+
+  /**
+   * Integer height of the new image.
+   */
+  height: utils.coerceStringToInt(superstruct.min(superstruct.integer(), 1)),
+
+  /**
+   * Background color to fill new pixels with.
+   * See the [color npm library](https://www.npmjs.com/package/color) for supported string formats.
+   * Defaults to black without transparency.
+   */
+  background: superstruct.optional(superstruct.string()),
+
+  /**
+   * Integral number of channels, either 3 (RGB) or 4 (RGBA).
+   * Defaults to 4 (RGBA).
+   */
+  channels: superstruct.defaulted(superstruct.enums([3, 4]), 4),
+
+  /**
+   * Mean of pixels in generated noise
+   */
+  noiseMean: superstruct.defaulted(
+    utils.coerceStringToInt(superstruct.min(superstruct.integer(), 0)),
+    0,
+  ),
+
+  /**
+   * A value between 0 and 1000 representing the sigma of the Gaussian mask,
+   * where sigma = 1 + radius / 2.
+   */
+  noiseSigma: superstruct.defaulted(
+    utils.coerceStringToFloat(superstruct.size(superstruct.number(), 0, 1000)),
+    0,
+  ),
+
+  /**
+   * Image format to be created.
+   */
+  format: superstruct.defaulted(
+    superstruct.enums(['png', 'jpeg', 'webp', 'tiff', 'avif']),
+    'png',
+  ),
+});
+
+/**
+ * An operation that defines specifying an input image that all future operations will be applied to.
+ */
+const struct = superstruct.union([
+  structFromGcsFile,
+  structFromGcsUrl,
+  structFromUrl,
+  structCreateNewImage,
+]);
+
+export type OperationInput = superstruct.Infer<typeof struct>;
+
+export const operationInput: OperationBuilder = {
+  name,
+  struct,
+  validate(rawOptions: Operation): Operation {
+    switch (rawOptions.type) {
+      case 'create':
+        return structCreateNewImage.create(rawOptions);
+      case 'gcs-file':
+        return structFromGcsFile.create(rawOptions);
+      case 'gcs-url':
+        return structFromGcsUrl.create(rawOptions);
+      case 'url':
+        return structFromUrl.create(rawOptions);
+    }
+    throw new AssertionError({
+      message: `'${rawOptions.type}' is not a valid input 'type'.`,
+    });
+  },
+  async build(operation) {
+    const options = operation.options as OperationInput;
+
+    switch (options.type) {
+      case 'create':
+        return newImageOptions(options);
+      case 'gcs-file':
+        return await fetchGcsFile(options);
+      case 'gcs-url':
+        return await fetchGcsUrl(options);
+      case 'url':
+        return await fetchUrl(options);
+    }
+  },
+};
+
+async function fetchGcsUrl(
+  options: OperationInput,
+): Promise<OperationAction[]> {
+  if (options.type !== 'gcs-url') return;
+  // TODO validations:
+  //  - is url
+  //  - bucket in url is same as options
+  //  - fetch meta and check is image
+  return fetchUrl(options);
+}
+
+async function fetchUrl(options: OperationInput): Promise<OperationAction[]> {
+  if (options.type !== 'url') return;
+  // TODO validations:
+  //  - is url
+  return [
+    {
+      method: 'constructor',
+      arguments: [Buffer.from('')],
+    },
+  ];
+}
+
+async function fetchGcsFile(
+  options: OperationInput,
+): Promise<OperationAction[]> {
+  if (options.type !== 'gcs-file') return;
+  // TODO validations:
+  //  - check image is public
+  //  - fetch meta and check is image
+  return [
+    {
+      method: 'constructor',
+      arguments: [Buffer.from('')],
+    },
+  ];
+}
+
+function newImageOptions(options: OperationInput): OperationAction[] {
+  if (options.type !== 'create') return;
+  const create: Record<string, unknown | Record<string, unknown>> = {};
+
+  create.width = options.width;
+  create.height = options.height;
+
+  if (options.channels) {
+    create.channels = options.channels;
+  }
+
+  if (options.background) {
+    create.background = options.background;
+  }
+
+  create.noise = {
+    type: 'gaussian',
+  };
+  if (options.noiseMean != undefined) {
+    create.noise['mean'] = options.noiseMean;
+  }
+  if (options.noiseSigma != undefined) {
+    create.noise['sigma'] = options.noiseSigma;
+  }
+
+  return [
+    {
+      method: 'constructor',
+      arguments: [
+        {
+          create,
+        },
+      ],
+    },
+    {
+      method: options.format,
+      arguments: [],
+    },
+  ];
+}
