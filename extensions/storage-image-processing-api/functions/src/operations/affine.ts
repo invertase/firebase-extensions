@@ -32,8 +32,6 @@ const name = 'affine';
  * background color with the background option.
  *
  * A particular interpolator may also be specified via the interpolator option.
-
-
  */
 const struct = superstruct.object({
   operation: superstruct.literal(name),
