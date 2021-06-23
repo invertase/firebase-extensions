@@ -327,7 +327,32 @@ const structTiff = superstruct.object({
 const structAvif = superstruct.object({
   operation: superstruct.literal(name),
   format: superstruct.literal('avif'),
-  // TODO options
+
+  /**
+   * quality, integer 1-100 (optional, default 80)
+   */
+  quality: superstruct.optional(
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 1, 100)),
+  ),
+
+  /**
+   * Use lossless compression (optional, default false)
+   */
+  lossless: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * CPU effort vs file size, 0 (slowest/smallest) to 8 (fastest/largest) (optional, default 5)
+   */
+  speed: superstruct.optional(
+    utils.coerceStringToArray(
+      utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0, 8)),
+    ),
+  ),
+
+  /**
+   * Set to '4:4:4' to prevent chroma subsampling otherwise
+   */
+  chromaSubsampling: superstruct.optional(superstruct.string()),
 });
 
 /**
