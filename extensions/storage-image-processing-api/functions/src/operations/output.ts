@@ -242,7 +242,83 @@ const structWebp = superstruct.object({
 const structTiff = superstruct.object({
   operation: superstruct.literal(name),
   format: superstruct.literal('tiff'),
-  // TODO options
+
+  /**
+   * quality, integer 1-100 (optional, default 80)
+   */
+  quality: superstruct.optional(
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 1, 100)),
+  ),
+
+  /**
+   * Force TIFF output, otherwise attempt to use input format (optional, default true)
+   */
+  force: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * Compression options: lzw, deflate, jpeg, ccittfax4 (optional, default 'jpeg')
+   */
+  compression: superstruct.optional(superstruct.string()),
+
+  /**
+   * Compression predictor options: none, horizontal, float (optional, default 'horizontal')
+   */
+  predictor: superstruct.optional(superstruct.string()),
+
+  /**
+   * Write an image pyramid (optional, default false)
+   */
+  pyramid: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * Write a tiled tiff (optional, default false)
+   */
+  tile: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * horizontal tile size (optional, default 256)
+   */
+  tileWidth: superstruct.optional(
+    utils.coerceStringToArray(
+      utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0)),
+    ),
+  ),
+
+  /**
+   * vertical tile size (optional, default 256)
+   */
+  tileHeight: superstruct.optional(
+    utils.coerceStringToArray(
+      utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0)),
+    ),
+  ),
+
+  /**
+   * horizontal resolution in pixels/mm (optional, default 1.0)
+   */
+  xres: superstruct.optional(
+    utils.coerceStringToArray(
+      utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0)),
+    ),
+  ),
+
+  /**
+   * vertical resolution in pixels/mm (optional, default 1.0)
+   */
+  yres: superstruct.optional(
+    utils.coerceStringToArray(
+      utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0)),
+    ),
+  ),
+
+  /**
+   * reduce bitdepth to 1, 2 or 4 bit (optional, default 8)
+   */
+  bitdepth: superstruct.optional(
+    utils.coerceStringToArray(
+      utils.coerceStringToInt(superstruct.enums([1, 2, 4, 8])),
+    ),
+  ),
 });
 
 /**
