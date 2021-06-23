@@ -91,7 +91,77 @@ const structPng = superstruct.object({
 const structJpeg = superstruct.object({
   operation: superstruct.literal(name),
   format: superstruct.literal('jpeg'),
-  // TODO options
+
+  /**
+   * quality, integer 1-100 (optional, default 80)
+   */
+  quality: superstruct.optional(
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 1, 100)),
+  ),
+
+  /**
+   * Use progressive (interlace) scan (optional, default false)
+   */
+  progressive: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * Set to '4:4:4' to prevent chroma subsampling otherwise defaults to '4:2:0' chroma subsampling (optional, default '4:2:0')
+   */
+  chromaSubsampling: superstruct.optional(superstruct.string()),
+
+  /**
+   * Optimise Huffman coding tables (optional, default true)
+   */
+  optimiseCoding: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * Alternative spelling of optimiseCoding (optional, default true)
+   */
+  optimizeCoding: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * Use mozjpeg defaults, equivalent to { trellisQuantisation: true, overshootDeringing: true, optimiseScans: true, quantisationTable: 3 } (optional, default false)
+   */
+  mozjpeg: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * Apply trellis quantisation (optional, default false)
+   */
+  trellisQuantisation: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * Apply overshoot deringing (optional, default false)
+   */
+  overshootDeringing: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * Optimise progressive scans, forces progressive (optional, default false)
+   */
+  optimiseScans: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * Alternative spelling of optimiseScans (optional, default false)
+   */
+  optimizeScans: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * Quantization table to use, integer 0-8 (optional, default 0)
+   */
+  quantisationTable: superstruct.optional(
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0, 8)),
+  ),
+
+  /**
+   * Alternative spelling of quantisationTable (optional, default 0)
+   */
+  quantizationTable: superstruct.optional(
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0, 8)),
+  ),
+
+  /**
+   * Force JPEG output, otherwise attempt to use input format (optional, default true)
+   */
+  force: superstruct.optional(utils.coerceStringToBoolean()),
 });
 
 /**
