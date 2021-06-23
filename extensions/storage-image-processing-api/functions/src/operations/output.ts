@@ -170,7 +170,70 @@ const structJpeg = superstruct.object({
 const structWebp = superstruct.object({
   operation: superstruct.literal(name),
   format: superstruct.literal('webp'),
-  // TODO options
+
+  /**
+   * quality, integer 1-100 (optional, default 80)
+   */
+  quality: superstruct.optional(
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 1, 100)),
+  ),
+
+  /**
+   * quality of alpha layer, integer 0-100 (optional, default 100)
+   */
+  alphaQuality: superstruct.optional(
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0, 100)),
+  ),
+
+  /**
+   * Use lossless compression mode (optional, default false)
+   */
+  lossless: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * Use near_lossless compression mode (optional, default false)
+   */
+  nearLossless: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * Use high quality chroma subsampling (optional, default false)
+   */
+  smartSubsample: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * Level of CPU effort to reduce file size, integer 0-6 (optional, default 4)
+   */
+  reductionEffort: superstruct.optional(
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 1, 100)),
+  ),
+
+  /**
+   * Page height for animated output
+   */
+  pageHeight: superstruct.optional(
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 1, 100)),
+  ),
+
+  /**
+   * Number of animation iterations, use 0 for infinite animation (optional, default 0)
+   */
+  loop: superstruct.optional(
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 1, 100)),
+  ),
+
+  /**
+   * List of delays between animation frames (in milliseconds)
+   */
+  delay: superstruct.optional(
+    utils.coerceStringToArray(
+      superstruct.size(superstruct.array(superstruct.number()), 0, 65535),
+    ),
+  ),
+
+  /**
+   * Force WebP output, otherwise attempt to use input format (optional, default true)
+   */
+  force: superstruct.optional(utils.coerceStringToBoolean()),
 });
 
 /**
