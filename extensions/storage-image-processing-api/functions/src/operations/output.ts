@@ -29,7 +29,60 @@ const name = 'output';
 const structPng = superstruct.object({
   operation: superstruct.literal(name),
   format: superstruct.literal('png'),
-  // TODO options
+  /**
+   * Use progressive (interlace) scan.
+   */
+  progressive: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * zlib compression level, 0 (fastest, largest) to 9 (slowest, smallest) (optional, default 6)
+   */
+  compressionLevel: superstruct.optional(
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0, 9)),
+  ),
+
+  /**
+   * use adaptive row filtering (optional, default false)
+   */
+  adaptiveFiltering: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * quantise to a palette-based image with alpha transparency support (optional, default false)
+   */
+  palette: superstruct.optional(utils.coerceStringToBoolean()),
+
+  /**
+   * use the lowest number of colours needed to achieve given quality, sets palette to true (optional, default 100)
+   */
+  quality: superstruct.optional(
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0, 100)),
+  ),
+
+  /**
+   * maximum number of palette entries, sets palette to true (optional, default 256)
+   */
+  colours: superstruct.optional(
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 2, 256)),
+  ),
+
+  /**
+   * alternative spelling of options.colours, sets palette to true (optional, default 256)
+   */
+  colors: superstruct.optional(
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 2, 256)),
+  ),
+
+  /**
+   * level of Floyd-Steinberg error diffusion, sets palette to true (optional, default 1.0)
+   */
+  dither: superstruct.optional(
+    utils.coerceStringToFloat(superstruct.size(superstruct.number(), 0.0, 1.0)),
+  ),
+
+  /**
+   * force PNG output, otherwise attempt to use input format (optional, default true)
+   */
+  force: superstruct.optional(utils.coerceStringToBoolean()),
 });
 
 /**
