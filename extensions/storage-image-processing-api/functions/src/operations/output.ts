@@ -204,7 +204,7 @@ const structWebp = superstruct.object({
    * Page height for animated output
    */
   pageHeight: superstruct.optional(
-    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 1, 100)),
+    utils.coerceStringToInt(superstruct.min(superstruct.integer(), 1)),
   ),
 
   /**
