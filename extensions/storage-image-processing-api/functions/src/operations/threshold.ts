@@ -32,9 +32,12 @@ const struct = superstruct.object({
   /**
    * A value in the range 0-255 representing the level at which the threshold will be applied. (optional, default 128)
    */
-  threshold: utils.coerceStringToInt(
-    superstruct.size(superstruct.number(), 0, 255),
-  ),
+  threshold: superstruct.defaulted(
+    utils.coerceStringToInt(
+      superstruct.size(superstruct.integer(), 0, 255),
+    ),
+    128,
+  ),  
 
   /**
    * Convert to single channel grayscale. (optional, default true)
@@ -54,7 +57,7 @@ export const operationThreshold: OperationBuilder = {
     return [
       {
         method: name,
-        arguments: [options.threshold, { grayscale: options.grayscale }],
+        arguments: [options.threshold, utils.omitKey(options, 'grayscale')],
       },
     ];
   },
