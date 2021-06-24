@@ -281,9 +281,7 @@ const structTiff = superstruct.object({
    * vertical resolution in pixels/mm (optional, default 1.0)
    */
   yres: superstruct.optional(
-    utils.coerceStringToArray(
-      utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0)),
-    ),
+    utils.coerceStringToInt(superstruct.min(superstruct.integer(), 1)),
   ),
 
   /**
