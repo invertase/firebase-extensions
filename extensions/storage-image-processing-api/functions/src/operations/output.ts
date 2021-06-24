@@ -317,9 +317,7 @@ const structAvif = superstruct.object({
    * CPU effort vs file size, 0 (slowest/smallest) to 8 (fastest/largest) (optional, default 5)
    */
   speed: superstruct.optional(
-    utils.coerceStringToArray(
-      utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0, 8)),
-    ),
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0, 8)),
   ),
 
   /**
