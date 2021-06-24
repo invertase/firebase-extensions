@@ -265,9 +265,7 @@ const structTiff = superstruct.object({
    * vertical tile size (optional, default 256)
    */
   tileHeight: superstruct.optional(
-    utils.coerceStringToArray(
-      utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0)),
-    ),
+    utils.coerceStringToInt(superstruct.min(superstruct.integer(), 1)),
   ),
 
   /**
