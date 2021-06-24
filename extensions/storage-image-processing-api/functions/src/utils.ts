@@ -72,7 +72,6 @@ export function coerceStringToArray<T>(
   struct: superstruct.Struct<T>,
 ): superstruct.Struct<T> {
   return superstruct.coerce(struct, superstruct.string(), value => {
-    console.log('Parsing >>>>>', value);
     try {
       return JSON.parse(value);
     } catch {
