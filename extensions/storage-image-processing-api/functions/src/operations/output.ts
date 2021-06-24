@@ -208,22 +208,6 @@ const structWebp = superstruct.object({
   ),
 
   /**
-   * Number of animation iterations, use 0 for infinite animation (optional, default 0)
-   */
-  loop: superstruct.optional(
-    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 1, 100)),
-  ),
-
-  /**
-   * List of delays between animation frames (in milliseconds)
-   */
-  delay: superstruct.optional(
-    utils.coerceStringToArray(
-      superstruct.size(superstruct.array(superstruct.number()), 0, 65535),
-    ),
-  ),
-
-  /**
    * Force WebP output, otherwise attempt to use input format (optional, default true)
    */
   force: superstruct.optional(utils.coerceStringToBoolean()),
