@@ -290,9 +290,7 @@ const structTiff = superstruct.object({
    * reduce bitdepth to 1, 2 or 4 bit (optional, default 8)
    */
   bitdepth: superstruct.optional(
-    utils.coerceStringToArray(
-      utils.coerceStringToInt(superstruct.enums([1, 2, 4, 8])),
-    ),
+    utils.coerceStringToInt(superstruct.enums([1, 2, 4, 8])),
   ),
 });
 
