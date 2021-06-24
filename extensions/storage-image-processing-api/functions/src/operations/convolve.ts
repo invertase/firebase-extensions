@@ -47,7 +47,7 @@ const struct = superstruct.object({
    * Array of length width*height containing the kernel values.
    */
   kernel: utils.coerceStringToArray(
-    superstruct.size(superstruct.array(superstruct.number()), 9, 9),
+    superstruct.min(superstruct.array(superstruct.number()), 1),
   ),
 
   /**
@@ -60,7 +60,9 @@ const struct = superstruct.object({
   /**
    * The offset of the kernel in pixels. (optional, default 0)
    */
-  offset: utils.coerceStringToInt(superstruct.integer()),
+  offset: superstruct.optional(
+    utils.coerceStringToInt(superstruct.min(superstruct.integer(), 0)),
+  ),
 });
 
 export type OperationConvolve = superstruct.Infer<typeof struct>;
