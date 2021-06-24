@@ -235,7 +235,7 @@ const structTiff = superstruct.object({
   /**
    * Compression options: lzw, deflate, jpeg, ccittfax4 (optional, default 'jpeg')
    */
-  compression: superstruct.optional(superstruct.string()),
+  compression: superstruct.optional(superstruct.enum(['lzw', 'deflate', 'jpeg', 'ccittfax4'])),
 
   /**
    * Compression predictor options: none, horizontal, float (optional, default 'horizontal')
