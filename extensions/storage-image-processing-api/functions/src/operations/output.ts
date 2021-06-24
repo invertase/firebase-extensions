@@ -235,12 +235,16 @@ const structTiff = superstruct.object({
   /**
    * Compression options: lzw, deflate, jpeg, ccittfax4 (optional, default 'jpeg')
    */
-  compression: superstruct.optional(superstruct.enums(['lzw', 'deflate', 'jpeg', 'ccittfax4'])),
+  compression: superstruct.optional(
+    superstruct.enums(['lzw', 'deflate', 'jpeg', 'ccittfax4']),
+  ),
 
   /**
    * Compression predictor options: none, horizontal, float (optional, default 'horizontal')
    */
-  predictor: superstruct.optional(superstruct.enums(['none', 'horizontal', 'float'])),
+  predictor: superstruct.optional(
+    superstruct.enums(['none', 'horizontal', 'float']),
+  ),
 
   /**
    * Write an image pyramid (optional, default false)
