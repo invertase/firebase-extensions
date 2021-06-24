@@ -240,7 +240,7 @@ const structTiff = superstruct.object({
   /**
    * Compression predictor options: none, horizontal, float (optional, default 'horizontal')
    */
-  predictor: superstruct.optional(superstruct.string()),
+  predictor: superstruct.optional(superstruct.enum(['none', 'horizontal', 'float'])),
 
   /**
    * Write an image pyramid (optional, default false)
