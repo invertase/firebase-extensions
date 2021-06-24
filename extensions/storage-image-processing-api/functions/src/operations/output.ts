@@ -256,9 +256,7 @@ const structTiff = superstruct.object({
    * horizontal tile size (optional, default 256)
    */
   tileWidth: superstruct.optional(
-    utils.coerceStringToArray(
-      utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0)),
-    ),
+    utils.coerceStringToInt(superstruct.min(superstruct.integer(), 1)),
   ),
 
   /**
