@@ -48,6 +48,7 @@ import { operationNegate } from './negate';
 import { operationNormalize } from './normalize';
 import { operationAffine } from './affine';
 import { operationClahe } from './clahe';
+import { operationThreshold } from './threshold';
 import { operationConvolve } from './convolve';
 
 export * from './input';
@@ -70,6 +71,7 @@ export * from './negate';
 export * from './normalize';
 export * from './affine';
 export * from './clahe';
+export * from './threshold';
 export * from './convolve';
 
 const builders: { [key: string]: OperationBuilder } = {
@@ -93,6 +95,7 @@ const builders: { [key: string]: OperationBuilder } = {
   normalize: operationNormalize,
   affine: operationAffine,
   clahe: operationClahe,
+  threshold: operationThreshold,
   convolve: operationConvolve,
 };
 
