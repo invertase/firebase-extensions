@@ -197,7 +197,7 @@ const structWebp = superstruct.object({
    * Level of CPU effort to reduce file size, integer 0-6 (optional, default 4)
    */
   reductionEffort: superstruct.optional(
-    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 1, 100)),
+    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0, 6)),
   ),
 
   /**
