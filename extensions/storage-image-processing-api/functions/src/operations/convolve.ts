@@ -53,7 +53,9 @@ const struct = superstruct.object({
   /**
    * The scale of the kernel in pixels. (optional, default sum)
    */
-  scale: utils.coerceStringToInt(superstruct.size(superstruct.integer(), 1)),
+  scale: superstruct.optional(
+    utils.coerceStringToInt(superstruct.min(superstruct.integer(), 1)),
+  ),
 
   /**
    * The offset of the kernel in pixels. (optional, default 0)
