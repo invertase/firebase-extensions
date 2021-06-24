@@ -145,13 +145,6 @@ const structJpeg = superstruct.object({
   optimizeScans: superstruct.optional(utils.coerceStringToBoolean()),
 
   /**
-   * Quantization table to use, integer 0-8 (optional, default 0)
-   */
-  quantisationTable: superstruct.optional(
-    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0, 8)),
-  ),
-
-  /**
    * Alternative spelling of quantisationTable (optional, default 0)
    */
   quantizationTable: superstruct.optional(
