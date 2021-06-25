@@ -29,17 +29,17 @@ const struct = superstruct.object({
   operation: superstruct.literal(name),
 
   /**
-   * Parsed by the color  module to extract chroma values.
+   * Red colour to be parsed
    */
   r: superstruct.string(),
 
   /**
-   * Parsed by the color  module to extract chroma values.
+   * Blue colour to be parsed
    */
   b: superstruct.string(),
 
   /**
-   * Parsed by the color  module to extract chroma values.
+   * Green colour to be parsed
    */
   g: superstruct.string(),
 });
