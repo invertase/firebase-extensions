@@ -50,6 +50,7 @@ import { operationAffine } from './affine';
 import { operationClahe } from './clahe';
 import { operationThreshold } from './threshold';
 import { operationConvolve } from './convolve';
+import { operationToColorSpace } from './toColorSpace';
 
 export * from './input';
 export * from './output';
@@ -73,6 +74,7 @@ export * from './affine';
 export * from './clahe';
 export * from './threshold';
 export * from './convolve';
+export * from './toColorSpace';
 
 const builders: { [key: string]: OperationBuilder } = {
   input: operationInput,
@@ -97,6 +99,7 @@ const builders: { [key: string]: OperationBuilder } = {
   clahe: operationClahe,
   threshold: operationThreshold,
   convolve: operationConvolve,
+  toColorspace: operationToColorSpace,
 };
 
 export function builderForOperation(operation: Operation): OperationBuilder {
@@ -214,11 +217,13 @@ export async function applyValidatedOperation(
     validatedOperation,
     currentMetadata,
   );
+
   for (let i = 0; i < builtOperation.actions.length; i++) {
     const action = builtOperation.actions[i];
     if (action.method == 'constructor') {
       currentInstance = sharp(...action.arguments);
     } else {
+      console.log('currentInstance >>>', action.method);
       currentInstance = (
         currentInstance[action.method] as (...args: unknown[]) => sharp.Sharp
       )(...action.arguments);
