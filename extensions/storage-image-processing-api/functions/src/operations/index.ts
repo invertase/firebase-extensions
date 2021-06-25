@@ -50,6 +50,7 @@ import { operationAffine } from './affine';
 import { operationClahe } from './clahe';
 import { operationThreshold } from './threshold';
 import { operationConvolve } from './convolve';
+import { operationLinear } from './linear';
 
 export * from './input';
 export * from './output';
@@ -73,6 +74,7 @@ export * from './affine';
 export * from './clahe';
 export * from './threshold';
 export * from './convolve';
+export * from './linear';
 
 const builders: { [key: string]: OperationBuilder } = {
   input: operationInput,
@@ -97,6 +99,7 @@ const builders: { [key: string]: OperationBuilder } = {
   clahe: operationClahe,
   threshold: operationThreshold,
   convolve: operationConvolve,
+  linear: operationLinear,
 };
 
 export function builderForOperation(operation: Operation): OperationBuilder {
