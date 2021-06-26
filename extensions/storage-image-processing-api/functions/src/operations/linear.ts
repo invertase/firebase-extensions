@@ -32,15 +32,17 @@ const struct = superstruct.object({
   /**
    * Multiplier (optional, default 1.0)
    */
-  a: superstruct.optional(
-    utils.coerceStringToInt(superstruct.size(superstruct.number(), 0.0, 1000)),
+  a: superstruct.defaulted(
+    utils.coerceStringToFloat(superstruct.min(superstruct.number(), 0.0)),
+    1.0,
   ),
 
   /**
    * Offset (optional, default 0.0)
    */
-  b: superstruct.optional(
-    utils.coerceStringToInt(superstruct.size(superstruct.number(), 0.0, 1000)),
+  b: superstruct.defaulted(
+    utils.coerceStringToFloat(superstruct.min(superstruct.number(), 0.0)),
+    0.0,
   ),
 });
 
