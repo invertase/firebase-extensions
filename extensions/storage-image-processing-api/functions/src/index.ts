@@ -20,102 +20,111 @@ import a2a from 'a2a';
 import { applyValidatedOperation, asValidatedOperations } from './operations';
 
 import cors from 'cors';
-import express from 'express';
+import express, { Response } from 'express';
 import helmet from 'helmet';
 import * as functions from 'firebase-functions';
 import { StructError } from 'superstruct';
 import {
   expressAsyncHandlerWrapper,
   fileMetadataBufferKeys,
-  hasOwnProperty,
   omitKeys,
 } from './utils';
 import { ValidatedOperation } from './types';
 import { extensionConfiguration } from './config';
 
+async function processImageRequest(
+  validatedOperations: ValidatedOperation[],
+  res: Response,
+): Promise<void> {
+  const firstOperation = validatedOperations[0];
+  const lastOperation = validatedOperations[validatedOperations.length - 1];
+
+  // Ensure input is the first operation.
+  if (firstOperation.operation != 'input') {
+    throw new AssertionError({
+      message: `An input operation must be the first operation.`,
+    });
+  }
+
+  // Ensure output is the last operation.
+  if (lastOperation.operation != 'output') {
+    throw new AssertionError({
+      message: `An output operation must be the last operation.`,
+    });
+  }
+
+  // Apply operations.
+  let instance = null;
+  for (let i = 0; i < validatedOperations.length; i++) {
+    const validatedOperation = validatedOperations[i];
+    instance = await applyValidatedOperation(instance, validatedOperation);
+  }
+
+  const finalFileMetadata = omitKeys(
+    await instance.metadata(),
+    fileMetadataBufferKeys,
+  );
+
+  if (lastOperation.options.debug == true) {
+    res.json({
+      operations: validatedOperations,
+      metadata: finalFileMetadata,
+    });
+    return;
+  }
+
+  const output = await instance.toBuffer({ resolveWithObject: true });
+  const { data, info } = output;
+
+  functions.logger.debug(`Processed a new request.`, validatedOperations);
+
+  const headers = {
+    'Content-Type': `image/${info.format}`,
+    'Content-Length': Buffer.byteLength(data),
+    'Content-Disposition': `inline; filename=image.${info.format}`,
+    'Cache-control': 'public, max-age=31536000', // 1 Year
+  };
+
+  // Attach output information as response headers.
+  Object.entries(info).forEach(entry => {
+    headers[`ext-output-info-${entry[0].toLowerCase()}`] = `${entry[1]}`;
+  });
+
+  // Attach sharp metadata as response headers.
+  Object.entries(finalFileMetadata).forEach(entry => {
+    headers[`ext-metadata-${entry[0].toLowerCase()}`] = `${entry[1]}`;
+  });
+
+  res.writeHead(200, headers);
+  res.end(data);
+}
+
 const app = express();
 
 app.use(helmet());
+
 app.use(
   cors({
     origin: extensionConfiguration.corsAllowList,
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'HEAD'],
   }),
 );
 
-app.use(
+app.get(
   '/process/**',
   expressAsyncHandlerWrapper(async (req, res, next) => {
-    const operationsString = req.baseUrl.replace('/process/', '');
-    const queryParams = req.query;
-
-    // 404 if no operations
+    const operationsString = req.url.replace('/process/', '');
     if (!operationsString || !operationsString.length) {
       return next();
     }
-
     const validatedOperations: ValidatedOperation[] =
       asValidatedOperations(operationsString);
-
-    // Ensure input is the first operation.
-    if (validatedOperations[0].operation != 'input') {
-      throw new AssertionError({
-        message: `An input operation must be the first operation.`,
-      });
-    }
-
-    // Ensure output is the last operation.
-    if (
-      validatedOperations[validatedOperations.length - 1].operation != 'output'
-    ) {
-      throw new AssertionError({
-        message: `An output operation must be the last operation.`,
-      });
-    }
-
-    // Apply operations.
-    let instance = null;
-    for (let i = 0; i < validatedOperations.length; i++) {
-      const validatedOperation = validatedOperations[i];
-      instance = await applyValidatedOperation(instance, validatedOperation);
-    }
-
-    if (hasOwnProperty(queryParams, 'debug')) {
-      const [metadataError, fileMetadata] = await a2a(instance.metadata());
-      if (metadataError) {
-        return next(metadataError);
-      }
-      return res.json({
-        operations: validatedOperations,
-        metadata: omitKeys(fileMetadata, fileMetadataBufferKeys),
-      });
-    }
-
-    const [outputError, output] = await a2a(
-      instance.toBuffer({ resolveWithObject: true }),
+    const [processError] = await a2a(
+      processImageRequest(validatedOperations, res),
     );
-    if (outputError) {
-      return next(outputError);
+    if (processError) {
+      return next(processError);
     }
-
-    const { data, info } = output;
-
-    functions.logger.debug(`Processed a new request.`, validatedOperations);
-
-    const headers = {
-      'Content-Type': `image/${info.format}`,
-      'Content-Length': data.length,
-      'Content-Disposition': `inline; filename=image.${info.format}`,
-    };
-
-    Object.entries(info).forEach(entry => {
-      headers[`ext-output-info-${entry[0].toLowerCase()}`] = `${entry[1]}`;
-    });
-
-    // TODO attach headers using final fileMetadata
-
-    res.writeHead(200, headers);
-    res.end(data);
   }),
 );
 
@@ -149,11 +158,11 @@ app.use(function handleError(error, req, res, next) {
   }
 });
 
-app.use('*', (_req, res) => {
+app.use('*', function notFoundHandler(_req, res) {
   res.status(404).send('Not Found');
 });
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.EXPRESS_SERVER === 'true') {
   app.listen(3001, 'localhost', () =>
     functions.logger.info(
       `Local dev server listening on http://localhost:3001`,
