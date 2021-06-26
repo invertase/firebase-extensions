@@ -24,15 +24,15 @@ import { OperationBuilder } from '../types';
 const name = 'recomb';
 
 /**
- * Apply the recomb formula a * input + b to the image (levels adjustment)
+ * Recomb the image with the specified matrix.
  */
 const struct = superstruct.object({
   operation: superstruct.literal(name),
 
   /**
-   * Multiplier (optional, default 1.0)
+   * 3x3 Recombination matrix.
    */
-  inputMatrix: utils.coerceStringToArray(
+  matrix: utils.coerceStringToArray(
     superstruct.size(
       superstruct.array(superstruct.array(superstruct.number())),
       3,
@@ -53,7 +53,7 @@ export const operationRecomb: OperationBuilder = {
     return [
       {
         method: name,
-        arguments: [options.inputMatrix, utils.omitKey(options, 'inputMatrix')],
+        arguments: [options.matrix],
       },
     ];
   },
