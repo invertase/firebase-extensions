@@ -3,7 +3,9 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "tsc",
-    "dev": "../../../node_modules/.bin/nodemon",
+    "build:watch": "tsc --watch",
+    "dev": "EXPRESS_SERVER=true ../../../node_modules/.bin/nodemon",
+    "emulator": "firebase ext:dev:emulators:start --test-params=test-params.env --project=extensions-testing",
     "generate-readme": "firebase ext:info .. --markdown > ../README.md"
   },
   "engines": {
