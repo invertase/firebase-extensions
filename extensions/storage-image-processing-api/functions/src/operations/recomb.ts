@@ -34,7 +34,9 @@ const struct = superstruct.object({
    */
   matrix: utils.coerceStringToArray(
     superstruct.size(
-      superstruct.array(superstruct.size(superstruct.array(superstruct.number()), 3, 3)),
+      superstruct.array(
+        superstruct.size(superstruct.array(superstruct.number()), 3, 3),
+      ),
       3,
       3,
     ),
