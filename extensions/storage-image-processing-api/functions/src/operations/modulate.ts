@@ -56,15 +56,4 @@ export type OperationModulate = superstruct.Infer<typeof struct>;
 export const operationModulate: OperationBuilder = {
   name,
   struct,
-
-  //   build(operation) {
-  //     const options = operation.options as OperationModulate;
-
-  //     return [
-  //       {
-  //         method: name,
-  //         arguments: [options.brightness],
-  //       },
-  //     ];
-  //   },
 };
