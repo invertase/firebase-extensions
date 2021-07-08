@@ -20,16 +20,18 @@ import { OperationBuilder } from '../types';
 /**
  * The user visible name of this operation.
  */
-const name = 'toColorspace';
+const name = 'colorspace';
 
 /**
- * Set the output colorspace. By default output image will be web-friendly sRGB, with additional channels interpreted as alpha channels.
+ * Set the output colorspace. By default output image will
+ * be web-friendly sRGB, with additional channels interpreted
+ * as alpha channels.
  */
 const struct = superstruct.object({
   operation: superstruct.literal(name),
 
   /**
-   * output colourspace e.g. srgb, rgb, cmyk, lab, b-w ...
+   * Output colourspace e.g. srgb, rgb, cmyk, lab, b-w ...
    */
   colorspace: superstruct.enums([
     'cmyk',
@@ -47,14 +49,14 @@ const struct = superstruct.object({
   ]),
 });
 
-export type OperationToColorSpace = superstruct.Infer<typeof struct>;
+export type OperationColorspace = superstruct.Infer<typeof struct>;
 
-export const operationToColorSpace: OperationBuilder = {
+export const operationColorspace: OperationBuilder = {
   name,
   struct,
 
   build(operation) {
-    const options = operation.options as OperationToColorSpace;
+    const options = operation.options as OperationColorspace;
 
     return [
       {
