@@ -6,7 +6,7 @@ admin.initializeApp({
 });
 
 const imgSrc =
-  'http://localhost:5001/extensions-testing/us-central1/api/process/input~type:url~url:https%3A%2F%2Fimages.unsplash.com%2Fphoto-1624216873925-9c86b448a64c%3Fixid%3DMnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHw%253D%26ixlib%3Drb-1.2.1%26auto%3Dformat%26fit%3Dcrop%26w%3D900%26q%3D60';
+  'http://localhost:5001/extensions-testing/europe-west2/api/process/input~type:url~url:https%3A%2F%2Fimages.unsplash.com%2Fphoto-1624216873925-9c86b448a64c%3Fixid%3DMnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHw%253D%26ixlib%3Drb-1.2.1%26auto%3Dformat%26fit%3Dcrop%26w%3D900%26q%3D60';
 
 describe('e2e testing', () => {
   test('successfully generate an image', async () => {
@@ -33,7 +33,7 @@ describe('e2e testing', () => {
   test('throws an error if an input operation is not the first operation', async () => {
     try {
       await axios.get(
-        `http://localhost:5001/extensions-testing/us-central1/api/process/output~format:jpeg`,
+        `http://localhost:5001/extensions-testing/europe-west2/api/process/output~format:jpeg`,
       );
     } catch (error) {
       expect(error.response.status).toBe(400);

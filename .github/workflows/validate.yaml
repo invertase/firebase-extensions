@@ -21,21 +21,3 @@ jobs:
         run: npm run check:typescript
       - name: Check Spelling & Grammar
         run: npm run check:spelling
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2-beta
-        with:
-          node-version: '14'
-      - name: NPM Install
-        run: npm install      
-      - name: Install Firebase CLI
-        run: |
-          git clone --single-branch --branch jh-ext-emu-fixes https://github.com/firebase/firebase-tools.git
-          cd firebase-tools
-          npm i
-          npm link --local
-          firebase --open-sesame extdev
-      - name: Jest Tests
-        run: npm run test:ci

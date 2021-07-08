@@ -21,7 +21,6 @@
   "scripts": {
     "prepare": "npm run lerna:bootstrap && npm run lerna:link",
     "test": "lerna run test",
-    "test:ci": "lerna run test:ci",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,mdx}\"",
     "check:linting": "eslint . --max-warnings=0",
     "check:formatting": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md,mdx}\"",
