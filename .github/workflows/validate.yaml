@@ -12,15 +12,15 @@ jobs:
         with:
           node-version: '12'
       - name: NPM Install
-        run: yarn
+        run: npm install
       - name: Check Linting
-        run: yarn run check:linting
+        run: npm run check:linting
       - name: Check Formatting
-        run: yarn run check:formatting
+        run: npm run check:formatting
       - name: Check TS Compiles
-        run: yarn run check:typescript
+        run: npm run check:typescript
       - name: Check Spelling & Grammar
-        run: yarn run check:spelling
+        run: npm run check:spelling
   test:
     runs-on: ubuntu-latest
     steps:
@@ -29,6 +29,6 @@ jobs:
         with:
           node-version: '12'
       - name: NPM Install
-        run: yarn
+        run: npm install
       - name: Jest Tests
-        run: yarn run test
+        run: npm run test:ci
