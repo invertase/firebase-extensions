@@ -217,13 +217,11 @@ export async function applyValidatedOperation(
     validatedOperation,
     currentMetadata,
   );
-
   for (let i = 0; i < builtOperation.actions.length; i++) {
     const action = builtOperation.actions[i];
     if (action.method == 'constructor') {
       currentInstance = sharp(...action.arguments);
     } else {
-      console.log('currentInstance >>>', action.method);
       currentInstance = (
         currentInstance[action.method] as (...args: unknown[]) => sharp.Sharp
       )(...action.arguments);
