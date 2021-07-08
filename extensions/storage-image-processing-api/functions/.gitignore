@@ -2,3 +2,4 @@
 lib/**/*.js
 lib/**/*.js.map
 assets/*_output.*
+test-params.env
