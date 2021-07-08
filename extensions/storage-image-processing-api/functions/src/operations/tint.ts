@@ -23,25 +23,17 @@ import { OperationBuilder } from '../types';
 const name = 'tint';
 
 /**
- * Tint the image using the provided chroma while preserving the image luminance. An alpha channel may be present and will be unchanged by the operation.
+ * Tint the image using the provided chroma while preserving the image luminance.
+ * An alpha channel if present will be unchanged by the operation.
  */
 const struct = superstruct.object({
   operation: superstruct.literal(name),
 
   /**
-   * Red colour to be parsed
+   * Color string which chroma values are extracted from.
+   * See the [color npm library](https://www.npmjs.com/package/color) for supported string formats.
    */
-  r: superstruct.string(),
-
-  /**
-   * Blue colour to be parsed
-   */
-  b: superstruct.string(),
-
-  /**
-   * Green colour to be parsed
-   */
-  g: superstruct.string(),
+  rgb: superstruct.string(),
 });
 
 export type OperationTint = superstruct.Infer<typeof struct>;
@@ -49,22 +41,12 @@ export type OperationTint = superstruct.Infer<typeof struct>;
 export const operationTint: OperationBuilder = {
   name,
   struct,
-
-  /**
-   * Custom action builder since Sharp does not accept an object of options
-   * for trim.
-   */
   build(operation) {
     const options = operation.options as OperationTint;
-
-    console.log('Option >>>', options);
-
-    const rgbOption = { ...options };
-
     return [
       {
         method: name,
-        arguments: [rgbOption],
+        arguments: [options.rgb],
       },
     ];
   },
