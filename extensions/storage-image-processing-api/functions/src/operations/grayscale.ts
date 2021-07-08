@@ -24,18 +24,23 @@ import { OperationBuilder } from '../types';
 const name = 'grayscale';
 
 /**
- * Convert to 8-bit greyscale; 256 shades of grey. This is a linear operation. If the input image is in a non-linear colour space such as sRGB,
- * use gamma() with greyscale() for the best results. By default the output image will be web-friendly sRGB and contain three (identical) color channels.
+ * Convert to 8-bit grayscale; 256 shades of grey.
+ * This is a linear operation.
+ * If the input image is in a non-linear colour space such as sRGB,
+ * use gamma() with grayscale() for the best results.
+ * By default the output image will be web-friendly sRGB and contain
+ * three (identical) color channels.
  * This may be overridden by other sharp operations such as toColourspace('b-w'),
- * which will produce an output image containing one color channel. An alpha channel may be present, and will be unchanged by the operation.
+ * which will produce an output image containing one color channel.
+ * An alpha channel may be present, and will be unchanged by the operation.
  */
 const struct = superstruct.object({
   operation: superstruct.literal(name),
 
   /**
-   * Red colour to be parsed
+   * Convert to grayscale, true or false value. Defaults to true.
    */
-  grayscale: superstruct.optional(utils.coerceStringToBoolean()),
+  grayscale: superstruct.defaulted(utils.coerceStringToBoolean(), true),
 });
 
 export type OperationGrayScale = superstruct.Infer<typeof struct>;
@@ -43,20 +48,12 @@ export type OperationGrayScale = superstruct.Infer<typeof struct>;
 export const operationGrayScale: OperationBuilder = {
   name,
   struct,
-
-  /**
-   * Custom action builder since Sharp does not accept an object of options
-   * for trim.
-   */
   build(operation) {
     const options = operation.options as OperationGrayScale;
-
-    const rgbOption = { ...options };
-
     return [
       {
         method: name,
-        arguments: [rgbOption],
+        arguments: [options.grayscale],
       },
     ];
   },
