@@ -24,30 +24,30 @@ import { OperationBuilder } from '../types';
 const name = 'modulate';
 
 /**
- * Apply the modulate formula a * input + b to the image (levels adjustment)
+ * Transforms the image using brightness, saturation and hue rotation.
  */
 const struct = superstruct.object({
   operation: superstruct.literal(name),
 
   /**
-   * Brightness multiplier
+   * Brightness multiplier.
    */
   brightness: superstruct.optional(
-    utils.coerceStringToInt(superstruct.size(superstruct.number(), 0.0, 1000)),
+    utils.coerceStringToInt(superstruct.min(superstruct.number(), 0)),
   ),
 
   /**
-   * Saturation multiplier
+   * Saturation multiplier.
    */
   saturation: superstruct.optional(
-    utils.coerceStringToInt(superstruct.size(superstruct.number(), 0.0, 1000)),
+    utils.coerceStringToInt(superstruct.min(superstruct.number(), 0)),
   ),
 
   /**
-   * Degrees for hue rotation
+   * Degrees for hue rotation.
    */
   hue: superstruct.optional(
-    utils.coerceStringToInt(superstruct.size(superstruct.integer(), 0, 239)),
+    utils.coerceStringToInt(superstruct.min(superstruct.integer(), 0)),
   ),
 });
 
