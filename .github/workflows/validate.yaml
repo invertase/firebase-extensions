@@ -36,5 +36,6 @@ jobs:
           cd firebase-tools
           npm i
           npm link --local
+          firebase --open-sesame extdev
       - name: Jest Tests
         run: npm run test:ci
