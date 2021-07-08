@@ -1,0 +1,37 @@
+name: storage-image-processing-api
+
+on:
+  pull_request:
+    paths:
+      - "extensions/storage-image-processing-api/**"
+      - ".github/workflows/storage-image-processing-api.yaml"
+
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+
+env:
+  EXTENSION_PATH: "extensions/storage-image-processing-api"
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+  
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '14'
+      - name: NPM Install
+        run: npm install      
+      - name: Install Firebase CLI
+        run: ./.github/workflows/scripts/install-firebase-cli.sh
+      - name: Jest Tests
+        run: |
+          cd $EXTENSION_PATH/functions
+          npm run emulator &
+          sleep 10
+          npm run test
