@@ -50,6 +50,7 @@ import { operationAffine } from './affine';
 import { operationClahe } from './clahe';
 import { operationThreshold } from './threshold';
 import { operationConvolve } from './convolve';
+import { operationRecomb } from './recomb';
 import { operationTint } from './tint';
 import { operationGrayScale } from './grayscale';
 import { operationModulate } from './modulate';
@@ -77,6 +78,7 @@ export * from './affine';
 export * from './clahe';
 export * from './threshold';
 export * from './convolve';
+export * from './recomb';
 export * from './tint';
 export * from './grayscale';
 export * from './modulate';
@@ -105,6 +107,7 @@ const builders: { [key: string]: OperationBuilder } = {
   clahe: operationClahe,
   threshold: operationThreshold,
   convolve: operationConvolve,
+  recomb: operationRecomb,
   tint: operationTint,
   grayscale: operationGrayScale,
   modulate: operationModulate,
