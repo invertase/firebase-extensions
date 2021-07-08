@@ -51,6 +51,9 @@ import { operationClahe } from './clahe';
 import { operationThreshold } from './threshold';
 import { operationConvolve } from './convolve';
 import { operationRecomb } from './recomb';
+import { operationTint } from './tint';
+import { operationGrayScale } from './grayscale';
+import { operationModulate } from './modulate';
 import { operationLinear } from './linear';
 
 export * from './input';
@@ -76,6 +79,9 @@ export * from './clahe';
 export * from './threshold';
 export * from './convolve';
 export * from './recomb';
+export * from './tint';
+export * from './grayscale';
+export * from './modulate';
 export * from './linear';
 
 const builders: { [key: string]: OperationBuilder } = {
@@ -102,6 +108,9 @@ const builders: { [key: string]: OperationBuilder } = {
   threshold: operationThreshold,
   convolve: operationConvolve,
   recomb: operationRecomb,
+  tint: operationTint,
+  grayscale: operationGrayScale,
+  modulate: operationModulate,
   linear: operationLinear,
 };
 
