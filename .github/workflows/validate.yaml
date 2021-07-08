@@ -28,7 +28,9 @@ jobs:
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '12'
+      - name: Install Firebase CLI
+        run: sudo npm i -g firebase-tools
       - name: NPM Install
-        run: npm install
+        run: npm install      
       - name: Jest Tests
         run: npm run test:ci
