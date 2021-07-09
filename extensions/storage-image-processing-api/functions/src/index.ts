@@ -15,15 +15,15 @@
  */
 
 import { AssertionError } from 'assert';
-
 import a2a from 'a2a';
-import { applyValidatedOperation, asValidatedOperations } from './operations';
-
 import cors from 'cors';
 import express, { Response } from 'express';
-import helmet from 'helmet';
+import * as firebase from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import helmet from 'helmet';
 import { StructError } from 'superstruct';
+
+import { applyValidatedOperation, asValidatedOperations } from './operations';
 import {
   expressAsyncHandlerWrapper,
   fileMetadataBufferKeys,
@@ -169,5 +169,6 @@ if (process.env.EXPRESS_SERVER === 'true') {
     ),
   );
 } else {
+  firebase.initializeApp();
   exports.api = functions.handler.https.onRequest(app);
 }

@@ -1,0 +1,19 @@
+{
+  "name": "invertase.jpeg",
+  "bucket": "extensions-testing",
+  "contentType": "image/jpeg",
+  "metageneration": 1,
+  "generation": 1625834405328,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "45270e94-bc47-4329-b0ba-1f6191f1ec21"
+  ],
+  "timeCreated": "2021-07-09T12:40:05.327Z",
+  "updated": "2021-07-09T12:40:05.328Z",
+  "size": 2136,
+  "md5Hash": "v0oknyXSaqPKi3rQ6azoCQ==",
+  "crc32c": "3476354297"
+}
