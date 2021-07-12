@@ -1,6 +1,15 @@
 {
-  "name": "Melos",
+  "name": "Invertase Firebase Extnesions",
   "twitter": "invertaseio",
   "theme": "#FFA03F",
-  "sidebar": []
+  "sidebar": [
+    ["Overview", "/"],
+    [
+      "Storage Image Processing Api",
+      [
+        ["Overview", "/storage-image-processing-api"],
+        ["Getting started", "/storage-image-processing-api/getting-started"]
+      ]
+    ]
+  ]
 }
