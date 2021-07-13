@@ -165,15 +165,19 @@ async function fetchGcsFile(
   options: OperationInput,
 ): Promise<OperationAction[]> {
   if (options.type !== 'gcs') return;
+  const firebaseStorageApi =
+    process.env.NODE_ENV === 'production'
+      ? 'https://firebasestorage.googleapis.com'
+      : `http://${process.env.FIREBASE_STORAGE_EMULATOR_HOST}`;
   if (options.source.startsWith('https')) {
     if (
       // default bucket
       !options.source.startsWith(
-        `https://firebasestorage.googleapis.com/v0/b/${extensionConfiguration.bucket}.appspot.com/o`,
+        `${firebaseStorageApi}/v0/b/${extensionConfiguration.bucket}.appspot.com/o`,
       ) &&
       // secondary buckets
       !options.source.startsWith(
-        `https://firebasestorage.googleapis.com/v0/b/${extensionConfiguration.bucket}/o`,
+        `${firebaseStorageApi}/v0/b/${extensionConfiguration.bucket}/o`,
       )
     ) {
       throw new AssertionError({
@@ -189,9 +193,11 @@ async function fetchGcsFile(
     });
   }
 
-  const bucket = firebase.storage().bucket(extensionConfiguration.bucket);
-  const file = bucket.file(options.source);
-  return fetchUrl({ ...options, url: file.publicUrl(), type: 'url' });
+  return fetchUrl({
+    ...options,
+    url: `${firebaseStorageApi}/v0/b/${extensionConfiguration.bucket}/o/${options.source}?alt=media`,
+    type: 'url',
+  });
 }
 
 function newImageOptions(options: OperationInput): OperationAction[] {
