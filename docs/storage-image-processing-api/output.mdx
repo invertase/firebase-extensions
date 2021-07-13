@@ -1,0 +1,43 @@
+# Ouput
+
+A `mandatory` operation when requesting an image.
+
+This provides the format of the generated image along with addiitonal (optional) transformations.
+
+## Format
+
+This mandatory and dictates which optional output operations can be applied.
+
+This must be one of the following...
+
+- jpeg
+- webp
+- tiff
+- avif
+- png
+
+This can be added at ther end of the process url as `/output~format:png`.
+
+## Addiitonal Operations
+
+This has no source and will generate an image based on the operations provided.
+
+Example: /input~`type:url~create`
+
+## Gsc
+
+This is a valid google cloud storage url of an exisiting image.
+
+Example: input~`type:url~gsc`:exampleimage.com
+
+## Url
+
+A generic url of an exisiting image
+
+Example: /input~`type:url~url`:https://www.exampleimage.com
+
+## Create
+
+Generates a brand new image.
+
+Example: /input~`type:create`

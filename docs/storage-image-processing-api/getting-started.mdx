@@ -1,0 +1,59 @@
+# Getting started
+
+## Installation
+
+This extension requires a `STORAGE_BUCKET`, this is the location where the processed images are saved and accessed.
+
+## Generating an image
+
+This extension allows multiple chaining of operations within a url allow multiple transformations to be parsed and applied to the image to be processed.
+
+This url can be broken down into the following parts.
+
+{`domain`}?{`input`}/{`operations`}/{`output`}
+
+`domain`
+
+This is the location of your installed cloud function, this is defined by the deployed function name and the location where the extension has been installed.
+
+For example `http://localhost:5001`/extensions-testing/`europe-west2`/api/process/
+
+`input`
+
+Input is a mandatory operation, this is the image source and will need to include a type.
+
+A full list of options can be found (here)[/input]
+
+`Operations`
+
+Operations are `(optional)` key transformations that can take place on image.
+
+A full list of options can be found (here)[/operations]
+
+`Output`
+
+Output is a `mandatory` option which contains at least one output operation. A full list can be found [here](https://todo-output-ops-link)
+
+A full list of options can be found (here)[/output]
+
+## Understanding operations
+
+As a url can be broken down into the above sections. Each input, operation and output can contain multiple elements. This allows multipe transformation to be applied simulataneously.
+
+### Parsing
+
+Operations are parsed on the following characters: `/` `:` `~`.
+
+This can be broken down as `/`operation`~`property`:`value`~`property`:`value`/`
+
+## Example: Single Operation
+
+/resize~width:100~height:100/
+
+This would parse `resize` as the operations and apply the `height` and `width` properties to 100 pixels.
+
+## Example: Multiple operations
+
+Building upon the previous example, we can now add an additional operation. In this example we add a grayscale operation.
+
+/resize~width:100~height:100/grayscale~grayscale:true
