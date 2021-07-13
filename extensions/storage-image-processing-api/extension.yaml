@@ -30,7 +30,7 @@ roles:
     reason: Allows the extension to store resized images in Cloud Storage
 
 resources:
-  - name: api
+  - name: handler
     type: firebaseextensions.v1beta.function
     description: >-
       TODO

@@ -207,5 +207,5 @@ if (process.env.EXPRESS_SERVER === 'true') {
   );
 } else {
   firebase.initializeApp();
-  exports.api = functions.handler.https.onRequest(app);
+  exports.handler = functions.handler.https.onRequest(app);
 }
