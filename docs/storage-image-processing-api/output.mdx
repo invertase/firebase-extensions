@@ -18,26 +18,40 @@ This must be one of the following...
 
 This can be added at ther end of the process url as `/output~format:png`.
 
-## Addiitonal Operations
+## Additional Operations
 
-This has no source and will generate an image based on the operations provided.
+### progressive
 
-Example: /input~`type:url~create`
+Use progressive (interlace) scan.
 
-## Gsc
+### compressionLevel
 
-This is a valid google cloud storage url of an exisiting image.
+Zlib compression level, 0 (fastest, largest) to 9 (slowest, smallest) (optional, default 6)
 
-Example: input~`type:url~gsc`:exampleimage.com
+### adaptiveFiltering
 
-## Url
+Use adaptive row filtering (optional, default false)
 
-A generic url of an exisiting image
+### palette
 
-Example: /input~`type:url~url`:https://www.exampleimage.com
+Quantise to a palette-based image with alpha transparency support (optional, default false)
 
-## Create
+### quality
 
-Generates a brand new image.
+Use the lowest number of colours needed to achieve given quality, sets palette to true (optional, default 100)
 
-Example: /input~`type:create`
+### acolours
+
+Maximum number of palette entries, sets palette to true (optional, default 256)
+
+### acolors
+
+Alternative spelling of options.colours, sets palette to true (optional, default 256)
+
+### dither
+
+Level of Floyd-Steinberg error diffusion, sets palette to true (optional, default 1.0)
+
+### force
+
+Force PNG output, otherwise attempt to use input format (optional, default true)
