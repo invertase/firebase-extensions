@@ -23,13 +23,17 @@ import * as functions from 'firebase-functions';
 import helmet from 'helmet';
 import { StructError } from 'superstruct';
 
-import { applyValidatedOperation, asValidatedOperations } from './operations';
+import {
+  applyValidatedOperation,
+  asValidatedOperations,
+  jsonAsValidatedOperations,
+} from './operations';
 import {
   expressAsyncHandlerWrapper,
   fileMetadataBufferKeys,
   omitKeys,
 } from './utils';
-import { ValidatedOperation } from './types';
+import { Operation, ValidatedOperation } from './types';
 import { extensionConfiguration } from './config';
 
 async function processImageRequest(
@@ -107,6 +111,39 @@ app.use(
   cors({
     origin: extensionConfiguration.corsAllowList,
     methods: ['GET', 'POST', 'HEAD'],
+  }),
+);
+
+app.get(
+  '/process',
+  expressAsyncHandlerWrapper(async (req, res, next) => {
+    const operationsString = req.query.operations as string;
+    if (!operationsString || !operationsString.length) {
+      return next(
+        new AssertionError({
+          message: `An 'operations' query parameter - a json array of operations to perform - converted to a json string and url encoded.`,
+        }),
+      );
+    }
+    let operations: Operation[] = null;
+    try {
+      operations = JSON.parse(decodeURIComponent(operationsString));
+    } catch (e) {
+      return next(
+        new AssertionError({
+          message: `Invalid operations JSON string. ${e.message}`,
+        }),
+      );
+    }
+
+    const validatedOperations: ValidatedOperation[] =
+      jsonAsValidatedOperations(operations);
+    const [processError] = await a2a(
+      processImageRequest(validatedOperations, res),
+    );
+    if (processError) {
+      return next(processError);
+    }
   }),
 );
 

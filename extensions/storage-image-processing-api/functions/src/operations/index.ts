@@ -163,6 +163,31 @@ export const defaultActionsBuilder: ActionBuilder = (
   ];
 };
 
+export function jsonAsValidatedOperations(
+  operations: Operation[],
+): ValidatedOperation[] {
+  const output: ValidatedOperation[] = [];
+
+  for (let i = 0; i < operations.length; i++) {
+    const rawOptions = operations[i];
+    const operation = rawOptions.operation;
+    try {
+      const options = asValidatedOperationOptions(rawOptions);
+      output.push({
+        source: null,
+        operation,
+        rawOptions,
+        options,
+      });
+    } catch (error) {
+      error.message = `Options for the '${operation}' operation (at position ${i}) are invalid: ${error.message}`;
+      throw error;
+    }
+  }
+
+  return output;
+}
+
 export function asValidatedOperations(input: string): ValidatedOperation[] {
   const output: ValidatedOperation[] = [];
   const operationSegments = input.split('/');
