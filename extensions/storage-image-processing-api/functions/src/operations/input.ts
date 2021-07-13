@@ -195,7 +195,9 @@ async function fetchGcsFile(
 
   return fetchUrl({
     ...options,
-    url: `${firebaseStorageApi}/v0/b/${extensionConfiguration.bucket}/o/${options.source}?alt=media`,
+    url: `${firebaseStorageApi}/v0/b/${
+      extensionConfiguration.bucket
+    }/o/${encodeURIComponent(options.source)}?alt=media`,
     type: 'url',
   });
 }
