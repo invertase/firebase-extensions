@@ -1,10 +1,7 @@
 {
   "buckets": [
     {
-      "id": "default-bucket"
-    },
-    {
-      "id": "extensions-testing"
+      "id": "extensions-testing.appspot.com"
     }
   ]
 }

@@ -1,5 +1,6 @@
 {
   "name": "storage-image-processing-api-functions",
+  "version": "0.0.1",
   "scripts": {
     "prepare": "npm run build",
     "build": "tsc",
@@ -7,8 +8,9 @@
     "dev": "EXPRESS_SERVER=true ../../../node_modules/.bin/nodemon",
     "emulator": "FIREBASE_STORAGE_EMULATOR_HOST='localhost:9199' firebase ext:dev:emulators:start --test-config=__tests__/test-firebase.json --test-params=__tests__/test-params.env --project=extensions-testing --import=./__tests__/data",
     "generate-readme": "firebase ext:info .. --markdown > ../README.md",
-    "test:watch": "jest --watch",
-    "test": "jest"
+    "test:watch": "jest --config=./jest.config.js --watch",
+    "test": "jest --config=./jest.config.js",
+    "deploy": "firebase ext:install ./ --project=extensions-testing"
   },
   "engines": {
     "node": "14"
@@ -24,7 +26,13 @@
     "helmet": "^4.6.0",
     "sharp": "0.28.3",
     "superstruct": "^0.15.2",
-    "text-svg": "^1.0.3"
+    "text-svg": "^1.0.3",
+    "typescript": "^4.3.2",
+    "@types/cors": "^2.8.10",
+    "@types/lodash.get": "^4.4.6",
+    "@types/sharp": "0.28.3",
+    "axios": "^0.21.1",
+    "@types/jest": "^26.0.23"
   },
   "nodemonConfig": {
     "watch": [
@@ -34,14 +42,8 @@
     "exec": "../../../node_modules/.bin/ts-node src/index.ts"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.10",
-    "@types/lodash.get": "^4.4.6",
-    "@types/sharp": "0.28.3",
-    "@types/jest": "^26.0.23",
     "jest": "^27.0.4",
-    "axios": "^0.21.1",
-    "firebase-functions-test": "^0.2.3",
-    "typescript": "^4.3.2"
+    "firebase-functions-test": "^0.2.3"
   },
   "private": true
 }

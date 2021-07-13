@@ -183,49 +183,15 @@ async function fetchGcsFile(
     return fetchUrl({ ...options, url: options.source, type: 'url' });
   }
 
-  if (!options.source.startsWith('/')) {
+  if (options.source.startsWith('/')) {
     throw new AssertionError({
-      message: `Input 'source' does not appear to be a valid storage path.`,
+      message: `Input 'source' does not appear to be a valid storage path. Paths must not start with '/'.`,
     });
   }
 
-  const genericError = `Input 'source' does not appear to be a valid storage object. Check this object and bucket exists and that it is publicly readable.`;
-
-  // Check bucket exists.
   const bucket = firebase.storage().bucket(extensionConfiguration.bucket);
-  if (!(await bucket.exists())) {
-    throw new AssertionError({
-      message: genericError,
-    });
-  }
-
   const file = bucket.file(options.source);
-
-  // Ensure the file exists.
-  const fileExists = await file.exists();
-  if (!fileExists) {
-    throw new AssertionError({
-      message: genericError,
-    });
-  }
-
-  // Ensure the file is publicly readable.
-  const fileIsPublic = await file.isPublic();
-  if (!fileIsPublic) {
-    throw new AssertionError({
-      message: genericError,
-    });
-  }
-
-  // Storage file exists so lets fetch it as a buffer.
-  const fileBuffer = await file.download();
-
-  return [
-    {
-      method: 'constructor',
-      arguments: [fileBuffer],
-    },
-  ];
+  return fetchUrl({ ...options, url: file.publicUrl(), type: 'url' });
 }
 
 function newImageOptions(options: OperationInput): OperationAction[] {
