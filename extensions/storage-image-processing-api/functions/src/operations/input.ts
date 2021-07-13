@@ -15,7 +15,6 @@
  */
 
 import * as superstruct from 'superstruct';
-import * as firebase from 'firebase-admin';
 
 import * as utils from '../utils';
 import { Operation, OperationAction, OperationBuilder } from '../types';
