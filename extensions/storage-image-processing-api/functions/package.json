@@ -10,7 +10,7 @@
     "generate-readme": "firebase ext:info .. --markdown > ../README.md",
     "test:watch": "jest --config=./jest.config.js --watch",
     "test": "jest --config=./jest.config.js",
-    "deploy": "firebase ext:install ./ --project=extensions-testing"
+    "deploy": "firebase ext:install ../ --project=extensions-testing"
   },
   "engines": {
     "node": "14"
