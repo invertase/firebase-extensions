@@ -4,14 +4,18 @@ A collection of Firebase Extensions built by Invertase.
 
 > New to Extensions? You can learn more at the [Firebase Extensions product page](https://firebase.google.com/products/extensions).
 
-Each directory in extensions folder of this repo contains the source code for an extension, and a README that explains
-how the extension works, including information about the APIs enabled, resources created, and the access granted to the extension.
+Each directory in the `/extensions` folder of this repository contains the source code for a Firebase Extension with a
+README that explains how the extension works, including information about the APIs enabled, resources created, and the
+access granted to the extension.
 
 ## List of Extensions
 
 > Want to install one of these? Visit each extension's linked README for installation instructions.
 
-> TODO
+### [Image Processing API](/extensions/storage-image-processing-api)
+
+Optimize and transform images from your Cloud Storage buckets via a powerful HTTP API. Supports over 30 different image
+operations to optimize and manipulate your images.
 
 ---
 

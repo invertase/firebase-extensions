@@ -1,0 +1,17 @@
+{
+  "name": "melos.png",
+  "bucket": "extensions-testing.appspot.com",
+  "contentType": "image/png",
+  "metageneration": 1,
+  "generation": 1625834405346,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": ["1a9a5700-3336-4043-8ec4-f5a5b6df9b28"],
+  "timeCreated": "2021-07-09T12:40:05.345Z",
+  "updated": "2021-07-09T12:40:05.346Z",
+  "size": 7975,
+  "md5Hash": "+xjWjVWAj1pvKDT89EACzQ==",
+  "crc32c": "1920535852"
+}

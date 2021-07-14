@@ -1,5 +1,5 @@
 {
-  "npmClient": "yarn",
-  "packages": ["extensions/*"],
+  "npmClient": "npm",
+  "packages": ["extensions/**"],
   "version": "0.0.0"
 }
