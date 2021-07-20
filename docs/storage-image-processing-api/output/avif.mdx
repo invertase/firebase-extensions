@@ -1,0 +1,28 @@
+# Avif
+
+Output to AVIF.
+
+#### **Options**
+
+| Key               |  Type   | Optional | Min Value | Max Value | Default |
+| ----------------- | :-----: | :------: | :-------: | :-------: | :-----: |
+| quality           | Integer |    ✓     |     1     |    100    |   80    |
+| lossless          | Boolean |    ✓     |    n/a    |    n/a    |  false  |
+| speed             | Integer |    ✓     |     0     |     8     |    5    |
+| chromaSubsampling | String  |    ✓     |    n/a    |    n/a    |   n/a   |
+
+### `quality`
+
+quality, integer 1-100 (optional, default 80)
+
+### `lossless`
+
+Use lossless compression (optional, default false)
+
+### `speed`
+
+CPU effort vs file size, 0 (slowest/smallest) to 8 (fastest/largest) (optional, default 5)
+
+### `chromaSubsampling`
+
+Set to '4:4:4' to prevent chroma subsampling otherwise

@@ -1,0 +1,53 @@
+# Jpeg
+
+Output to JPEG.
+
+#### **Options**
+
+| Key               |  Type   | Optional | Default |
+| ----------------- | :-----: | :------: | :-----: |
+| progressive       | Boolean |    ✓     |   n/a   |
+| compressionLevel  | Integer |    ✓     |   n/a   |
+| adaptiveFiltering | Integer |    ✓     |   n/a   |
+| palette           | Boolean |    ✓     |   n/a   |
+| quality           | Integer |    ✓     |   n/a   |
+| colours           | Integer |    ✓     |   n/a   |
+| colors            | Integer |    ✓     |   n/a   |
+| dither            |  Float  |    ✓     |   n/a   |
+| force             | Boolean |    ✓     |   n/a   |
+
+### `progressive`
+
+Use progressive (interlace) scan.
+
+### `compressionLevel`
+
+Zlib compression level, 0 (fastest, largest) to 9 (slowest, smallest) (optional, default 6)
+
+### `adaptiveFiltering`
+
+Use adaptive row filtering (optional, default false)
+
+### `palette`
+
+Quantise to a palette-based image with alpha transparency support (optional, default false)
+
+### `quality`
+
+Use the lowest number of colours needed to achieve given quality, sets palette to true (optional, default 100)
+
+### `acolours`
+
+Ma✓imum number of palette entries, sets palette to true (optional, default 256)
+
+### `acolors`
+
+Alternative spelling of options.colours, sets palette to true (optional, default 256)
+
+### `dither`
+
+Level of Floyd-Steinberg error diffusion, sets palette to true (optional, default 1.0)
+
+### `force`
+
+Force PNG output, otherwise attempt to use input format (optional, default true)

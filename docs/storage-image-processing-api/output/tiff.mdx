@@ -1,0 +1,63 @@
+# Tiff
+
+Output to TIFF.
+
+#### **Options**
+
+| Key         |        Type         | Optional | Min Value | Max Value | Default |
+| ----------- | :-----------------: | :------: | :-------: | :-------: | :-----: |
+| quality     |       Boolean       |    ✓     |     1     |    100    |   80    |
+| force       |       Boolean       |    ✓     |    n/a    |    n/a    |   n/a   |
+| compression | [Enum](compression) |    ✓     |    n/a    |    n/a    |   n/a   |
+| predictor   |  [Enum](predictor)  |    ✓     |    n/a    |    n/a    |   n/a   |
+| pyramid     |       Boolean       |    ✓     |    n/a    |    n/a    |   n/a   |
+| tile        |       Boolean       |    ✓     |    n/a    |    n/a    |   n/a   |
+| tileWidth   |       Integer       |    ✓     |    n/a    |    n/a    |   n/a   |
+| tileHeight  |       Integer       |    ✓     |    n/a    |    n/a    |   n/a   |
+| xres        |       Integer       |    ✓     |    n/a    |    n/a    |   n/a   |
+| yres        |       Integer       |    ✓     |    n/a    |    n/a    |   n/a   |
+| bitdepth    |       Integer       |    ✓     |    n/a    |    n/a    |   n/a   |
+
+### `quality`
+
+quality, integer 1-100 (optional, default 80)
+
+### `force`
+
+Force TIFF output, otherwise attempt to use input format (optional, default true)
+
+### `compression`
+
+ompression options: lzw, deflate, jpeg, ccittfax4 (optional, default 'jpeg')
+
+### `predictor`
+
+Compression predictor options: none, horizontal, float (optional, default 'horizontal')
+
+### `pyramid`
+
+Write an image pyramid (optional, default false)
+
+### `tile`
+
+Write a tiled tiff (optional, default false)
+
+### `tileWidth`
+
+horizontal tile size (optional, default 256)
+
+### `tileHeight`
+
+vertical tile size (optional, default 256)
+
+### `xres`
+
+horizontal resolution in pixels/mm (optional, default 1.0)
+
+### `yres`
+
+vertical resolution in pixels/mm (optional, default 1.0)
+
+### `bitdepth`
+
+reduce bitdepth to 1, 2 or 4 bit (optional, default 8)

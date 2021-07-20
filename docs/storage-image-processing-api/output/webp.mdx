@@ -1,0 +1,48 @@
+# Webp
+
+Output to WebP.
+
+#### **Options**
+
+| Key             |  Type   | Optional | Min Value | Max Value | Default |
+| --------------- | :-----: | :------: | :-------: | :-------: | :-----: |
+| quality         | Boolean |    ✓     |     1     |    100    |   80    |
+| alphaQuality    | Integer |    ✓     |     0     |    100    |   100   |
+| lossless        | Integer |    ✓     |    n/a    |    n/a    |   n/a   |
+| nearLossless    | Boolean |    ✓     |    n/a    |    n/a    |   n/a   |
+| smartSubsample  | Integer |    ✓     |    n/a    |    n/a    |   n/a   |
+| reductionEffort | Integer |    ✓     |     0     |     6     |    4    |
+| pageHeight      | Integer |    ✓     |    n/a    |    n/a    |   n/a   |
+| force           | Boolean |    ✓     |    n/a    |    n/a    |   n/a   |
+
+### `quality`
+
+quality, integer 1-100 (optional, default 80)
+
+### `alphaQuality`
+
+quality of alpha layer, integer 0-100 (optional, default 100)
+
+### `lossless`
+
+Use lossless compression mode (optional, default false)
+
+### `nearLossless`
+
+Use near_lossless compression mode (optional, default false)
+
+### `smartSubsample`
+
+Use high quality chroma subsampling (optional, default false)
+
+### `reductionEffort`
+
+Level of CPU effort to reduce file size, integer 0-6 (optional, default 4)
+
+### `pageHeight`
+
+Page height for animated output
+
+### `force`
+
+Force WebP output, otherwise attempt to use input format (optional, default true)
