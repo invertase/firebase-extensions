@@ -14,14 +14,14 @@ A particular interpolator may also be specified via the interpolator option.
 
 #### **Options**
 
-| Key          |        Type        | Optional | Default |
-| ------------ | :----------------: | :------: | :-----: |
-| matrix       |   Array(Integer)   |    x     |   n/a   |
-| idx          |      Integer       |    ✓     |   n/a   |
-| idy          |      Integer       |    ✓     |   n/a   |
-| odx          |      Integer       |    ✓     |   n/a   |
-| ody          |      Integer       |    ✓     |   n/a   |
-| interpolator | Enum(Interpolator) |    ✓     |   n/a   |
+| Key          |                                  Type                                  | Optional | Default |
+| ------------ | :--------------------------------------------------------------------: | :------: | :-----: |
+| matrix       |                             Array(Integer)                             |    x     |   n/a   |
+| idx          |                                Integer                                 |    ✓     |   n/a   |
+| idy          |                                Integer                                 |    ✓     |   n/a   |
+| odx          |                                Integer                                 |    ✓     |   n/a   |
+| ody          |                                Integer                                 |    ✓     |   n/a   |
+| interpolator | Enum([Interpolator])[/storage-image-processing-api/types/interpolator] |    ✓     |   n/a   |
 
 ### `Blur`
 
@@ -33,7 +33,7 @@ When a sigma is provided, performs a slower, more accurate Gaussian blur.
 
 | Key   | Type  | Optional | Min Value | Max Value | Default |
 | ----- | :---: | :------: | :-------: | :-------: | ------- |
-| sigma | Float |    x     |    0.3    |   1000    |
+| sigma | Float |    x     |    0.3    |   1000    | n/a     |
 
 ### `Clahe`
 

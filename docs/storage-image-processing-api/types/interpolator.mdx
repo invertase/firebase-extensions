@@ -1,0 +1,36 @@
+### `Interpolator`
+
+#### **Options**
+
+**nearest**
+
+[Nearest neighbour interpolation](http://en.wikipedia.org/wiki/Nearest-neighbor_interpolation).
+
+Suitable for image enlargement only
+
+**bilinear**
+
+[Bilinear interpolation](http://en.wikipedia.org/wiki/Bilinear_interpolation).
+Faster than bicubic but with less smooth results.
+
+**bicubic**
+
+[Bicubic interpolation](http://en.wikipedia.org/wiki/Bicubic_interpolation)
+(the default).
+
+**locallyBoundedBicubic**
+
+[LBB interpolation](https://github.com/jcupitt/libvips/blob/master/libvips/resample/lbb.cpp#L100).
+Prevents some "[acutance](http://en.wikipedia.org/wiki/Acutance)" but typically reduces performance
+by a factor of 2.
+
+**nohalo**
+
+[Nohalo interpolation](http://eprints.soton.ac.uk/268086/).
+Prevents acutance but typically reduces performance by a factor of 3.
+
+**vertexSplitQuadraticBasisSpline**
+
+[Vertex Split Quadratic Basis Spline interpolation](https://github.com/jcupitt/libvips/blob/master/libvips/resample/vsqbs.cpp#L48).
+
+Prevents "staircasing" when enlarging.
