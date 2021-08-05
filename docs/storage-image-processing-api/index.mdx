@@ -11,18 +11,32 @@ Follow our guide on how to setup and process images [here](/getting-started).
 ## Interactive Example
 
 <div class="flex flex-col">
-  <img id="imgSrc" />
+  <img
+    id="imgSrc"
+    src="https://europe-west2-extensions-testing.cloudfunctions.net/ext-storage-image-processing-api-handler/process/input~type:create~width:200~height:100/flatten~background:black/text~value:Invertase/output~format:jpeg"
+  />
   <div class="flex">
     <div>url:</div>
     <input
       type="text"
+      value=""
       onChange={({ target }) => {
         var image = document.getElementById('imgSrc');
-        image.src = `https://europe-west2-extensions-testing.cloudfunctions.net/ext-storage-image-processing-api-handler/process/input~type:create~width:200~height:100/flatten~background:black/text~value:Invertase/output~format:jpeg`;
+        image.src = target.value;
       }}
     />
   </div>
   <div class="flex">
-    <input type="checkbox" id="scales" name="scales"></input>
+    <label>Image text</label>
+    <input
+      type="text"
+      onChange={({ target }) => {
+        var image = document.getElementById('imgSrc');
+        image.src = image.value.replace(
+          'text~value:[a-zA-Z]*/',
+          `text~value:${target.value}`,
+        );
+      }}
+    />
   </div>
 </div>
