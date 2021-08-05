@@ -33,10 +33,11 @@ Follow our guide on how to setup and process images [here](/getting-started).
       onChange={({ target }) => {
         var image = document.getElementById('imgSrc');
         image.src = image.src.replace(
-          'text~value:[a-zA-Z]*/',
+          /text~value:[a-zA-Z]*/,
           `text~value:${target.value}`,
         );
       }}
     />
+
   </div>
 </div>
