@@ -32,7 +32,7 @@ Follow our guide on how to setup and process images [here](/getting-started).
       type="text"
       onChange={({ target }) => {
         var image = document.getElementById('imgSrc');
-        image.src = image.value.replace(
+        image.src = image.src.replace(
           'text~value:[a-zA-Z]*/',
           `text~value:${target.value}`,
         );
