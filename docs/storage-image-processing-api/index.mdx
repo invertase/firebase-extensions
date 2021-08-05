@@ -38,6 +38,18 @@ Follow our guide on how to setup and process images [here](/getting-started).
         );
       }}
     />
-
+  </div>
+  <div class="flex">
+    <label>Width (in pixels)</label>
+    <input
+      type="number"
+      onClick={() => {
+        var image = document.getElementById('imgSrc');
+        image.src = image.src.replace(
+          /width:[0-9]*/,
+          `text~value:${target.value}`,
+        );
+      }}
+    />
   </div>
 </div>
