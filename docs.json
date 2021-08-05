@@ -17,5 +17,8 @@
         ["Error Handling", "/storage-image-processing-api/error-handling"]
       ]
     ]
-  ]
+  ],
+  "components": {
+    "InteractiveExample": "./docs/components/interactive-example.js"
+  }
 }
