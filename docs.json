@@ -19,6 +19,6 @@
     ]
   ],
   "components": [
-    { "InteractiveExample": "./docs/components/interactive-example.js" }
+    ["InteractiveExample", "./docs/components/interactive-example.js"]
   ]
 }
