@@ -1,5 +1,7 @@
-const InteractiveExample = () => (
-  <div>This is an example remote components!</div>
-);
+import React from 'react';
+
+const InteractiveExample = () => {
+  return <div>Hello Remote World!</div>;
+};
 
 export default InteractiveExample;
