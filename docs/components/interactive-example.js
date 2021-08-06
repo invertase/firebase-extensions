@@ -1,7 +1,11 @@
-// import React from 'react';
+// index.js
+
+'use strict';
 
 const InteractiveExample = () => {
   return <div>Hello Remote World!</div>;
 };
 
-export default InteractiveExample;
+exports['default'] = InteractiveExample;
+
+//# sourceMappingURL=index.js.map
