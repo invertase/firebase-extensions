@@ -13,8 +13,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "outDir": "lib",
-    "jsx": "preserve",
-    "noEmit": false
+    "jsx": "react"
   },
   "exclude": ["node_modules", "__tests__"],
   "include": ["src"]
