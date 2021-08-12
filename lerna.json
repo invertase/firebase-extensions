@@ -1,5 +1,5 @@
 {
   "npmClient": "npm",
-  "packages": ["extensions/**"],
+  "packages": ["extensions/**", "components/**"],
   "version": "0.0.0"
 }
