@@ -31,22 +31,22 @@ const InteractiveExample = () => {
         setUrl(newUrl);
         setLoading(false);
     };
-    return (react_1.default.createElement("div", { className: "w-full" },
+    return (react_1.default.createElement("div", { className: "w-full flex" },
         react_1.default.createElement("div", { className: "flex flex-col space-y-4" },
             react_1.default.createElement("div", null, loading ? (react_1.default.createElement("div", null, "Loading...")) : (react_1.default.createElement("img", { src: url, className: "w-full" }))),
             react_1.default.createElement("div", { className: "flex justify-around w-full" },
-                react_1.default.createElement("div", { className: "flex flex-col" },
+                react_1.default.createElement("div", { className: "flex flex-col w-full" },
                     react_1.default.createElement("label", { className: "text-sm text-gray-500" }, "Image Type"),
                     react_1.default.createElement("select", { className: "border-4 border-blue-500 border-opacity-25 text-sm text-gray-500" },
                         react_1.default.createElement("option", { value: "create" }, "Creation"),
                         react_1.default.createElement("option", { value: "source" }, "Exisiting"))),
-                react_1.default.createElement("div", { className: "flex flex-col" },
+                react_1.default.createElement("div", { className: "flex flex-col w-full" },
                     react_1.default.createElement("label", { className: "text-sm text-gray-500" }, "Height (px)"),
                     react_1.default.createElement("input", { type: "number", className: "border-4 border-blue-500 border-opacity-25", onChange: ({ target }) => onChange(/text~value:[a-zA-Z]*/, `text~value:${target.value}`) })),
-                react_1.default.createElement("div", { className: "flex flex-col" },
+                react_1.default.createElement("div", { className: "flex flex-col w-full" },
                     react_1.default.createElement("label", { className: "text-sm text-gray-500" }, "Width (px)"),
                     react_1.default.createElement("input", { type: "number", className: "border-4 border-blue-500 border-opacity-25" })),
-                react_1.default.createElement("div", { className: "flex flex-col" },
+                react_1.default.createElement("div", { className: "flex flex-col w-full" },
                     react_1.default.createElement("label", { className: "text-sm text-gray-500" }, "Text"),
                     react_1.default.createElement("input", { type: "text", className: "border-4 border-blue-500 border-opacity-25", onChange: ({ target }) => onChange(/text~value:[a-zA-Z]*/, `text~value:${target.value}`) }))),
             react_1.default.createElement("div", { className: "flex justify-center p-4" }, url))));

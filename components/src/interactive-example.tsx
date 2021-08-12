@@ -18,7 +18,7 @@ const InteractiveExample = (): JSX.Element => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full flex">
       <div className="flex flex-col space-y-4">
         <div>
           {loading ? (
@@ -28,14 +28,14 @@ const InteractiveExample = (): JSX.Element => {
           )}
         </div>
         <div className="flex justify-around w-full">
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full">
             <label className="text-sm text-gray-500">Image Type</label>
             <select className="border-4 border-blue-500 border-opacity-25 text-sm text-gray-500">
               <option value="create">Creation</option>
               <option value="source">Exisiting</option>
             </select>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full">
             <label className="text-sm text-gray-500">Height (px)</label>
             <input
               type="number"
@@ -45,14 +45,14 @@ const InteractiveExample = (): JSX.Element => {
               }
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full">
             <label className="text-sm text-gray-500">Width (px)</label>
             <input
               type="number"
               className="border-4 border-blue-500 border-opacity-25"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full">
             <label className="text-sm text-gray-500">Text</label>
             <input
               type="text"
