@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "outDir": "lib",
     "jsx": "preserve",
-    "noEmit": true
+    "noEmit": false
   },
   "exclude": ["node_modules", "__tests__"],
   "include": ["src"]
