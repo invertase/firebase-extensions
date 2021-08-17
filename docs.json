@@ -18,5 +18,7 @@
       ]
     ]
   ],
-  "components": [["InteractiveExample", "/components/interactive-example.js"]]
+  "components": [
+    ["InteractiveExample", "/components/lib/interactive-example.js"]
+  ]
 }
