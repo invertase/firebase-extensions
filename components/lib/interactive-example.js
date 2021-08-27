@@ -18,13 +18,165 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = __importStar(require("react"));
 const fa_1 = require("react-icons/fa");
-const types_1 = __importDefault(require("./types"));
+const types = [
+    {
+        operation: 'flip',
+    },
+    {
+        operation: 'flop',
+    },
+    {
+        operation: 'grayscale',
+        options: [
+            {
+                key: 'grayscale',
+                type: 'boolean',
+                optional: true,
+            },
+        ],
+    },
+    //   {
+    //     _meta: {
+    //       label: 'Gamma',
+    //       type: 'boolean',
+    //     },
+    //     input: 'gamma',
+    //     operation: 'gamma',
+    //   },
+    //   {
+    //     _meta: {
+    //       label: 'Blur',
+    //       type: 'boolean',
+    //     },
+    //     input: 'sigma',
+    //     operation: 'blur',
+    //   },
+    //   {
+    //     _meta: {
+    //       label: 'Median',
+    //       type: 'boolean',
+    //     },
+    //     input: 'size',
+    //     operation: 'median',
+    //   },
+    //   {
+    //     _meta: {
+    //       label: 'Modulate',
+    //       type: 'boolean',
+    //     },
+    //     input: 'size',
+    //     operation: 'modulate',
+    //   },
+    //   {
+    //     _meta: {
+    //       label: 'Negate',
+    //       type: 'boolean',
+    //     },
+    //     operation: 'negate',
+    //   },
+    //   {
+    //     _meta: {
+    //       label: 'Rotate',
+    //     },
+    //     input: 'angle',
+    //     operation: 'rotate',
+    //   },
+    //   {
+    //     _meta: {
+    //       type: 'text',
+    //       label: 'Tint',
+    //       placeholder: 'eg. rgb(10, 2, 255)',
+    //     },
+    //     input: 'rgb',
+    //     operation: 'tint',
+    //   },
+    //   {
+    //     _meta: {
+    //       label: 'Trim',
+    //       type: 'number',
+    //     },
+    //     input: 'threshold',
+    //     operation: 'trim',
+    //   },
+    //   {
+    //     _meta: {
+    //       label: 'Flatten',
+    //       type: 'text',
+    //       placeholder: 'eg. rgb(10, 2, 255)',
+    //     },
+    //     input: 'background',
+    //     operation: 'flatten',
+    //   },
+    //   {
+    //     _meta: {
+    //       label: 'Colorspace',
+    //       type: 'text',
+    //       placeholder: 'eg. rgb16',
+    //     },
+    //     input: 'colorspace',
+    //     operation: 'colorspace',
+    //   },
+    {
+        operation: 'colorspace',
+        options: [
+            {
+                key: 'threshold',
+                type: 'number',
+                optional: true,
+                minValue: 0,
+                maxValue: 255,
+                default: 128,
+            },
+            {
+                key: 'grayscale',
+                type: 'boolean',
+                optional: true,
+            },
+        ],
+    },
+    {
+        operation: 'text',
+        options: [
+            {
+                key: 'value',
+                type: 'string',
+                optional: true,
+            },
+            {
+                key: 'font',
+                type: 'string',
+                optional: true,
+                minValue: 0.01,
+                maxValue: 1000,
+                default: '30px sans-serif',
+            },
+            {
+                key: 'top',
+                type: 'number',
+                optional: true,
+            },
+            {
+                key: 'left',
+                type: 'number',
+                optional: true,
+            },
+            {
+                key: 'textAlign',
+                type: 'string',
+                optional: true,
+            },
+            {
+                key: 'textColor',
+                type: 'string',
+                optional: true,
+                default: 'white',
+            },
+        ],
+    },
+];
 const baseUrl = 'https://europe-west2-extensions-testing.cloudfunctions.net/ext-storage-image-processing-api-handler/process';
 const InteractiveExample = () => {
     const [editing, setEditing] = react_1.useState(null);
@@ -121,7 +273,7 @@ const InteractiveExample = () => {
     const renderOperation = () => {
         if (!option.length)
             return null;
-        const { operation, options } = types_1.default.filter($ => $.operation === option)[0];
+        const { operation, options } = types.filter($ => $.operation === option)[0];
         if (!options || !options.length) {
             const toUpdate = operations;
             const toAdd = {};
@@ -154,7 +306,7 @@ const InteractiveExample = () => {
                     react_1.default.createElement("div", null,
                         react_1.default.createElement("select", { onChange: e => setOption(e.target.value) },
                             react_1.default.createElement("option", { value: '' }, "--Please choose an option--"),
-                            types_1.default.map(({ operation }) => {
+                            types.map(({ operation }) => {
                                 return react_1.default.createElement("option", { value: operation }, operation);
                             }))),
                     !!option && (react_1.default.createElement(react_1.default.Fragment, null,
