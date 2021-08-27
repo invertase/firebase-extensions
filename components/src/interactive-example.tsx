@@ -1,169 +1,253 @@
-import React, { createElement, HTMLProps, ReactNode, useState } from 'react';
+import React, { useState } from 'react';
+import { FaCircleNotch } from 'react-icons/fa';
+import { isLabeledStatement } from 'typescript';
 
-const imageOperations = [
-  { name: 'Rotate 180', key: 'rotate', value: ['angle', 180] },
-  { name: 'Rotate 360', key: 'rotate', value: ['angle', 360] },
-  { name: 'Rotate 900', key: 'rotate', value: ['angle', 900] },
-  { name: 'Grayscale', key: 'grayscale', value: ['grayscale', true] },
-];
-
-const inputOperations = [
-  {
-    name: 'New Image (200x 200)',
-    key: 'type',
-    value: ['create', 'width:200~height:200'],
-  },
-  {
-    name: 'New Image (400x 400)',
-    key: 'type',
-    value: ['create', 'width:400~height:400'],
-  },
-  {
-    name: 'New Image (600x 1200)',
-    key: 'type',
-    value: ['create', 'width:600~height:1200'],
-  },
-  {
-    name: 'New Image (800x 1400)',
-    key: 'type',
-    value: ['create', 'width:800~height:1400'],
-  },
-  {
-    name: 'Beagle',
-    key: 'type',
-    value: ['url', 'url:https%3A%2F%2Ftinyurl.com%2Fhkeujyyz'],
-  },
-];
+import types from './types';
 
 const baseUrl =
   'https://europe-west2-extensions-testing.cloudfunctions.net/ext-storage-image-processing-api-handler/process';
 
-const renderOperations = operations =>
-  Object.keys(operations)
-    .map(o => {
-      const [key, value] = operations[o];
-      const prop = value ? `${key}:${value}` : `${key}`;
-      return `${o}~${prop}`;
-    })
-    .join('/');
-
-const renderInput = input =>
-  Object.keys(input)
-    .map(o => {
-      const [key, value] = input[o];
-      const prop = value ? `${key}~${value}` : `${key}`;
-
-      return `${o}:${prop}`;
-    })
-    .join('~');
-
-const generateUrl = (input, operations) =>
-  `${baseUrl}/input~${renderInput(input)}/${renderOperations(
-    operations,
-  )}/output~format:jpeg`;
-
 const InteractiveExample = (): JSX.Element => {
-  const [input, setInput] = useState({
-    type: ['create', 'width:200~height:100'],
-  });
-
-  const [operations, setOperations] = useState({
-    flatten: ['background', 'black'],
-    text: ['value', 'Invertase'],
-  });
-
-  const [url, setUrl] = useState(generateUrl(input, operations));
-
+  const [editing, setEditing] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [option, setOption] = useState('');
+  const [operations, setOperations] = useState([
+    {
+      operation: 'input',
+      type: 'url',
+      url: 'https://tinyurl.com/hkeujyyz',
+    },
+    {
+      operation: 'output',
+      format: 'png',
+    },
+  ]);
 
-  const onChangeOperation = (key, value) => {
-    const ops = operations;
-    ops[key] = value;
-
-    console.log('here >>>');
+  const addOperation = () => {
     setLoading(true);
-    setOperations(ops);
-    setUrl(generateUrl(input, operations));
+
+    const toUpdate = operations;
+
+    toUpdate.splice(1, 0, editing);
+
+    setOperations([...toUpdate]);
+    setEditing(null);
+    setOption(null);
     setLoading(false);
   };
 
-  const onChangeInput = (key, value) => {
-    const i = input;
-    i[key] = value;
+  // const updateOperation = ({ operation, ...rest }) => {
+  //   setLoading(true);
 
-    console.log('here >>>');
+  //   const toUpdate = operations.filter($ => $.operation !== operation);
+
+  //   //@ts-ignore
+  //   toUpdate.splice(1, 0, { operation, ...rest });
+
+  //   setOperations([...toUpdate]);
+  //   setLoading(false);
+  // };
+
+  const removeOperation = operation => {
     setLoading(true);
-    setInput(i);
-    setUrl(generateUrl(i, operations));
+
+    const toUpdate = operations.filter($ => $.operation !== operation);
+
+    setOperations([...toUpdate]);
     setLoading(false);
   };
 
-  if (loading) return <div>Processing...</div>;
+  const renderToggleButton = ({ operation, option }) => {
+    const active = operations.some($ => $.operation === operation);
+
+    const bgColor = active ? 'bg-green-300' : 'bg-red-300';
+
+    return (
+      <div
+        className={`p-2 text-white ${bgColor} cursor-pointer`}
+        onClick={() => {
+          const toUpdate = editing || { operation };
+
+          toUpdate[option.key] = !toUpdate[option.key];
+          setEditing({ ...toUpdate });
+        }}
+      >
+        {operation}
+      </div>
+    );
+  };
+
+  const renderNumberInput = ({ operation, option }) => {
+    const value = editing ? editing[option.key] : null;
+    return (
+      <div className="flex flex-col">
+        <label className={'capitalize'}>{option.key}</label>
+        <input
+          type="number"
+          min="0.3"
+          max="1000"
+          step="0.1"
+          value={value}
+          className="p-2 text-black bg-white border border-black-200"
+          placeholder={'eg. 10'}
+          onBlur={({ target }) => {
+            const toUpdate = editing || { operation };
+            toUpdate[option.key] = parseInt(target.value);
+            setEditing({ ...toUpdate });
+          }}
+        />
+      </div>
+    );
+  };
+
+  const renderTextInput = ({ operation, option }) => {
+    const value = editing ? editing[option.key] : null;
+    return (
+      <div className="flex flex-col">
+        <label className={'capitalize'}>{option.key}</label>
+        <input
+          type="text"
+          value={value}
+          placeholder={option.default || ''}
+          className="p-2 text-black bg-white border border-black-200"
+          onBlur={({ target }) => {
+            const toUpdate = editing || { operation };
+            toUpdate[option.key] = target.value;
+            setEditing({ ...toUpdate });
+          }}
+        />
+      </div>
+    );
+  };
+
+  const renderImage = () => {
+    return (
+      <div className="relative">
+        {loading && (
+          <div className="absolute flex items-center justify-center w-full h-full bg-black rounded-xl opacity-60">
+            <div className="flex space-x-4">
+              <div>Processing...</div>
+              <FaCircleNotch
+                size={24}
+                className="border-b-4 border-green-900"
+              />
+            </div>
+          </div>
+        )}
+        <img src={generateUrl} className="w-full" />
+      </div>
+    );
+  };
+
+  const generateUrl = `${baseUrl}?operations=${encodeURI(
+    JSON.stringify(operations),
+  )}`;
+
+  console.log('>>>', operations);
+  console.log('editing >>>', editing);
+
+  const renderOperationWithOptions = ({ operation, options }) => {
+    return (
+      <div>
+        <label className={'capitalize'}>{operation}</label>
+        <div className="flex space-x-2">
+          {options.map(option => {
+            if (option.type === 'boolean') {
+              return renderToggleButton({ operation, option });
+            }
+
+            if (option.type === 'string')
+              return renderTextInput({ operation, option });
+
+            if (option.type === 'number')
+              return renderNumberInput({ operation, option });
+
+            return null;
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  const renderOperation = () => {
+    if (!option.length) return null;
+
+    const { operation, options } = types.filter($ => $.operation === option)[0];
+
+    if (!options || !options.length) {
+      const toUpdate = operations;
+      const toAdd = {};
+      // @ts-ignore
+      toAdd.operation = `${operation}`;
+
+      // @ts-ignore
+      toUpdate.splice(1, 0, { ...toAdd });
+
+      setOperations([...toUpdate]);
+      setOption(null);
+      return null;
+    }
+
+    return renderOperationWithOptions({ operation, options });
+  };
+
+  console.log(option);
+
   return (
     <div className="w-full">
       <div className="flex flex-col space-y-4">
-        <div className="w-full">
-          <img src={url} className="w-full" />
+        <div className="w-full">{renderImage()}</div>
+        <div className="flex space-x-4">
+          {operations.map($ => (
+            <div className={'px-2 bg-green-500 text-white flex space-x-2 z-10'}>
+              <div
+                onClick={() => {
+                  setOption($.operation);
+                  setEditing({ ...$ });
+                }}
+              >
+                <div>{$.operation}</div>
+              </div>
+              <div
+                className="cursor-pointer"
+                onClick={() => removeOperation($.operation)}
+              >
+                x
+              </div>
+            </div>
+          ))}
         </div>
         <div className="flex justify-around w-full space-x-4">
           <div className="flex flex-col w-full space-y-2">
             <label className="text-sm text-gray-500">Input Type</label>
-            {inputOperations.map(({ name, key, value }) => (
-              <div
-                className="p-2 bg-gray-400 text-white"
-                onClick={() => onChangeInput(key, value)}
-              >
-                {name}
-              </div>
-            ))}
           </div>
           <div className="flex flex-col w-full space-y-2">
             <label className="text-sm text-gray-500">Image Operations</label>
-            {imageOperations.map(({ name, key, value }) => (
-              <div
-                className="p-2 bg-gray-400 text-white"
-                onClick={() => onChangeOperation(key, value)}
-              >
-                {name}
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-col w-full">
-            <label className="text-sm text-gray-500">Height (px)</label>
-            <input
-              type="number"
-              className="border-4 border-blue-500 border-opacity-25"
-              onChange={({ target }) =>
-                onChangeOperation(
-                  /text~value:[a-zA-Z]*/,
-                  `text~value:${target.value}`,
-                )
-              }
-            />
-          </div>
-          <div className="flex flex-col w-full">
-            <label className="text-sm text-gray-500">Width (px)</label>
-            <input
-              type="number"
-              className="border-4 border-blue-500 border-opacity-25"
-            />
-          </div>
-          <div className="flex flex-col w-full">
-            <label className="text-sm text-gray-500">Text</label>
-            <input
-              type="text"
-              className="border-4 border-blue-500 border-opacity-25"
-              onChange={({ target }) =>
-                onChangeOperation(
-                  /text~value:[a-zA-Z]*/,
-                  `text~value:${target.value}`,
-                )
-              }
-            />
+
+            <div>
+              <select onChange={e => setOption(e.target.value)}>
+                <option value={''}>--Please choose an option--</option>
+                {types.map(({ operation }) => {
+                  return <option value={operation}>{operation}</option>;
+                })}
+              </select>
+            </div>
+
+            {!!option && (
+              <React.Fragment>
+                {renderOperation()}
+                <div
+                  className="px-4 text-white bg-green-400 pointer-cursor"
+                  onClick={() => addOperation()}
+                >
+                  Add Operation
+                </div>
+              </React.Fragment>
+            )}
           </div>
         </div>
 
-        <div className="flex justify-center p-4">{url}</div>
+        <div className="justify-center p-4">{generateUrl}</div>
       </div>
     </div>
   );

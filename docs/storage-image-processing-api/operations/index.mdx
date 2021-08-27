@@ -49,21 +49,15 @@ This will, in general, enhance the clarity of the image by bringing out darker d
 | height   | Integer |    x     |     1     |    n/a    |   n/a   |
 | maxSlope | Integer |    ✓     |     0     |    100    |   n/a   |
 
-#### **Options**
-
-| Key   | Type  | Optional | Min Value | Max Value | Default |
-| ----- | :---: | :------: | :-------: | :-------: | :-----: |
-| sigma | Float |    x     |    0.3    |   1000    |   n/a   |
-
 ### `Colorspace`
 
 Output colourspace e.g. srgb, rgb, cmyk, lab, b-w ...
 
 #### **Options**
 
-| Key   |                                 Type                                 | Optional | Min Value | Max Value | Default |
-| ----- | :------------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
-| width | Enum([Colorspace](/storage-image-processing-api/types/interpolator)) |    x     |    n/a    |    n/a    |   n/a   |
+| Key         |                                Type                                | Optional | Min Value | Max Value | Default |
+| ----------- | :----------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
+| colourspace | Enum([Colorspace](/storage-image-processing-api/types/colorspace)) |    x     |    n/a    |    n/a    |   n/a   |
 
 ### `Composite`
 
@@ -298,16 +292,13 @@ Separate control over the level of sharpening in "flat" and "jagged" areas is av
 
 ### `Text`
 
-Sharpen the image. When used without parameters, performs a fast, mild sharpen of the output image.
-
-When a sigma is provided, performs a slower, more accurate sharpen of the L channel in the LAB colour space.
-
-Separate control over the level of sharpening in "flat" and "jagged" areas is available.
+A string of text that will be rendered over your image.
 
 #### **Options**
 
 | Key             |                               Type                               | Optional | Min Value | Max Value |     Default     |
 | --------------- | :--------------------------------------------------------------: | :------: | :-------: | :-------: | :-------------: |
+| value           |                              String                              |    ✓     |    n/a    |    n/a    |       n/a       |
 | font            |                              String                              |    ✓     |   0.01    |   1000    | 30px sans-serif |
 | textAlign       | Enum([textAlign](/storage-image-processing-api/types/textAlign)) |    ✓     |    n/a    |    n/a    |       n/a       |
 | textColor       |                             Integer                              |    ✓     |    n/a    |    n/a    |      white      |
@@ -349,7 +340,7 @@ An alpha channel if present will be unchanged by the operation.
 
 ### `Trim`
 
-Tint the image using the provided chroma while preserving the image luminance.
+rim "boring" pixels from all edges that contain values similar to the top-left pixel. Images consisting entirely of a single colour will calculate "boring" using the alpha channel, if any.
 
 An alpha channel if present will be unchanged by the operation.
 
@@ -357,4 +348,4 @@ An alpha channel if present will be unchanged by the operation.
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
-| threshold | Integer |    ✓     |     0     |    n/a    |   n/a   |
+| threshold | Integer |    ✓     |     0     |    n/a    |   10    |

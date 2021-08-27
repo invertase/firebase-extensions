@@ -5,7 +5,7 @@ import '../styles/index.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <article class="prose lg:prose-xl">
+    <article className="prose lg:prose-xl">
       <Component {...pageProps} />
     </article>
   );

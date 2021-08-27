@@ -15,7 +15,6 @@
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.3.1",
     "spellchecker-cli": "^4.8.0",
-    "tailwindcss": "^2.2.7",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.2"
