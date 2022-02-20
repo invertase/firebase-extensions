@@ -1,0 +1,45 @@
+import * as admin from 'firebase-admin';
+import axios from 'axios';
+
+admin.initializeApp({
+  projectId: 'extensions-testing',
+});
+
+const host = 'http://localhost:5001';
+const path = 'extensions-testing/europe-west2/handler/process';
+
+const operations = 'flatten~background:black/text~value:Invertase';
+const output = 'output~format:jpeg';
+
+const buildInputUrl = (input: string) => {
+  return `${host}/${path}/${input}/${operations}/${output}`;
+};
+
+describe('input testing', () => {
+  test('successfully creates a new image', async () => {
+    const url = buildInputUrl('input~type:create~width:200~height:100');
+    const { status } = await axios.get(url).then(response => response);
+
+    expect(status).toBe(200);
+  });
+
+  test('successfully creates a new image from a remote image', async () => {
+    const remoteImgUrl = encodeURIComponent(
+      'https://images.unsplash.com/photo-1512546321483-c0468b7b8a95',
+    );
+
+    const url = buildInputUrl(`input~type:url~url:${remoteImgUrl}`);
+    const { status } = await axios.get(url).then(response => response);
+
+    expect(status).toBe(200);
+  });
+
+  test('successfully creates a new image from a GCS image', async () => {
+    const remoteImgUrl = encodeURIComponent('melos.png');
+
+    const url = buildInputUrl(`input~type:gcs~source:${remoteImgUrl}`);
+    const { status } = await axios.get(url).then(response => response);
+
+    expect(status).toBe(200);
+  });
+});

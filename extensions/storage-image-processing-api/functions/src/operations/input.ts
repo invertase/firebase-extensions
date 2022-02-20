@@ -168,6 +168,7 @@ async function fetchGcsFile(
     process.env.NODE_ENV === 'production'
       ? 'https://firebasestorage.googleapis.com'
       : `http://${process.env.FIREBASE_STORAGE_EMULATOR_HOST}`;
+
   if (options.source.startsWith('https')) {
     if (
       // default bucket

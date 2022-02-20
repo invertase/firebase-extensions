@@ -47,7 +47,7 @@ const struct = superstruct.object({
    * Array of length width*height containing the kernel values.
    */
   kernel: utils.coerceStringToArray(
-    superstruct.size(superstruct.array(superstruct.number()), 1),
+    superstruct.size(superstruct.array(superstruct.number()), 1, 9999),
   ),
 
   /**
