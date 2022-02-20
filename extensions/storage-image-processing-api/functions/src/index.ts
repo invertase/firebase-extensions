@@ -25,6 +25,7 @@ import { StructError } from 'superstruct';
 
 import {
   applyValidatedOperation,
+  asValidatedOperations,
   jsonAsValidatedOperations,
 } from './operations';
 import {
@@ -137,6 +138,24 @@ app.get(
 
     const validatedOperations: ValidatedOperation[] =
       jsonAsValidatedOperations(operations);
+    const [processError] = await a2a(
+      processImageRequest(validatedOperations, res),
+    );
+    if (processError) {
+      return next(processError);
+    }
+  }),
+);
+
+app.get(
+  '/process/**',
+  expressAsyncHandlerWrapper(async (req, res, next) => {
+    const operationsString = req.url.replace('/process/', '');
+    if (!operationsString || !operationsString.length) {
+      return next();
+    }
+    const validatedOperations: ValidatedOperation[] =
+      asValidatedOperations(operationsString);
     const [processError] = await a2a(
       processImageRequest(validatedOperations, res),
     );
