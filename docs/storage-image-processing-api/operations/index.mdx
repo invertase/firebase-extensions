@@ -13,9 +13,8 @@ By default, new pixels are filled with a black background. You can provide a bac
 A particular interpolator may also be specified via the interpolator option.
 
 #### **Options**
-
 | Key          |                                  Type                                  | Optional | Default |
-| ------------ | :--------------------------------------------------------------------: | :------: | :-----: |
+|--------------|:----------------------------------------------------------------------:|:--------:|:-------:|
 | matrix       |                             Array(Integer)                             |    x     |   n/a   |
 | idx          |                                Integer                                 |    ✓     |   n/a   |
 | idy          |                                Integer                                 |    ✓     |   n/a   |
@@ -32,7 +31,7 @@ When a sigma is provided, performs a slower, more accurate Gaussian blur.
 #### **Options**
 
 | Key   | Type  | Optional | Min Value | Max Value | Default |
-| ----- | :---: | :------: | :-------: | :-------: | ------- |
+|-------|:-----:|:--------:|:---------:|:---------:|---------|
 | sigma | Float |    x     |    0.3    |   1000    | n/a     |
 
 ### `Clahe`
@@ -44,7 +43,7 @@ This will, in general, enhance the clarity of the image by bringing out darker d
 #### **Options**
 
 | Key      |  Type   | Optional | Min Value | Max Value | Default |
-| -------- | :-----: | :------: | :-------: | :-------: | :-----: |
+|----------|:-------:|:--------:|:---------:|:---------:|:-------:|
 | width    | Integer |    x     |     1     |    n/a    |   n/a   |
 | height   | Integer |    x     |     1     |    n/a    |   n/a   |
 | maxSlope | Integer |    ✓     |     0     |    100    |   n/a   |
@@ -52,7 +51,7 @@ This will, in general, enhance the clarity of the image by bringing out darker d
 #### **Options**
 
 | Key   | Type  | Optional | Min Value | Max Value | Default |
-| ----- | :---: | :------: | :-------: | :-------: | :-----: |
+|-------|:-----:|:--------:|:---------:|:---------:|:-------:|
 | sigma | Float |    x     |    0.3    |   1000    |   n/a   |
 
 ### `Colorspace`
@@ -62,7 +61,7 @@ Output colourspace e.g. srgb, rgb, cmyk, lab, b-w ...
 #### **Options**
 
 | Key   |                                 Type                                 | Optional | Min Value | Max Value | Default |
-| ----- | :------------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
+|-------|:--------------------------------------------------------------------:|:--------:|:---------:|:---------:|:-------:|
 | width | Enum([Colorspace](/storage-image-processing-api/types/interpolator)) |    x     |    n/a    |    n/a    |   n/a   |
 
 ### `Composite`
@@ -76,7 +75,7 @@ If both `top` and `left` options are provided, they take precedence over `gravit
 #### **Options**
 
 | Key           |                             Type                             | Optional | Min Value | Max Value | Default |
-| ------------- | :----------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
+|---------------|:------------------------------------------------------------:|:--------:|:---------:|:---------:|:-------:|
 | input         |                            string                            |    x     |    n/a    |    n/a    |   n/a   |
 | blend         |   Enum([Blend](/storage-image-processing-api/types/blend))   |    x     |    n/a    |    n/a    |   n/a   |
 | gravity       | Enum([Gravity](/storage-image-processing-api/types/gravity)) |    ✓     |    n/a    |    n/a    |   n/a   |
@@ -93,7 +92,7 @@ Convolve the image with the specified kernel.
 #### **Options**
 
 | Key    |                               Type                                | Optional | Min Value | Max Value | Default |
-| ------ | :---------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
+|--------|:-----------------------------------------------------------------:|:--------:|:---------:|:---------:|:-------:|
 | width  |                              string                               |    x     |     3     |   1001    |   n/a   |
 | height |                              Integer                              |    x     |     3     |   1001    |   n/a   |
 | kernel | Array(Enum([Number](/storage-image-processing-api/types/number))) |    x     |    n/a    |    n/a    |   n/a   |
@@ -109,7 +108,7 @@ This operation will always occur after resizing and extraction, if any.
 #### **Options**
 
 | Key    |  Type   | Optional | Min Value | Max Value | Default |
-| ------ | :-----: | :------: | :-------: | :-------: | :-----: |
+|--------|:-------:|:--------:|:---------:|:---------:|:-------:|
 | all    | Integer |    ✓     |    n/a    |    n/a    |    0    |
 | top    | Integer |    ✓     |    n/a    |    n/a    |    0    |
 | left   | Integer |    ✓     |    n/a    |    n/a    |    0    |
@@ -123,7 +122,7 @@ Zero-indexed offset in pixels from the top edge.
 #### **Options**
 
 | Key    |  Type   | Optional | Min Value | Max Value | Default |
-| ------ | :-----: | :------: | :-------: | :-------: | :-----: |
+|--------|:-------:|:--------:|:---------:|:---------:|:-------:|
 | top    | Integer |    ✓     |    n/a    |    n/a    |    0    |
 | left   | Integer |    ✓     |    n/a    |    n/a    |    0    |
 | bottom | Integer |    ✓     |    n/a    |    n/a    |    0    |
@@ -136,7 +135,7 @@ Merge alpha transparency channel, if any, with a background, then remove the alp
 #### **Options**
 
 | Key        |  Type  | Optional | Min Value | Max Value | Default |
-| ---------- | :----: | :------: | :-------: | :-------: | :-----: |
+|------------|:------:|:--------:|:---------:|:---------:|:-------:|
 | background | String |    ✓     |    n/a    |    n/a    |   n/a   |
 
 ### `Flip`
@@ -170,7 +169,7 @@ when applying a gamma correction.
 #### **Options**
 
 | Key      |  Type  | Optional | Min Value | Max Value | Default |
-| -------- | :----: | :------: | :-------: | :-------: | :-----: |
+|----------|:------:|:--------:|:---------:|:---------:|:-------:|
 | gamma    | String |    x     |    1.0    |    3.0    |   1.0   |
 | gammaOut | String |    ✓     |    1.0    |    3.0    |   n/a   |
 
@@ -189,7 +188,7 @@ when applying a gamma correction.
 #### **Options**
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
-| --------- | :-----: | :------: | :-------: | :-------: | :-----: |
+|-----------|:-------:|:--------:|:---------:|:---------:|:-------:|
 | grayscale | Boolean |    x     |    n/a    |    n/a    |  true   |
 
 ### `Linear`
@@ -199,7 +198,7 @@ Apply the linear formula a \* input + b to the image (levels adjustment)
 #### **Options**
 
 | Key | Type  | Optional | Min Value | Max Value | Default |
-| --- | :---: | :------: | :-------: | :-------: | :-----: |
+|-----|:-----:|:--------:|:---------:|:---------:|:-------:|
 | a   | Float |    ✓     |    n/a    |    n/a    |   0.0   |
 | b   | Float |    ✓     |    n/a    |    n/a    |   0.0   |
 
@@ -214,7 +213,7 @@ e.g. a size of 15 on a 500x500 image adds around 1.5s to processing time.
 #### **Options**
 
 | Key  | Type  | Optional | Min Value | Max Value | Default |
-| ---- | :---: | :------: | :-------: | :-------: | :-----: |
+|------|:-----:|:--------:|:---------:|:---------:|:-------:|
 | size | Float |    ✓     |     1     |   1000    |    3    |
 
 ### `Modulate`
@@ -224,7 +223,7 @@ Transforms the image using brightness, saturation and hue rotation.
 #### **Options**
 
 | Key  | Type  | Optional | Min Value | Max Value | Default |
-| ---- | :---: | :------: | :-------: | :-------: | :-----: |
+|------|:-----:|:--------:|:---------:|:---------:|:-------:|
 | size | Float |    ✓     |     1     |   1000    |    3    |
 
 ### `Negate`
@@ -242,7 +241,7 @@ Transforms the image using brightness, saturation and hue rotation.
 #### **Options**
 
 | Key    |      Type      | Optional | Min Value | Max Value | Default |
-| ------ | :------------: | :------: | :-------: | :-------: | :-----: |
+|--------|:--------------:|:--------:|:---------:|:---------:|:-------:|
 | matrix | Array(Integer) |    x     |     3     |    n/a    |   n/a   |
 
 ### `Resize`
@@ -252,7 +251,7 @@ How the image should be resized to fit both provided dimensions.
 #### **Options**
 
 | Key                     |                                             Type                                             | Optional | Min Value | Max Value | Default |
-| ----------------------- | :------------------------------------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
+|-------------------------|:--------------------------------------------------------------------------------------------:|:--------:|:---------:|:---------:|:-------:|
 | operationResizeFit      |      Enum([operationResizeFit](/storage-image-processing-api/types/operationResizeFit))      |    x     |    n/a    |    n/a    |   n/a   |
 | operationResizePosition | Enum([operationResizePosition](/storage-image-processing-api/types/operationResizePosition)) |    x     |    n/a    |    n/a    |   n/a   |
 | operationResizeKernel   |   Enum([operationResizeKernel](/storage-image-processing-api/types/operationResizeKernel))   |    x     |    n/a    |    n/a    |   n/a   |
@@ -277,7 +276,7 @@ The use of rotate implies the removal of the EXIF Orientation tag, if any.
 #### **Options**
 
 | Key   |  Type   | Optional | Min Value | Max Value | Default |
-| ----- | :-----: | :------: | :-------: | :-------: | :-----: |
+|-------|:-------:|:--------:|:---------:|:---------:|:-------:|
 | angle | Integer |    ✓     |    n/a    |    n/a    |   n/a   |
 
 ### `Sharpen`
@@ -291,7 +290,7 @@ Separate control over the level of sharpening in "flat" and "jagged" areas is av
 #### **Options**
 
 | Key    |  Type   | Optional | Min Value | Max Value | Default |
-| ------ | :-----: | :------: | :-------: | :-------: | :-----: |
+|--------|:-------:|:--------:|:---------:|:---------:|:-------:|
 | sigma  | Integer |    ✓     |   0.01    |   1000    |   n/a   |
 | flat   | Integer |    ✓     |     0     |   10000   |   1.0   |
 | jagged | Integer |    ✓     |     0     |   10000   |   2.0   |
@@ -307,7 +306,7 @@ Separate control over the level of sharpening in "flat" and "jagged" areas is av
 #### **Options**
 
 | Key             |                               Type                               | Optional | Min Value | Max Value |     Default     |
-| --------------- | :--------------------------------------------------------------: | :------: | :-------: | :-------: | :-------------: |
+|-----------------|:----------------------------------------------------------------:|:--------:|:---------:|:---------:|:---------------:|
 | font            |                              String                              |    ✓     |   0.01    |   1000    | 30px sans-serif |
 | textAlign       | Enum([textAlign](/storage-image-processing-api/types/textAlign)) |    ✓     |    n/a    |    n/a    |       n/a       |
 | textColor       |                             Integer                              |    ✓     |    n/a    |    n/a    |      white      |
@@ -331,7 +330,7 @@ Any pixel value greater than or equal to the threshold value will be set to 255,
 #### **Options**
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
-| --------- | :-----: | :------: | :-------: | :-------: | :-----: |
+|-----------|:-------:|:--------:|:---------:|:---------:|:-------:|
 | threshold | String  |    ✓     |     0     |    255    |   128   |
 | grayscale | Boolean |    ✓     |    n/a    |    n/a    |   n/a   |
 
@@ -344,7 +343,7 @@ An alpha channel if present will be unchanged by the operation.
 #### **Options**
 
 | Key |  Type  | Optional | Min Value | Max Value | Default |
-| --- | :----: | :------: | :-------: | :-------: | :-----: |
+|-----|:------:|:--------:|:---------:|:---------:|:-------:|
 | rgb | String |    ✓     |    n/a    |    n/a    |   n/a   |
 
 ### `Trim`
@@ -356,5 +355,5 @@ An alpha channel if present will be unchanged by the operation.
 #### **Options**
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
-| --------- | :-----: | :------: | :-------: | :-------: | :-----: |
+|-----------|:-------:|:--------:|:---------:|:---------:|:-------:|
 | threshold | Integer |    ✓     |     0     |    n/a    |   n/a   |
