@@ -158,6 +158,8 @@ Merge alpha transparency channel, if any, with a background, then remove the alp
 
 Flip the image about the vertical Y axis.
 
+<Image operation={{ operation: 'flip' }} />
+
 #### **Options**
 
 No options available
@@ -165,6 +167,8 @@ No options available
 ### `Flop`
 
 Flop the image about the horizontal X axis.
+
+<Image operation={{ operation: 'flop' }} />
 
 #### **Options**
 
@@ -181,6 +185,8 @@ This can improve the perceived brightness of a resized image in non-linear colou
 JPEG and WebP input images will not take advantage of the shrink-on-load performance optimisation
 
 when applying a gamma correction.
+
+<Image operation={{ operation: 'gamma', gamma: 3.0 }} />
 
 #### **Options**
 
