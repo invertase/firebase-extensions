@@ -197,7 +197,7 @@ JPEG and WebP input images will not take advantage of the shrink-on-load perform
 
 when applying a gamma correction.
 
-<Image operation={{ operation: 'gamma', gamma: 2.2 }} />
+<Image operation={{ operation: 'gamma', gamma: 2.2, gammaOut: 2.2 }} />
 
 #### **Options**
 
@@ -218,6 +218,8 @@ JPEG and WebP input images will not take advantage of the shrink-on-load perform
 
 when applying a gamma correction.
 
+<Image operation={{ operation: 'grayscale', grayscale: true }}/>
+
 #### **Options**
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
@@ -228,7 +230,7 @@ when applying a gamma correction.
 
 Apply the linear formula a \* input + b to the image (levels adjustment)
 
-<Image operation={{ operation: 'linear' }} />
+<Image operation={{ operation: 'linear', a: 4, b: 8 }} />
 
 #### **Options**
 
@@ -245,7 +247,7 @@ Note larger sizes can significantly reduce the performance of processing image
 
 e.g. a size of 15 on a 500x500 image adds around 1.5s to processing time.
 
-<Image operation={{ operation: 'median' }} />
+<Image operation={{ operation: 'median', size: 3 }} />
 
 #### **Options**
 
@@ -275,6 +277,8 @@ Transforms the image using brightness, saturation and hue rotation.
 ### `Negate`
 
 Produce a "negative" of the image.
+
+<Image operation={{ operation: 'negate' }} />
 
 #### **Options**
 
@@ -387,6 +391,8 @@ Separate control over the level of sharpening in "flat" and "jagged" areas is av
 ### `Threshhold`
 
 Any pixel value greater than or equal to the threshold value will be set to 255, otherwise it will be set to 0.
+
+<Image operation={{ operation: 'threshold', threshold: 128 }} />
 
 #### **Options**
 
