@@ -12,7 +12,7 @@ By default, new pixels are filled with a black background. You can provide a bac
 
 A particular interpolator may also be specified via the interpolator option.
 
-<Image options={[{ operation: 'affine', matrix: [1, 0.3, 0.1, 0.7] }]} />
+<Image operation={{ operation: 'affine', matrix: [1, 0.3, 0.1, 0.7] }} />
 
 #### **Options**
 
@@ -31,7 +31,7 @@ Blur the image. When used without options, performs a fast, mild blur of the out
 
 When a sigma is provided, performs a slower, more accurate Gaussian blur.
 
-<Image options={[{ operation: 'blur', sigma: 10 }]} />
+<Image operation={{ operation: 'blur', sigma: 10 }} />
 
 #### **Options**
 
@@ -44,6 +44,8 @@ When a sigma is provided, performs a slower, more accurate Gaussian blur.
 Perform contrast limiting adaptive histogram equalization ([CLAHE](https://en.wikipedia.org/wiki/Adaptive_histogram_equalization#Contrast_Limited_AHE))
 
 This will, in general, enhance the clarity of the image by bringing out darker details.
+
+<Image operation={{ operation: 'clahe', width: 3, height: 3 }} />
 
 #### **Options**
 
@@ -93,6 +95,15 @@ If both `top` and `left` options are provided, they take precedence over `gravit
 ### `Convolve`
 
 Convolve the image with the specified kernel.
+
+<Image
+  operation={{
+    operation: 'convolve',
+    width: 3,
+    height: 3,
+    kernel: [-1, 0, 1, -2, 0, 2, -1, 0, 1],
+  }}
+/>
 
 #### **Options**
 
@@ -363,23 +374,27 @@ An alpha channel if present will be unchanged by the operation.
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
 | threshold | Integer |    ✓     |     0     |    n/a    |   n/a   |
 
-export const EXT_URL =
+export const EXTENSION_URL =
   'https://europe-central2-dev-extensions-testing.cloudfunctions.net/ext-storage-image-processing-api-ri3r-handler/process';
 
 export const IMAGE_URL =
   'https://cdn.pixabay.com/photo/2018/04/29/01/23/skin-3358873_960_720.jpg';
 
-export const INPUT_OPTION = { operation: 'input', type: 'url', url: IMAGE_URL };
+export const INPUT_OPERATION = {
+  operation: 'input',
+  type: 'url',
+  url: IMAGE_URL,
+};
 
-export const OUTPUT_OPTION = { operation: 'output', format: 'jpeg' };
+export const OUTPUT_OPERATION = { operation: 'output', format: 'jpeg' };
 
-export const Image = ({ options }) => (
+export const Image = ({ operation }) => (
   <div style={{ display: 'flex', alignItems: 'flex-start' }}>
     <img src={IMAGE_URL} style={{ width: '50%' }} />
     <img
       style={{ width: '50%' }}
-      src={`${EXT_URL}?operations=${encodeURIComponent(
-        JSON.stringify([INPUT_OPTION, ...options, OUTPUT_OPTION]),
+      src={`${EXTENSION_URL}?operations=${encodeURIComponent(
+        JSON.stringify([INPUT_OPERATION, operation, OUTPUT_OPERATION]),
       )}`}
     />
   </div>
