@@ -29,6 +29,8 @@ Blur the image. When used without options, performs a fast, mild blur of the out
 
 When a sigma is provided, performs a slower, more accurate Gaussian blur.
 
+<Image options={[{ operation: 'blur', sigma: 10 }]} />
+
 #### **Options**
 
 | Key   | Type  | Optional | Min Value | Max Value | Default |
@@ -358,3 +360,25 @@ An alpha channel if present will be unchanged by the operation.
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
 | threshold | Integer |    ✓     |     0     |    n/a    |   n/a   |
+
+export const EXT_URL =
+  "https://europe-central2-dev-extensions-testing.cloudfunctions.net/ext-storage-image-processing-api-ri3r-handler/process";
+
+export const IMAGE_URL =
+  "https://cdn.pixabay.com/photo/2018/04/29/01/23/skin-3358873_960_720.jpg";
+
+export const INPUT_OPTION = { operation: "input", type: "url", url: IMAGE_URL };
+
+export const OUTPUT_OPTION = { operation: "output", format: "jpeg" };
+
+export const Image = ({ options }) => (
+  <div style={{ display: "flex" }}>
+    <img src={IMAGE_URL} style={{ width: "50%" }} />
+    <img
+      style={{ width: "50%" }}
+      src={`${EXT_URL}?operations=${encodeURIComponent(
+        JSON.stringify([INPUT_OPTION, ...options, OUTPUT_OPTION])
+      )}`}
+    />
+  </div>
+);
