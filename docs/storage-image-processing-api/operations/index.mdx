@@ -121,6 +121,17 @@ Extends/pads the edges of the image with the provided background colour.
 
 This operation will always occur after resizing and extraction, if any.
 
+<Image
+  operation={{
+    operation: 'extend',
+    top: 20,
+    bottom: 60,
+    left: 10,
+    right: 10,
+    background: '#FFA03F',
+  }}
+/>
+
 #### **Options**
 
 | Key    |  Type   | Optional | Min Value | Max Value | Default |
@@ -186,7 +197,7 @@ JPEG and WebP input images will not take advantage of the shrink-on-load perform
 
 when applying a gamma correction.
 
-<Image operation={{ operation: 'gamma', gamma: 3.0 }} />
+<Image operation={{ operation: 'gamma', gamma: 2.2 }} />
 
 #### **Options**
 
@@ -217,6 +228,8 @@ when applying a gamma correction.
 
 Apply the linear formula a \* input + b to the image (levels adjustment)
 
+<Image operation={{ operation: 'linear' }} />
+
 #### **Options**
 
 | Key | Type  | Optional | Min Value | Max Value | Default |
@@ -232,6 +245,8 @@ Note larger sizes can significantly reduce the performance of processing image
 
 e.g. a size of 15 on a 500x500 image adds around 1.5s to processing time.
 
+<Image operation={{ operation: 'median' }} />
+
 #### **Options**
 
 | Key  | Type  | Optional | Min Value | Max Value | Default |
@@ -241,6 +256,15 @@ e.g. a size of 15 on a 500x500 image adds around 1.5s to processing time.
 ### `Modulate`
 
 Transforms the image using brightness, saturation and hue rotation.
+
+<Image
+  operation={{
+    operation: 'modulate',
+    brightness: 0.5,
+    saturation: 0.5,
+    hue: 90,
+  }}
+/>
 
 #### **Options**
 
@@ -259,6 +283,17 @@ No options available
 ### `Recomb`
 
 Transforms the image using brightness, saturation and hue rotation.
+
+<Image
+  operation={{
+    operation: 'recomb',
+    matrix: [
+      [0.3588, 0.7044, 0.1368],
+      [0.299, 0.587, 0.114],
+      [0.2392, 0.4696, 0.0912],
+    ],
+  }}
+/>
 
 #### **Options**
 
@@ -295,6 +330,8 @@ Mirroring is supported and may infer the use of a flip operation.
 
 The use of rotate implies the removal of the EXIF Orientation tag, if any.
 
+<Image operation={{ operation: 'rotate', angle: 20 }} />
+
 #### **Options**
 
 | Key   |  Type   | Optional | Min Value | Max Value | Default |
@@ -308,6 +345,8 @@ Sharpen the image. When used without parameters, performs a fast, mild sharpen o
 When a sigma is provided, performs a slower, more accurate sharpen of the L channel in the LAB colour space.
 
 Separate control over the level of sharpening in "flat" and "jagged" areas is available.
+
+<Image operation={{ operation: 'sharpen', sigma: 1000 }} />
 
 #### **Options**
 
