@@ -12,6 +12,8 @@ By default, new pixels are filled with a black background. You can provide a bac
 
 A particular interpolator may also be specified via the interpolator option.
 
+<Image operation={{ operation: 'affine', matrix: [1, 0.3, 0.1, 0.7] }} />
+
 #### **Options**
 
 | Key          |                                  Type                                  | Optional | Default |
@@ -29,6 +31,8 @@ Blur the image. When used without options, performs a fast, mild blur of the out
 
 When a sigma is provided, performs a slower, more accurate Gaussian blur.
 
+<Image operation={{ operation: 'blur', sigma: 10 }} />
+
 #### **Options**
 
 | Key   | Type  | Optional | Min Value | Max Value | Default |
@@ -40,6 +44,8 @@ When a sigma is provided, performs a slower, more accurate Gaussian blur.
 Perform contrast limiting adaptive histogram equalization ([CLAHE](https://en.wikipedia.org/wiki/Adaptive_histogram_equalization#Contrast_Limited_AHE))
 
 This will, in general, enhance the clarity of the image by bringing out darker details.
+
+<Image operation={{ operation: 'clahe', width: 3, height: 3 }} />
 
 #### **Options**
 
@@ -90,6 +96,15 @@ If both `top` and `left` options are provided, they take precedence over `gravit
 
 Convolve the image with the specified kernel.
 
+<Image
+  operation={{
+    operation: 'convolve',
+    width: 3,
+    height: 3,
+    kernel: [-1, 0, 1, -2, 0, 2, -1, 0, 1],
+  }}
+/>
+
 #### **Options**
 
 | Key    |                               Type                                | Optional | Min Value | Max Value | Default |
@@ -105,6 +120,17 @@ Convolve the image with the specified kernel.
 Extends/pads the edges of the image with the provided background colour.
 
 This operation will always occur after resizing and extraction, if any.
+
+<Image
+  operation={{
+    operation: 'extend',
+    top: 20,
+    bottom: 60,
+    left: 10,
+    right: 10,
+    background: '#FFA03F',
+  }}
+/>
 
 #### **Options**
 
@@ -143,6 +169,8 @@ Merge alpha transparency channel, if any, with a background, then remove the alp
 
 Flip the image about the vertical Y axis.
 
+<Image operation={{ operation: 'flip' }} />
+
 #### **Options**
 
 No options available
@@ -150,6 +178,8 @@ No options available
 ### `Flop`
 
 Flop the image about the horizontal X axis.
+
+<Image operation={{ operation: 'flop' }} />
 
 #### **Options**
 
@@ -166,6 +196,8 @@ This can improve the perceived brightness of a resized image in non-linear colou
 JPEG and WebP input images will not take advantage of the shrink-on-load performance optimization
 
 when applying a gamma correction.
+
+<Image operation={{ operation: 'gamma', gamma: 2.2, gammaOut: 2.2 }} />
 
 #### **Options**
 
@@ -186,6 +218,8 @@ JPEG and WebP input images will not take advantage of the shrink-on-load perform
 
 when applying a gamma correction.
 
+<Image operation={{ operation: 'grayscale', grayscale: true }} />
+
 #### **Options**
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
@@ -195,6 +229,8 @@ when applying a gamma correction.
 ### `Linear`
 
 Apply the linear formula a \* input + b to the image (levels adjustment)
+
+<Image operation={{ operation: 'linear', a: 4, b: 8 }} />
 
 #### **Options**
 
@@ -211,6 +247,8 @@ Note larger sizes can significantly reduce the performance of processing image
 
 e.g. a size of 15 on a 500x500 image adds around 1.5s to processing time.
 
+<Image operation={{ operation: 'median', size: 3 }} />
+
 #### **Options**
 
 | Key  | Type  | Optional | Min Value | Max Value | Default |
@@ -220,6 +258,15 @@ e.g. a size of 15 on a 500x500 image adds around 1.5s to processing time.
 ### `Modulate`
 
 Transforms the image using brightness, saturation and hue rotation.
+
+<Image
+  operation={{
+    operation: 'modulate',
+    brightness: 0.5,
+    saturation: 0.5,
+    hue: 90,
+  }}
+/>
 
 #### **Options**
 
@@ -231,6 +278,8 @@ Transforms the image using brightness, saturation and hue rotation.
 
 Produce a "negative" of the image.
 
+<Image operation={{ operation: 'negate' }} />
+
 #### **Options**
 
 No options available
@@ -238,6 +287,17 @@ No options available
 ### `Recomb`
 
 Transforms the image using brightness, saturation and hue rotation.
+
+<Image
+  operation={{
+    operation: 'recomb',
+    matrix: [
+      [0.3588, 0.7044, 0.1368],
+      [0.299, 0.587, 0.114],
+      [0.2392, 0.4696, 0.0912],
+    ],
+  }}
+/>
 
 #### **Options**
 
@@ -274,6 +334,8 @@ Mirroring is supported and may infer the use of a flip operation.
 
 The use of rotate implies the removal of the EXIF Orientation tag, if any.
 
+<Image operation={{ operation: 'rotate', angle: 20 }} />
+
 #### **Options**
 
 | Key   |  Type   | Optional | Min Value | Max Value | Default |
@@ -287,6 +349,8 @@ Sharpen the image. When used without parameters, performs a fast, mild sharpen o
 When a sigma is provided, performs a slower, more accurate sharpen of the L channel in the LAB colour space.
 
 Separate control over the level of sharpening in "flat" and "jagged" areas is available.
+
+<Image operation={{ operation: 'sharpen', sigma: 1000 }} />
 
 #### **Options**
 
@@ -328,6 +392,8 @@ Separate control over the level of sharpening in "flat" and "jagged" areas is av
 
 Any pixel value greater than or equal to the threshold value will be set to 255, otherwise it will be set to 0.
 
+<Image operation={{ operation: 'threshold', threshold: 128 }} />
+
 #### **Options**
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
@@ -358,3 +424,29 @@ An alpha channel if present will be unchanged by the operation.
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
 | threshold | Integer |    ✓     |     0     |    n/a    |   n/a   |
+
+export const EXTENSION_URL =
+  'https://europe-central2-dev-extensions-testing.cloudfunctions.net/ext-storage-image-processing-api-ri3r-handler/process';
+
+export const IMAGE_URL =
+  'https://cdn.pixabay.com/photo/2018/04/29/01/23/skin-3358873_960_720.jpg';
+
+export const INPUT_OPERATION = {
+  operation: 'input',
+  type: 'url',
+  url: IMAGE_URL,
+};
+
+export const OUTPUT_OPERATION = { operation: 'output', format: 'jpeg' };
+
+export const Image = ({ operation }) => (
+  <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+    <img src={IMAGE_URL} style={{ width: '50%' }} />
+    <img
+      style={{ width: '50%' }}
+      src={`${EXTENSION_URL}?operations=${encodeURIComponent(
+        JSON.stringify([INPUT_OPERATION, operation, OUTPUT_OPERATION]),
+      )}`}
+    />
+  </div>
+);
