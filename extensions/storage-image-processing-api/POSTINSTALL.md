@@ -2,9 +2,13 @@
 
 You can test out this extension right away!
 
+Use the following URL to access the image processing API:
+
 [https://{param:LOCATION}-{param:PROJECT_ID}.cloudfunctions.net/{param:EXTENSION_INSTANCE_ID}-handler/process](https://{param:LOCATION}-{param:PROJECT_ID}.cloudfunctions.net/{param:EXTENSION_INSTANCE_ID}-handler/process)
 
 ### Using the extension
+
+See the [official documentation](https://extensions.invertase.dev/storage-image-processing-api) for more information on using the extension, including the full list of supported operations you can use.
 
 ### Monitoring
 
