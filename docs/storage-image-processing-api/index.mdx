@@ -1,12 +1,12 @@
 # Storage Image Processing API
 
-The Storage Image Processing API extension (`storage-image-processing-api`) lets you optimize and transform images in the [Cloud Storage](https://firebase.google.com/docs/storage) bucket via a powerful HTTP API. The API provides more than 30 different operations to enhance and manipulate your images, including image composition, cropping, flipping, color reduction, sharpening, filtering, and much more.
+The Storage Image Processing API extension (`storage-image-processing-api`) lets you optimize and transform images in the [Cloud Storage](https://firebase.google.com/docs/storage) bucket via a powerful HTTP API. The API provides more than 30 different operations to enhance and manipulate your images, including image composition, cropping, flipping, color reduction, sharpening, filtering, and much more. See the full list of available operations in the [Operations](/operations) documentation.
 
 ## Install the extension
 
 To install the extension, follow the steps on the [Install Firebase Extension](https://firebase.google.com/docs/extensions/install-extensions) page. In summary, do one of the following:
 
-- **Firebase console:** Click the following button:
+- **Firebase console:** Click the following link:
 
   [Install the Storage Image Processing API extension](https://console.firebase.google.com/project/_/extensions/install?ref=invertase/storage-image-processing-api)
 
@@ -40,9 +40,17 @@ After installation, a new Cloud Function called `process` will be added to your 
 
 ```bash
 curl -X GET \
-  https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/{EXTENSION_INSTANCE_ID}-handler/process?operations=[]
+  https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/{EXTENSION_INSTANCE_ID}-handler/process?operations=...
 ```
 
 - **`{LOCATION}`**: The Cloud Functions location that was specified during the installation of the extension.
 - **`{PROJECT_ID}`**: The Firebase project ID.
 - **`{EXTENSION_INSTANCE_ID}`**: The extension instance ID.
+
+### Operations
+
+The `operations` query parameter is a JSON array of operations to perform. Each operation is a JSON object with an `operation` property specifying the operation to perform and other properties depending on the operation.
+
+The first operation in the array must be an `input` operation. This operation specifies the image to be processed. Read the [input](/input) operation documentation for more information.
+
+Also, the last operation in the array must be an `output` operation. This operation specifies the properites of the image to be created. Read the [output](/output) operation documentation for more information.
