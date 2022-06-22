@@ -32,8 +32,17 @@ During the installation of the extension, you will be prompted to specify a numb
 
 - **Allowed CORS origins:**
 
-  A comma-delimited value of allowed CORS origins. Use the default of "\*" to allow all origins. This is useful to lock down your API and only allow your own website to embed the images directly. Note this will not prevent non-browser requests from accessing your API.
+  A comma-delimited value of allowed `CORS` origins. Use the default of `*` to allow all origins. This is useful to lock down your API and only allow your own website to embed the images directly. Note this will not prevent non-browser requests from accessing your API.
 
 ## Use the extension
 
 After installation, a new Cloud Function called `process` will be added to your project. You can make HTTP requests to this function specifying a method of `GET` and a single query parameter `operations` with a JSON array of operations you'd like to perform. For example:
+
+```bash
+curl -X GET \
+  https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/{EXTENSION_INSTANCE_ID}-handler/process?operations=[]
+```
+
+- **`{LOCATION}`**: The Cloud Functions location that was specified during the installation of the extension.
+- **`{PROJECT_ID}`**: The Firebase project ID.
+- **`{EXTENSION_INSTANCE_ID}`**: The extension instance ID.
