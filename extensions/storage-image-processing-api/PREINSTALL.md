@@ -1,4 +1,4 @@
-Use this extension to get an image processing API with over 90 operations on the fly.
+Use this extension to optimize and transform images via a powerful HTTP API with over 30 different image operations to enhance and manipulate your images.
 
 A cloud function called `process` will be added to your project which you can call from your code specifying:
 
