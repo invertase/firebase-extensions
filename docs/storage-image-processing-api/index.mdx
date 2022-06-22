@@ -1,9 +1,39 @@
-# Storage Image Processing Api
+# Storage Image Processing API
 
-Welcome to Storage Image Processing Api!
+The Storage Image Processing API extension (`storage-image-processing-api`) lets you optimize and transform images in the [Cloud Storage](https://firebase.google.com/docs/storage) bucket via a powerful HTTP API. The API provides more than 30 different operations to enhance and manipulate your images, including image composition, cropping, flipping, color reduction, sharpening, filtering, and much more.
 
-Optimize and transform images from your Cloud Storage buckets via a powerful HTTP API. Library Supports over 30 different image operations to optimize and manipulate your images.
+## Install the extension
 
-## Getting started
+To install the extension, follow the steps on the [Install Firebase Extension](https://firebase.google.com/docs/extensions/install-extensions) page. In summary, do one of the following:
 
-Follow our guide on how to setup and process images [here](/getting-started).
+- **Firebase console:** Click the following button:
+
+  [Install the Storage Image Processing API extension](https://console.firebase.google.com/project/_/extensions/install?ref=invertase/storage-image-processing-api)
+
+- **CLI:** Run the following command:
+
+  ```bash
+  firebase ext:install invertase/storage-image-processing-api --project=projectId-or-alias
+  ```
+
+During the installation of the extension, you will be prompted to specify a number of configuration parameters:
+
+- **Cloud Functions location:**
+
+  Select the location of where you want to deploy the functions created for this extension. You usually want a location close to your database. For help selecting a location, refer to the [location selection guide](https://firebase.google.com/docs/functions/locations).
+
+- **Cloud Storage bucket:**
+
+  Cloud storage bucket, where the images to be processed are located.
+
+- **Cloud Storage path for caching images:**
+
+  A relative path in which the processed images are cached in the specified Cloud Storage bucket. If you prefer to store resized images at the default location, leave this field empty.
+
+- **Allowed CORS origins:**
+
+  A comma-delimited value of allowed CORS origins. Use the default of "\*" to allow all origins. This is useful to lock down your API and only allow your own website to embed the images directly. Note this will not prevent non-browser requests from accessing your API.
+
+## Use the extension
+
+After installation, a new Cloud Function called `process` will be added to your project. You can make HTTP requests to this function specifying a method of `GET` and a single query parameter `operations` with a JSON array of operations you'd like to perform. For example:
