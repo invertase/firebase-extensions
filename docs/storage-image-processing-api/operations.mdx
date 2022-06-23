@@ -441,9 +441,9 @@ export const OUTPUT_OPERATION = { operation: 'output', format: 'jpeg' };
 
 export const Image = ({ operation }) => (
   <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-    <img src={IMAGE_URL} style={{ width: '49%', borderRadius: 6 }} />
+    <img src={IMAGE_URL} style={{ width: '49.5%', borderRadius: 6 }} />
     <img
-      style={{ width: '49%', marginLeft: '2%', borderRadius: 6 }}
+      style={{ width: '49.5%', marginLeft: '1%', borderRadius: 6 }}
       src={`${EXTENSION_URL}?operations=${encodeURIComponent(
         JSON.stringify([INPUT_OPERATION, operation, OUTPUT_OPERATION]),
       )}`}
