@@ -1,23 +1,25 @@
 # Input
 
-A `mandatory` operation when requesting an image.
+## Google Cloud Storage
 
-This is the image source of the image you want to process.
+This is a valid google cloud storage url of an existing image. For example:
+
+```json
+{ "operation": "input", "type": "gcs", "source": "gs://bucket/path/to/file" }
+```
+
+## URL
+
+A generic url of an existing image. For example:
+
+```json
+{ "operation": "input", "type": "url", "url": "https://example.com/image.jpg" }
+```
 
 ## Create
 
-This has no source and will generate an image based on the operations provided.
+This has no source and will generate an image based on the operations provided. For example:
 
-Example: /input~`type:url~create`
-
-## Gsc
-
-This is a valid google cloud storage url of an existing image.
-
-Example: input~`type:url~gsc`:exampleimage.com
-
-## Url
-
-A generic url of an existing image
-
-Example: /input~`type:url~url`:https://www.exampleimage.com
+```json
+{ "operation": "input", "type": "create" }
+```
