@@ -23,7 +23,13 @@ A particular interpolator may also be specified via the interpolator option.
 | ody          |                                Integer                                 |    ✓     |   n/a   |
 | interpolator | Enum([Interpolator](/storage-image-processing-api/types/interpolator)) |    ✓     |   n/a   |
 
+#### Example
+
 <Image operation={{ operation: 'affine', matrix: [1, 0.3, 0.1, 0.7] }} />
+
+```json
+{ "operation": "affine", "matrix": [1, 0.3, 0.1, 0.7] }
+```
 
 ### `Blur`
 
@@ -37,7 +43,13 @@ When a sigma is provided, performs a slower, more accurate Gaussian blur.
 | ----- | :---: | :------: | :-------: | :-------: | ------- |
 | sigma | Float |    x     |    0.3    |   1000    | n/a     |
 
+#### Example
+
 <Image operation={{ operation: 'blur', sigma: 10 }} />
+
+```json
+{ "operation": "blur", "sigma": 10 }
+```
 
 ### `Clahe`
 
@@ -59,7 +71,13 @@ This will, in general, enhance the clarity of the image by bringing out darker d
 | ----- | :---: | :------: | :-------: | :-------: | :-----: |
 | sigma | Float |    x     |    0.3    |   1000    |   n/a   |
 
+#### Example
+
 <Image operation={{ operation: 'clahe', width: 3, height: 3 }} />
+
+```json
+{ "operation": "clahe", "width": 3, "height": 3 }
+```
 
 ### `Colorspace`
 
@@ -106,6 +124,8 @@ Convolve the image with the specified kernel.
 | scale  |                              Integer                              |    ✓     |    n/a    |    n/a    |   n/a   |
 | offset |                              Integer                              |    ✓     |    n/a    |    n/a    |   n/a   |
 
+#### Example
+
 <Image
   operation={{
     operation: 'convolve',
@@ -114,6 +134,15 @@ Convolve the image with the specified kernel.
     kernel: [-1, 0, 1, -2, 0, 2, -1, 0, 1],
   }}
 />
+
+```json
+{
+  "operation": "convolve",
+  "width": 3,
+  "height": 3,
+  "kernel": [-1, 0, 1, -2, 0, 2, -1, 0, 1]
+}
+```
 
 ### `Extend`
 
@@ -131,6 +160,8 @@ This operation will always occur after resizing and extraction, if any.
 | bottom | Integer |    ✓     |    n/a    |    n/a    |    0    |
 | right  | Integer |    ✓     |    n/a    |    n/a    |    0    |
 
+#### Example
+
 <Image
   operation={{
     operation: 'extend',
@@ -141,6 +172,17 @@ This operation will always occur after resizing and extraction, if any.
     background: '#FFA03F',
   }}
 />
+
+```json
+{
+  "operation": "extend",
+  "top": 42,
+  "bottom": 84,
+  "left": 16,
+  "right": 16,
+  "background": "#FFA03F"
+}
+```
 
 ### `Extract`
 
@@ -173,7 +215,13 @@ Flip the image about the vertical Y axis.
 
 No options available
 
+#### Example
+
 <Image operation={{ operation: 'flip' }} />
+
+```json
+{ "operation": "flip" }
+```
 
 ### `Flop`
 
@@ -183,7 +231,13 @@ Flop the image about the horizontal X axis.
 
 No options available
 
+#### Example
+
 <Image operation={{ operation: 'flop' }} />
+
+```json
+{ "operation": "flop" }
+```
 
 ### `Gamma`
 
@@ -204,7 +258,13 @@ when applying a gamma correction.
 | gamma    | String |    x     |    1.0    |    3.0    |   1.0   |
 | gammaOut | String |    ✓     |    1.0    |    3.0    |   n/a   |
 
+#### Example
+
 <Image operation={{ operation: 'gamma', gamma: 2.2, gammaOut: 2.2 }} />
+
+```json
+{ "operation": "gamma", "gamma": 2.2, "gammaOut": 2.2 }
+```
 
 ### `Grayscale`
 
@@ -224,7 +284,13 @@ when applying a gamma correction.
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
 | grayscale | Boolean |    x     |    n/a    |    n/a    |  true   |
 
+#### Example
+
 <Image operation={{ operation: 'grayscale', grayscale: true }} />
+
+```json
+{ "operation": "grayscale", "grayscale": true }
+```
 
 ### `Linear`
 
@@ -237,7 +303,13 @@ Apply the linear formula a \* input + b to the image (levels adjustment)
 | a   | Float |    ✓     |    n/a    |    n/a    |   0.0   |
 | b   | Float |    ✓     |    n/a    |    n/a    |   0.0   |
 
+#### Example
+
 <Image operation={{ operation: 'linear', a: 4, b: 8 }} />
+
+```json
+{ "operation": "linear", "a": 4, "b": 8 }
+```
 
 ### `Median`
 
@@ -253,7 +325,13 @@ e.g. a size of 15 on a 500x500 image adds around 1.5s to processing time.
 | ---- | :---: | :------: | :-------: | :-------: | :-----: |
 | size | Float |    ✓     |     1     |   1000    |    3    |
 
+#### Example
+
 <Image operation={{ operation: 'median', size: 3 }} />
+
+```json
+{ "operation": "median", "size": 3 }
+```
 
 ### `Modulate`
 
@@ -265,6 +343,8 @@ Transforms the image using brightness, saturation and hue rotation.
 | ---- | :---: | :------: | :-------: | :-------: | :-----: |
 | size | Float |    ✓     |     1     |   1000    |    3    |
 
+#### Example
+
 <Image
   operation={{
     operation: 'modulate',
@@ -274,6 +354,15 @@ Transforms the image using brightness, saturation and hue rotation.
   }}
 />
 
+```json
+{
+  "operation": "modulate",
+  "brightness": 0.5,
+  "saturation": 0.5,
+  "hue": 90
+}
+```
+
 ### `Negate`
 
 Produce a "negative" of the image.
@@ -282,7 +371,13 @@ Produce a "negative" of the image.
 
 No options available
 
+#### Example
+
 <Image operation={{ operation: 'negate' }} />
+
+```json
+{ "operation": "negate" }
+```
 
 ### `Recomb`
 
@@ -294,6 +389,8 @@ Transforms the image using brightness, saturation and hue rotation.
 | ------ | :------------: | :------: | :-------: | :-------: | :-----: |
 | matrix | Array(Integer) |    x     |     3     |    n/a    |   n/a   |
 
+#### Example
+
 <Image
   operation={{
     operation: 'recomb',
@@ -304,6 +401,17 @@ Transforms the image using brightness, saturation and hue rotation.
     ],
   }}
 />
+
+```json
+{
+  "operation": "recomb",
+  "matrix": [
+    [0.3588, 0.7044, 0.1368],
+    [0.299, 0.587, 0.114],
+    [0.2392, 0.4696, 0.0912]
+  ]
+}
+```
 
 ### `Resize`
 
@@ -340,7 +448,13 @@ The use of rotate implies the removal of the EXIF Orientation tag, if any.
 | ----- | :-----: | :------: | :-------: | :-------: | :-----: |
 | angle | Integer |    ✓     |    n/a    |    n/a    |   n/a   |
 
+#### Example
+
 <Image operation={{ operation: 'rotate', angle: 20 }} />
+
+```json
+{ "operation": "rotate", "angle": 20 }
+```
 
 ### `Sharpen`
 
@@ -358,7 +472,13 @@ Separate control over the level of sharpening in "flat" and "jagged" areas is av
 | flat   | Integer |    ✓     |     0     |   10000   |   1.0   |
 | jagged | Integer |    ✓     |     0     |   10000   |   2.0   |
 
+#### Example
+
 <Image operation={{ operation: 'sharpen', sigma: 1000 }} />
+
+```json
+{ "operation": "sharpen", "sigma": 1000 }
+```
 
 ### `Text`
 
@@ -399,7 +519,13 @@ Any pixel value greater than or equal to the threshold value will be set to 255,
 | threshold | String  |    ✓     |     0     |    255    |   128   |
 | grayscale | Boolean |    ✓     |    n/a    |    n/a    |   n/a   |
 
+#### Example
+
 <Image operation={{ operation: 'threshold', threshold: 128 }} />
+
+```json
+{ "operation": "threshold", "threshold": 128 }
+```
 
 ### `Tint`
 
@@ -450,3 +576,4 @@ export const Image = ({ operation }) => (
     />
   </div>
 );
+```
