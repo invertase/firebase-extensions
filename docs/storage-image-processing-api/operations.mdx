@@ -12,8 +12,6 @@ By default, new pixels are filled with a black background. You can provide a bac
 
 A particular interpolator may also be specified via the interpolator option.
 
-<Image operation={{ operation: 'affine', matrix: [1, 0.3, 0.1, 0.7] }} />
-
 #### Options
 
 | Key          |                                  Type                                  | Optional | Default |
@@ -25,13 +23,13 @@ A particular interpolator may also be specified via the interpolator option.
 | ody          |                                Integer                                 |    ✓     |   n/a   |
 | interpolator | Enum([Interpolator](/storage-image-processing-api/types/interpolator)) |    ✓     |   n/a   |
 
+<Image operation={{ operation: 'affine', matrix: [1, 0.3, 0.1, 0.7] }} />
+
 ### `Blur`
 
 Blur the image. When used without options, performs a fast, mild blur of the output image.
 
 When a sigma is provided, performs a slower, more accurate Gaussian blur.
-
-<Image operation={{ operation: 'blur', sigma: 10 }} />
 
 #### Options
 
@@ -39,13 +37,13 @@ When a sigma is provided, performs a slower, more accurate Gaussian blur.
 | ----- | :---: | :------: | :-------: | :-------: | ------- |
 | sigma | Float |    x     |    0.3    |   1000    | n/a     |
 
+<Image operation={{ operation: 'blur', sigma: 10 }} />
+
 ### `Clahe`
 
 Perform contrast limiting adaptive histogram equalization ([CLAHE](https://en.wikipedia.org/wiki/Adaptive_histogram_equalization#Contrast_Limited_AHE))
 
 This will, in general, enhance the clarity of the image by bringing out darker details.
-
-<Image operation={{ operation: 'clahe', width: 3, height: 3 }} />
 
 #### Options
 
@@ -60,6 +58,8 @@ This will, in general, enhance the clarity of the image by bringing out darker d
 | Key   | Type  | Optional | Min Value | Max Value | Default |
 | ----- | :---: | :------: | :-------: | :-------: | :-----: |
 | sigma | Float |    x     |    0.3    |   1000    |   n/a   |
+
+<Image operation={{ operation: 'clahe', width: 3, height: 3 }} />
 
 ### `Colorspace`
 
@@ -96,15 +96,6 @@ If both `top` and `left` options are provided, they take precedence over `gravit
 
 Convolve the image with the specified kernel.
 
-<Image
-  operation={{
-    operation: 'convolve',
-    width: 3,
-    height: 3,
-    kernel: [-1, 0, 1, -2, 0, 2, -1, 0, 1],
-  }}
-/>
-
 #### Options
 
 | Key    |                               Type                                | Optional | Min Value | Max Value | Default |
@@ -115,11 +106,30 @@ Convolve the image with the specified kernel.
 | scale  |                              Integer                              |    ✓     |    n/a    |    n/a    |   n/a   |
 | offset |                              Integer                              |    ✓     |    n/a    |    n/a    |   n/a   |
 
+<Image
+  operation={{
+    operation: 'convolve',
+    width: 3,
+    height: 3,
+    kernel: [-1, 0, 1, -2, 0, 2, -1, 0, 1],
+  }}
+/>
+
 ### `Extend`
 
 Extends/pads the edges of the image with the provided background colour.
 
 This operation will always occur after resizing and extraction, if any.
+
+#### Options
+
+| Key    |  Type   | Optional | Min Value | Max Value | Default |
+| ------ | :-----: | :------: | :-------: | :-------: | :-----: |
+| all    | Integer |    ✓     |    n/a    |    n/a    |    0    |
+| top    | Integer |    ✓     |    n/a    |    n/a    |    0    |
+| left   | Integer |    ✓     |    n/a    |    n/a    |    0    |
+| bottom | Integer |    ✓     |    n/a    |    n/a    |    0    |
+| right  | Integer |    ✓     |    n/a    |    n/a    |    0    |
 
 <Image
   operation={{
@@ -131,16 +141,6 @@ This operation will always occur after resizing and extraction, if any.
     background: '#FFA03F',
   }}
 />
-
-#### Options
-
-| Key    |  Type   | Optional | Min Value | Max Value | Default |
-| ------ | :-----: | :------: | :-------: | :-------: | :-----: |
-| all    | Integer |    ✓     |    n/a    |    n/a    |    0    |
-| top    | Integer |    ✓     |    n/a    |    n/a    |    0    |
-| left   | Integer |    ✓     |    n/a    |    n/a    |    0    |
-| bottom | Integer |    ✓     |    n/a    |    n/a    |    0    |
-| right  | Integer |    ✓     |    n/a    |    n/a    |    0    |
 
 ### `Extract`
 
@@ -169,21 +169,21 @@ Merge alpha transparency channel, if any, with a background, then remove the alp
 
 Flip the image about the vertical Y axis.
 
-<Image operation={{ operation: 'flip' }} />
-
 #### Options
 
 No options available
+
+<Image operation={{ operation: 'flip' }} />
 
 ### `Flop`
 
 Flop the image about the horizontal X axis.
 
-<Image operation={{ operation: 'flop' }} />
-
 #### Options
 
 No options available
+
+<Image operation={{ operation: 'flop' }} />
 
 ### `Gamma`
 
@@ -197,14 +197,14 @@ JPEG and WebP input images will not take advantage of the shrink-on-load perform
 
 when applying a gamma correction.
 
-<Image operation={{ operation: 'gamma', gamma: 2.2, gammaOut: 2.2 }} />
-
 #### Options
 
 | Key      |  Type  | Optional | Min Value | Max Value | Default |
 | -------- | :----: | :------: | :-------: | :-------: | :-----: |
 | gamma    | String |    x     |    1.0    |    3.0    |   1.0   |
 | gammaOut | String |    ✓     |    1.0    |    3.0    |   n/a   |
+
+<Image operation={{ operation: 'gamma', gamma: 2.2, gammaOut: 2.2 }} />
 
 ### `Grayscale`
 
@@ -218,19 +218,17 @@ JPEG and WebP input images will not take advantage of the shrink-on-load perform
 
 when applying a gamma correction.
 
-<Image operation={{ operation: 'grayscale', grayscale: true }} />
-
 #### Options
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
 | grayscale | Boolean |    x     |    n/a    |    n/a    |  true   |
 
+<Image operation={{ operation: 'grayscale', grayscale: true }} />
+
 ### `Linear`
 
 Apply the linear formula a \* input + b to the image (levels adjustment)
-
-<Image operation={{ operation: 'linear', a: 4, b: 8 }} />
 
 #### Options
 
@@ -238,6 +236,8 @@ Apply the linear formula a \* input + b to the image (levels adjustment)
 | --- | :---: | :------: | :-------: | :-------: | :-----: |
 | a   | Float |    ✓     |    n/a    |    n/a    |   0.0   |
 | b   | Float |    ✓     |    n/a    |    n/a    |   0.0   |
+
+<Image operation={{ operation: 'linear', a: 4, b: 8 }} />
 
 ### `Median`
 
@@ -247,17 +247,23 @@ Note larger sizes can significantly reduce the performance of processing image
 
 e.g. a size of 15 on a 500x500 image adds around 1.5s to processing time.
 
-<Image operation={{ operation: 'median', size: 3 }} />
-
 #### Options
 
 | Key  | Type  | Optional | Min Value | Max Value | Default |
 | ---- | :---: | :------: | :-------: | :-------: | :-----: |
 | size | Float |    ✓     |     1     |   1000    |    3    |
 
+<Image operation={{ operation: 'median', size: 3 }} />
+
 ### `Modulate`
 
 Transforms the image using brightness, saturation and hue rotation.
+
+#### Options
+
+| Key  | Type  | Optional | Min Value | Max Value | Default |
+| ---- | :---: | :------: | :-------: | :-------: | :-----: |
+| size | Float |    ✓     |     1     |   1000    |    3    |
 
 <Image
   operation={{
@@ -268,25 +274,25 @@ Transforms the image using brightness, saturation and hue rotation.
   }}
 />
 
-#### Options
-
-| Key  | Type  | Optional | Min Value | Max Value | Default |
-| ---- | :---: | :------: | :-------: | :-------: | :-----: |
-| size | Float |    ✓     |     1     |   1000    |    3    |
-
 ### `Negate`
 
 Produce a "negative" of the image.
-
-<Image operation={{ operation: 'negate' }} />
 
 #### Options
 
 No options available
 
+<Image operation={{ operation: 'negate' }} />
+
 ### `Recomb`
 
 Transforms the image using brightness, saturation and hue rotation.
+
+#### Options
+
+| Key    |      Type      | Optional | Min Value | Max Value | Default |
+| ------ | :------------: | :------: | :-------: | :-------: | :-----: |
+| matrix | Array(Integer) |    x     |     3     |    n/a    |   n/a   |
 
 <Image
   operation={{
@@ -298,12 +304,6 @@ Transforms the image using brightness, saturation and hue rotation.
     ],
   }}
 />
-
-#### Options
-
-| Key    |      Type      | Optional | Min Value | Max Value | Default |
-| ------ | :------------: | :------: | :-------: | :-------: | :-----: |
-| matrix | Array(Integer) |    x     |     3     |    n/a    |   n/a   |
 
 ### `Resize`
 
@@ -334,13 +334,13 @@ Mirroring is supported and may infer the use of a flip operation.
 
 The use of rotate implies the removal of the EXIF Orientation tag, if any.
 
-<Image operation={{ operation: 'rotate', angle: 20 }} />
-
 #### Options
 
 | Key   |  Type   | Optional | Min Value | Max Value | Default |
 | ----- | :-----: | :------: | :-------: | :-------: | :-----: |
 | angle | Integer |    ✓     |    n/a    |    n/a    |   n/a   |
+
+<Image operation={{ operation: 'rotate', angle: 20 }} />
 
 ### `Sharpen`
 
@@ -350,8 +350,6 @@ When a sigma is provided, performs a slower, more accurate sharpen of the L chan
 
 Separate control over the level of sharpening in "flat" and "jagged" areas is available.
 
-<Image operation={{ operation: 'sharpen', sigma: 1000 }} />
-
 #### Options
 
 | Key    |  Type   | Optional | Min Value | Max Value | Default |
@@ -359,6 +357,8 @@ Separate control over the level of sharpening in "flat" and "jagged" areas is av
 | sigma  | Integer |    ✓     |   0.01    |   1000    |   n/a   |
 | flat   | Integer |    ✓     |     0     |   10000   |   1.0   |
 | jagged | Integer |    ✓     |     0     |   10000   |   2.0   |
+
+<Image operation={{ operation: 'sharpen', sigma: 1000 }} />
 
 ### `Text`
 
@@ -392,14 +392,14 @@ Separate control over the level of sharpening in "flat" and "jagged" areas is av
 
 Any pixel value greater than or equal to the threshold value will be set to 255, otherwise it will be set to 0.
 
-<Image operation={{ operation: 'threshold', threshold: 128 }} />
-
 #### Options
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
 | threshold | String  |    ✓     |     0     |    255    |   128   |
 | grayscale | Boolean |    ✓     |    n/a    |    n/a    |   n/a   |
+
+<Image operation={{ operation: 'threshold', threshold: 128 }} />
 
 ### `Tint`
 
