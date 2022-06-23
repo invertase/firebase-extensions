@@ -14,7 +14,7 @@ A particular interpolator may also be specified via the interpolator option.
 
 <Image operation={{ operation: 'affine', matrix: [1, 0.3, 0.1, 0.7] }} />
 
-#### **Options**
+#### Options
 
 | Key          |                                  Type                                  | Optional | Default |
 | ------------ | :--------------------------------------------------------------------: | :------: | :-----: |
@@ -33,7 +33,7 @@ When a sigma is provided, performs a slower, more accurate Gaussian blur.
 
 <Image operation={{ operation: 'blur', sigma: 10 }} />
 
-#### **Options**
+#### Options
 
 | Key   | Type  | Optional | Min Value | Max Value | Default |
 | ----- | :---: | :------: | :-------: | :-------: | ------- |
@@ -47,7 +47,7 @@ This will, in general, enhance the clarity of the image by bringing out darker d
 
 <Image operation={{ operation: 'clahe', width: 3, height: 3 }} />
 
-#### **Options**
+#### Options
 
 | Key      |  Type   | Optional | Min Value | Max Value | Default |
 | -------- | :-----: | :------: | :-------: | :-------: | :-----: |
@@ -55,7 +55,7 @@ This will, in general, enhance the clarity of the image by bringing out darker d
 | height   | Integer |    x     |     1     |    n/a    |   n/a   |
 | maxSlope | Integer |    ✓     |     0     |    100    |   n/a   |
 
-#### **Options**
+#### Options
 
 | Key   | Type  | Optional | Min Value | Max Value | Default |
 | ----- | :---: | :------: | :-------: | :-------: | :-----: |
@@ -65,7 +65,7 @@ This will, in general, enhance the clarity of the image by bringing out darker d
 
 Output colourspace e.g. srgb, rgb, cmyk, lab, b-w ...
 
-#### **Options**
+#### Options
 
 | Key   |                                 Type                                 | Optional | Min Value | Max Value | Default |
 | ----- | :------------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
@@ -79,7 +79,7 @@ or smaller than the base image.
 
 If both `top` and `left` options are provided, they take precedence over `gravity`.
 
-#### **Options**
+#### Options
 
 | Key           |                             Type                             | Optional | Min Value | Max Value | Default |
 | ------------- | :----------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
@@ -105,7 +105,7 @@ Convolve the image with the specified kernel.
   }}
 />
 
-#### **Options**
+#### Options
 
 | Key    |                               Type                                | Optional | Min Value | Max Value | Default |
 | ------ | :---------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
@@ -132,7 +132,7 @@ This operation will always occur after resizing and extraction, if any.
   }}
 />
 
-#### **Options**
+#### Options
 
 | Key    |  Type   | Optional | Min Value | Max Value | Default |
 | ------ | :-----: | :------: | :-------: | :-------: | :-----: |
@@ -146,7 +146,7 @@ This operation will always occur after resizing and extraction, if any.
 
 Zero-indexed offset in pixels from the top edge.
 
-#### **Options**
+#### Options
 
 | Key    |  Type   | Optional | Min Value | Max Value | Default |
 | ------ | :-----: | :------: | :-------: | :-------: | :-----: |
@@ -159,7 +159,7 @@ Zero-indexed offset in pixels from the top edge.
 
 Merge alpha transparency channel, if any, with a background, then remove the alpha channel.
 
-#### **Options**
+#### Options
 
 | Key        |  Type  | Optional | Min Value | Max Value | Default |
 | ---------- | :----: | :------: | :-------: | :-------: | :-----: |
@@ -171,7 +171,7 @@ Flip the image about the vertical Y axis.
 
 <Image operation={{ operation: 'flip' }} />
 
-#### **Options**
+#### Options
 
 No options available
 
@@ -181,7 +181,7 @@ Flop the image about the horizontal X axis.
 
 <Image operation={{ operation: 'flop' }} />
 
-#### **Options**
+#### Options
 
 No options available
 
@@ -199,7 +199,7 @@ when applying a gamma correction.
 
 <Image operation={{ operation: 'gamma', gamma: 2.2, gammaOut: 2.2 }} />
 
-#### **Options**
+#### Options
 
 | Key      |  Type  | Optional | Min Value | Max Value | Default |
 | -------- | :----: | :------: | :-------: | :-------: | :-----: |
@@ -220,7 +220,7 @@ when applying a gamma correction.
 
 <Image operation={{ operation: 'grayscale', grayscale: true }} />
 
-#### **Options**
+#### Options
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
@@ -232,7 +232,7 @@ Apply the linear formula a \* input + b to the image (levels adjustment)
 
 <Image operation={{ operation: 'linear', a: 4, b: 8 }} />
 
-#### **Options**
+#### Options
 
 | Key | Type  | Optional | Min Value | Max Value | Default |
 | --- | :---: | :------: | :-------: | :-------: | :-----: |
@@ -249,7 +249,7 @@ e.g. a size of 15 on a 500x500 image adds around 1.5s to processing time.
 
 <Image operation={{ operation: 'median', size: 3 }} />
 
-#### **Options**
+#### Options
 
 | Key  | Type  | Optional | Min Value | Max Value | Default |
 | ---- | :---: | :------: | :-------: | :-------: | :-----: |
@@ -268,7 +268,7 @@ Transforms the image using brightness, saturation and hue rotation.
   }}
 />
 
-#### **Options**
+#### Options
 
 | Key  | Type  | Optional | Min Value | Max Value | Default |
 | ---- | :---: | :------: | :-------: | :-------: | :-----: |
@@ -280,7 +280,7 @@ Produce a "negative" of the image.
 
 <Image operation={{ operation: 'negate' }} />
 
-#### **Options**
+#### Options
 
 No options available
 
@@ -299,7 +299,7 @@ Transforms the image using brightness, saturation and hue rotation.
   }}
 />
 
-#### **Options**
+#### Options
 
 | Key    |      Type      | Optional | Min Value | Max Value | Default |
 | ------ | :------------: | :------: | :-------: | :-------: | :-----: |
@@ -309,7 +309,7 @@ Transforms the image using brightness, saturation and hue rotation.
 
 How the image should be resized to fit both provided dimensions.
 
-#### **Options**
+#### Options
 
 | Key                     |                                             Type                                             | Optional | Min Value | Max Value | Default |
 | ----------------------- | :------------------------------------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
@@ -336,7 +336,7 @@ The use of rotate implies the removal of the EXIF Orientation tag, if any.
 
 <Image operation={{ operation: 'rotate', angle: 20 }} />
 
-#### **Options**
+#### Options
 
 | Key   |  Type   | Optional | Min Value | Max Value | Default |
 | ----- | :-----: | :------: | :-------: | :-------: | :-----: |
@@ -352,7 +352,7 @@ Separate control over the level of sharpening in "flat" and "jagged" areas is av
 
 <Image operation={{ operation: 'sharpen', sigma: 1000 }} />
 
-#### **Options**
+#### Options
 
 | Key    |  Type   | Optional | Min Value | Max Value | Default |
 | ------ | :-----: | :------: | :-------: | :-------: | :-----: |
@@ -368,7 +368,7 @@ When a sigma is provided, performs a slower, more accurate sharpen of the L chan
 
 Separate control over the level of sharpening in "flat" and "jagged" areas is available.
 
-#### **Options**
+#### Options
 
 | Key             |                               Type                               | Optional | Min Value | Max Value |     Default     |
 | --------------- | :--------------------------------------------------------------: | :------: | :-------: | :-------: | :-------------: |
@@ -394,7 +394,7 @@ Any pixel value greater than or equal to the threshold value will be set to 255,
 
 <Image operation={{ operation: 'threshold', threshold: 128 }} />
 
-#### **Options**
+#### Options
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
@@ -407,7 +407,7 @@ Tint the image using the provided chroma while preserving the image luminance.
 
 An alpha channel if present will be unchanged by the operation.
 
-#### **Options**
+#### Options
 
 | Key |  Type  | Optional | Min Value | Max Value | Default |
 | --- | :----: | :------: | :-------: | :-------: | :-----: |
@@ -419,7 +419,7 @@ Tint the image using the provided chroma while preserving the image luminance.
 
 An alpha channel if present will be unchanged by the operation.
 
-#### **Options**
+#### Options
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
