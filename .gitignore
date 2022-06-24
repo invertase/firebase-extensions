@@ -83,7 +83,3 @@ firebase-debug.*.log*
 .firebase/
 .DS_Store
 yarn.lock
-
-
-#vscode
-.vscode

@@ -61,6 +61,16 @@ This will, in general, enhance the clarity of the image by bringing out darker d
 | ----- | :---: | :------: | :-------: | :-------: | :-----: |
 | sigma | Float |    x     |    0.3    |   1000    |   n/a   |
 
+### `Colorspace`
+
+Output colourspace e.g. srgb, rgb, cmyk, lab, b-w ...
+
+#### **Options**
+
+| Key   |                                 Type                                 | Optional | Min Value | Max Value | Default |
+| ----- | :------------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
+| width | Enum([Colorspace](/storage-image-processing-api/types/interpolator)) |    x     |    n/a    |    n/a    |   n/a   |
+
 ### `Composite`
 
 Composite an image over the base image. The image to composite must be the same size
@@ -74,13 +84,13 @@ If both `top` and `left` options are provided, they take precedence over `gravit
 | Key           |                             Type                             | Optional | Min Value | Max Value | Default |
 | ------------- | :----------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
 | input         |                            string                            |    x     |    n/a    |    n/a    |   n/a   |
-| blend         |   Enum([Blend](/storage-image-processing-api/types/blend))   |    ✓     |    n/a    |    n/a    |   n/a   |
+| blend         |   Enum([Blend](/storage-image-processing-api/types/blend))   |    x     |    n/a    |    n/a    |   n/a   |
 | gravity       | Enum([Gravity](/storage-image-processing-api/types/gravity)) |    ✓     |    n/a    |    n/a    |   n/a   |
 | top           |                           Integer                            |    ✓     |    n/a    |    n/a    |   n/a   |
 | left          |                           Integer                            |    ✓     |    n/a    |    n/a    |   n/a   |
 | tile          |                           Boolean                            |    ✓     |    n/a    |    n/a    |   n/a   |
-| premultiplied |                            string                            |    ✓     |    n/a    |    n/a    |   n/a   |
-| density       |                           Integer                            |    ✓     |    n/a    |    n/a    |   72    |
+| premultiplied |                            string                            |    x     |    n/a    |    n/a    |   n/a   |
+| density       |                           Integer                            |    x     |    n/a    |    n/a    |   72    |
 
 ### `Convolve`
 
@@ -142,8 +152,8 @@ Zero-indexed offset in pixels from the top edge.
 | ------ | :-----: | :------: | :-------: | :-------: | :-----: |
 | top    | Integer |    ✓     |    n/a    |    n/a    |    0    |
 | left   | Integer |    ✓     |    n/a    |    n/a    |    0    |
-| width  | Integer |    x     |    n/a    |    n/a    |    0    |
-| height | Integer |    x     |    n/a    |    n/a    |    0    |
+| bottom | Integer |    ✓     |    n/a    |    n/a    |    0    |
+| right  | Integer |    ✓     |    n/a    |    n/a    |    0    |
 
 ### `Flatten`
 
@@ -193,7 +203,7 @@ when applying a gamma correction.
 
 | Key      |  Type  | Optional | Min Value | Max Value | Default |
 | -------- | :----: | :------: | :-------: | :-------: | :-----: |
-| gamma    | String |    ✓     |    1.0    |    3.0    |   1.0   |
+| gamma    | String |    x     |    1.0    |    3.0    |   1.0   |
 | gammaOut | String |    ✓     |    1.0    |    3.0    |   n/a   |
 
 ### `Grayscale`
@@ -226,7 +236,7 @@ Apply the linear formula a \* input + b to the image (levels adjustment)
 
 | Key | Type  | Optional | Min Value | Max Value | Default |
 | --- | :---: | :------: | :-------: | :-------: | :-----: |
-| a   | Float |    ✓     |    n/a    |    n/a    |   1.0   |
+| a   | Float |    ✓     |    n/a    |    n/a    |   0.0   |
 | b   | Float |    ✓     |    n/a    |    n/a    |   0.0   |
 
 ### `Median`
@@ -241,9 +251,9 @@ e.g. a size of 15 on a 500x500 image adds around 1.5s to processing time.
 
 #### **Options**
 
-| Key  |  Type   | Optional | Min Value | Max Value | Default |
-| ---- | :-----: | :------: | :-------: | :-------: | :-----: |
-| size | Integer |    ✓     |     1     |   1000    |    3    |
+| Key  | Type  | Optional | Min Value | Max Value | Default |
+| ---- | :---: | :------: | :-------: | :-------: | :-----: |
+| size | Float |    ✓     |     1     |   1000    |    3    |
 
 ### `Modulate`
 
@@ -260,12 +270,9 @@ Transforms the image using brightness, saturation and hue rotation.
 
 #### **Options**
 
-| Key        |  Type   | Optional | Min Value | Max Value | Default |
-| ---------- | :-----: | :------: | :-------: | :-------: | :-----: |
-| brightness | Integer |    ✓     |     1     |   1000    |    3    |
-| saturation | Integer |    ✓     |     1     |   1000    |    3    |
-| hue        | Integer |    ✓     |     1     |   1000    |    3    |
-| lightness  | Integer |    ✓     |     1     |   1000    |    3    |
+| Key  | Type  | Optional | Min Value | Max Value | Default |
+| ---- | :---: | :------: | :-------: | :-------: | :-----: |
+| size | Float |    ✓     |     1     |   1000    |    3    |
 
 ### `Negate`
 
@@ -304,16 +311,12 @@ How the image should be resized to fit both provided dimensions.
 
 #### **Options**
 
-| Key                |                                                                                                                                  Type                                                                                                                                  | Optional | Min Value | Max Value | Default |
-| ------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
-| width              |                                                                                           Enum([operationResizeFit](/storage-image-processing-api/types/operationResizeFit))                                                                                           |    ✓     |    n/a    |    n/a    |   n/a   |
-| height             |                                                                                           Enum([operationResizeFit](/storage-image-processing-api/types/operationResizeFit))                                                                                           |    ✓     |    n/a    |    n/a    |   n/a   |
-| fit                |                                                                                           Enum([operationResizeFit](/storage-image-processing-api/types/operationResizeFit))                                                                                           |    ✓     |    n/a    |    n/a    |   n/a   |
-| position           | Enum([operationResizePosition](/storage-image-processing-api/types/operationResizePosition)) / Enum([operationResizeStrategy](/storage-image-processing-api/types/operationResizeStrategy)) / / Enum([imageGravity](/storage-image-processing-api/types/imageGravity)) |    ✓     |    n/a    |    n/a    |   n/a   |
-| kernel             |                                                                                        Enum([operationResizeKernel](/storage-image-processing-api/types/operationResizeKernel))                                                                                        |    ✓     |    n/a    |    n/a    |   n/a   |
-| background         |                                                                                                                                 String                                                                                                                                 |    ✓     |    n/a    |    n/a    |   n/a   |
-| withoutEnlargement |                                                                                                                                Boolean                                                                                                                                 |    ✓     |    n/a    |    n/a    |   n/a   |
-| fastShrinkOnLoad   |                                                                                                                                Boolean                                                                                                                                 |    ✓     |    n/a    |    n/a    |   n/a   |
+| Key                     |                                             Type                                             | Optional | Min Value | Max Value | Default |
+| ----------------------- | :------------------------------------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
+| operationResizeFit      |      Enum([operationResizeFit](/storage-image-processing-api/types/operationResizeFit))      |    x     |    n/a    |    n/a    |   n/a   |
+| operationResizePosition | Enum([operationResizePosition](/storage-image-processing-api/types/operationResizePosition)) |    x     |    n/a    |    n/a    |   n/a   |
+| operationResizeKernel   |   Enum([operationResizeKernel](/storage-image-processing-api/types/operationResizeKernel))   |    x     |    n/a    |    n/a    |   n/a   |
+| operationResizeStrategy | Enum([operationResizeStrategy](/storage-image-processing-api/types/operationResizeStrategy)) |    x     |    n/a    |    n/a    |   n/a   |
 
 ### `Rotate`
 
@@ -337,7 +340,7 @@ The use of rotate implies the removal of the EXIF Orientation tag, if any.
 
 | Key   |  Type   | Optional | Min Value | Max Value | Default |
 | ----- | :-----: | :------: | :-------: | :-------: | :-----: |
-| angle | Integer |    ✓     |    n/a    |    n/a    |  auto   |
+| angle | Integer |    ✓     |    n/a    |    n/a    |   n/a   |
 
 ### `Sharpen`
 
@@ -359,14 +362,17 @@ Separate control over the level of sharpening in "flat" and "jagged" areas is av
 
 ### `Text`
 
-A string of text that will be rendered over your image.
+Sharpen the image. When used without parameters, performs a fast, mild sharpen of the output image.
+
+When a sigma is provided, performs a slower, more accurate sharpen of the L channel in the LAB colour space.
+
+Separate control over the level of sharpening in "flat" and "jagged" areas is available.
 
 #### **Options**
 
 | Key             |                               Type                               | Optional | Min Value | Max Value |     Default     |
 | --------------- | :--------------------------------------------------------------: | :------: | :-------: | :-------: | :-------------: |
-| value           |                              String                              |    x     |    n/a    |    n/a    | 30px sans-serif |
-| font            |                              String                              |    ✓     |    n/a    |    n/a    | 30px sans-serif |
+| font            |                              String                              |    ✓     |   0.01    |   1000    | 30px sans-serif |
 | textAlign       | Enum([textAlign](/storage-image-processing-api/types/textAlign)) |    ✓     |    n/a    |    n/a    |       n/a       |
 | textColor       |                             Integer                              |    ✓     |    n/a    |    n/a    |      white      |
 | backgroundColor |                              String                              |    ✓     |    n/a    |    n/a    |       n/a       |
@@ -377,7 +383,7 @@ A string of text that will be rendered over your image.
 | borderColor     |                              String                              |    ✓     |    n/a    |    n/a    |      black      |
 | wrap            |                             Boolean                              |    ✓     |    n/a    |    n/a    |       n/a       |
 | maxWidth        |                             Integer                              |    ✓     |    n/a    |    n/a    |       n/a       |
-| blend           |     Enum([Blend](/storage-image-processing-api/types/blend))     |    ✓     |    n/a    |    n/a    |      over       |
+| blend           |     Enum([Blend](/storage-image-processing-api/types/blend))     |    ✓     |    n/a    |    n/a    |        0        |
 | gravity         |   Enum([Gravity](/storage-image-processing-api/types/gravity))   |    ✓     |    n/a    |    n/a    |       n/a       |
 | top             |                             Integer                              |    ✓     |    n/a    |    n/a    |       n/a       |
 | left            |                             Integer                              |    ✓     |    n/a    |    n/a    |       n/a       |
@@ -417,7 +423,7 @@ An alpha channel if present will be unchanged by the operation.
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
-| threshold | Integer |    ✓     |     0     |    n/a    |   10    |
+| threshold | Integer |    ✓     |     0     |    n/a    |   n/a   |
 
 export const EXTENSION_URL =
   'https://europe-central2-dev-extensions-testing.cloudfunctions.net/ext-storage-image-processing-api-ri3r-handler/process';
