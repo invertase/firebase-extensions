@@ -49,6 +49,13 @@ const struct = superstruct.object({
   hue: superstruct.optional(
     utils.coerceStringToInt(superstruct.min(superstruct.integer(), 0)),
   ),
+
+  /**
+   * Lightness addend.
+   */
+  lightness: superstruct.optional(
+    utils.coerceStringToInt(superstruct.min(superstruct.integer(), 0)),
+  ),
 });
 
 export type OperationModulate = superstruct.Infer<typeof struct>;

@@ -188,6 +188,47 @@ export function jsonAsValidatedOperations(
   return output;
 }
 
+export function asValidatedOperations(input: string): ValidatedOperation[] {
+  const output: ValidatedOperation[] = [];
+  const operationSegments = input.split('/');
+
+  for (let i = 0; i < operationSegments.length; i++) {
+    const source = operationSegments[i].trim();
+    const [operation, ...optionSegments] = source.split('~');
+
+    // Parse raw options.
+    const rawOptions: Operation = {
+      operation: operation,
+    };
+    for (let j = 0; j < optionSegments.length; j++) {
+      const optionSegment = optionSegments[j].trim();
+      const [key, value] = optionSegment.split(':');
+      if (value == undefined) {
+        // An option without a value is treated as a flag.
+        rawOptions[key] = 'true';
+      } else {
+        rawOptions[key] = decodeURIComponent(value);
+      }
+    }
+
+    // Validate options.
+    try {
+      const options = asValidatedOperationOptions(rawOptions);
+      output.push({
+        source,
+        operation,
+        rawOptions,
+        options,
+      });
+    } catch (error) {
+      error.message = `Options for the '${operation}' operation (at position ${i}) are invalid: ${error.message}`;
+      throw error;
+    }
+  }
+
+  return output;
+}
+
 export async function asBuiltOperation(
   validatedOperation: ValidatedOperation,
   fileMetadata: sharp.Metadata | null,
