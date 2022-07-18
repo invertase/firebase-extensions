@@ -54,4 +54,8 @@ module.exports = [
   /^mitchell/,
   /^fourier/,
   /^const/,
+  /^json/,
+  /^invertase/,
+  /^firebase/,
+  /^href/,
 ];

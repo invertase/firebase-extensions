@@ -8,13 +8,12 @@
       "Storage Image Processing Api",
       [
         ["Overview", "/storage-image-processing-api"],
-        ["Getting started", "/storage-image-processing-api/getting-started"],
         ["Input", "/storage-image-processing-api/input"],
         ["Operations", "/storage-image-processing-api/operations"],
-        ["Types", "/storage-image-processing-api/types"],
         ["Output", "/storage-image-processing-api/output"],
         ["Caching", "/storage-image-processing-api/caching"],
-        ["Error Handling", "/storage-image-processing-api/error-handling"]
+        ["Error Handling", "/storage-image-processing-api/error-handling"],
+        ["Types", "/storage-image-processing-api/types"]
       ]
     ]
   ]
