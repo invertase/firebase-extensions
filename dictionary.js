@@ -51,4 +51,11 @@ module.exports = [
   /^odx/,
   /^ody/,
   /^src/,
+  /^mitchell/,
+  /^fourier/,
+  /^const/,
+  /^json/,
+  /^invertase/,
+  /^firebase/,
+  /^href/,
 ];

@@ -12,7 +12,7 @@ By default, new pixels are filled with a black background. You can provide a bac
 
 A particular interpolator may also be specified via the interpolator option.
 
-#### **Options**
+#### Options
 
 | Key          |                                  Type                                  | Optional | Default |
 | ------------ | :--------------------------------------------------------------------: | :------: | :-----: |
@@ -23,17 +23,33 @@ A particular interpolator may also be specified via the interpolator option.
 | ody          |                                Integer                                 |    ✓     |   n/a   |
 | interpolator | Enum([Interpolator](/storage-image-processing-api/types/interpolator)) |    ✓     |   n/a   |
 
+#### Example
+
+<Image operation={{ operation: 'affine', matrix: [1, 0.3, 0.1, 0.7] }} />
+
+```json
+{ "operation": "affine", "matrix": [1, 0.3, 0.1, 0.7] }
+```
+
 ### `Blur`
 
 Blur the image. When used without options, performs a fast, mild blur of the output image.
 
 When a sigma is provided, performs a slower, more accurate Gaussian blur.
 
-#### **Options**
+#### Options
 
 | Key   | Type  | Optional | Min Value | Max Value | Default |
 | ----- | :---: | :------: | :-------: | :-------: | ------- |
 | sigma | Float |    x     |    0.3    |   1000    | n/a     |
+
+#### Example
+
+<Image operation={{ operation: 'blur', sigma: 10 }} />
+
+```json
+{ "operation": "blur", "sigma": 10 }
+```
 
 ### `Clahe`
 
@@ -41,7 +57,7 @@ Perform contrast limiting adaptive histogram equalization ([CLAHE](https://en.wi
 
 This will, in general, enhance the clarity of the image by bringing out darker details.
 
-#### **Options**
+#### Options
 
 | Key      |  Type   | Optional | Min Value | Max Value | Default |
 | -------- | :-----: | :------: | :-------: | :-------: | :-----: |
@@ -49,11 +65,29 @@ This will, in general, enhance the clarity of the image by bringing out darker d
 | height   | Integer |    x     |     1     |    n/a    |   n/a   |
 | maxSlope | Integer |    ✓     |     0     |    100    |   n/a   |
 
-#### **Options**
+#### Options
 
 | Key   | Type  | Optional | Min Value | Max Value | Default |
 | ----- | :---: | :------: | :-------: | :-------: | :-----: |
 | sigma | Float |    x     |    0.3    |   1000    |   n/a   |
+
+#### Example
+
+<Image operation={{ operation: 'clahe', width: 3, height: 3 }} />
+
+```json
+{ "operation": "clahe", "width": 3, "height": 3 }
+```
+
+### `Colorspace`
+
+Output colourspace e.g. srgb, rgb, cmyk, lab, b-w ...
+
+#### Options
+
+| Key   |                                 Type                                 | Optional | Min Value | Max Value | Default |
+| ----- | :------------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
+| width | Enum([Colorspace](/storage-image-processing-api/types/interpolator)) |    x     |    n/a    |    n/a    |   n/a   |
 
 ### `Composite`
 
@@ -63,24 +97,24 @@ or smaller than the base image.
 
 If both `top` and `left` options are provided, they take precedence over `gravity`.
 
-#### **Options**
+#### Options
 
 | Key           |                             Type                             | Optional | Min Value | Max Value | Default |
 | ------------- | :----------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
 | input         |                            string                            |    x     |    n/a    |    n/a    |   n/a   |
-| blend         |   Enum([Blend](/storage-image-processing-api/types/blend))   |    ✓     |    n/a    |    n/a    |   n/a   |
+| blend         |   Enum([Blend](/storage-image-processing-api/types/blend))   |    x     |    n/a    |    n/a    |   n/a   |
 | gravity       | Enum([Gravity](/storage-image-processing-api/types/gravity)) |    ✓     |    n/a    |    n/a    |   n/a   |
 | top           |                           Integer                            |    ✓     |    n/a    |    n/a    |   n/a   |
 | left          |                           Integer                            |    ✓     |    n/a    |    n/a    |   n/a   |
 | tile          |                           Boolean                            |    ✓     |    n/a    |    n/a    |   n/a   |
-| premultiplied |                            string                            |    ✓     |    n/a    |    n/a    |   n/a   |
-| density       |                           Integer                            |    ✓     |    n/a    |    n/a    |   72    |
+| premultiplied |                            string                            |    x     |    n/a    |    n/a    |   n/a   |
+| density       |                           Integer                            |    x     |    n/a    |    n/a    |   72    |
 
 ### `Convolve`
 
 Convolve the image with the specified kernel.
 
-#### **Options**
+#### Options
 
 | Key    |                               Type                                | Optional | Min Value | Max Value | Default |
 | ------ | :---------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
@@ -90,13 +124,33 @@ Convolve the image with the specified kernel.
 | scale  |                              Integer                              |    ✓     |    n/a    |    n/a    |   n/a   |
 | offset |                              Integer                              |    ✓     |    n/a    |    n/a    |   n/a   |
 
+#### Example
+
+<Image
+  operation={{
+    operation: 'convolve',
+    width: 3,
+    height: 3,
+    kernel: [-1, 0, 1, -2, 0, 2, -1, 0, 1],
+  }}
+/>
+
+```json
+{
+  "operation": "convolve",
+  "width": 3,
+  "height": 3,
+  "kernel": [-1, 0, 1, -2, 0, 2, -1, 0, 1]
+}
+```
+
 ### `Extend`
 
 Extends/pads the edges of the image with the provided background colour.
 
 This operation will always occur after resizing and extraction, if any.
 
-#### **Options**
+#### Options
 
 | Key    |  Type   | Optional | Min Value | Max Value | Default |
 | ------ | :-----: | :------: | :-------: | :-------: | :-----: |
@@ -106,24 +160,48 @@ This operation will always occur after resizing and extraction, if any.
 | bottom | Integer |    ✓     |    n/a    |    n/a    |    0    |
 | right  | Integer |    ✓     |    n/a    |    n/a    |    0    |
 
+#### Example
+
+<Image
+  operation={{
+    operation: 'extend',
+    top: 42,
+    bottom: 84,
+    left: 16,
+    right: 16,
+    background: '#FFA03F',
+  }}
+/>
+
+```json
+{
+  "operation": "extend",
+  "top": 42,
+  "bottom": 84,
+  "left": 16,
+  "right": 16,
+  "background": "#FFA03F"
+}
+```
+
 ### `Extract`
 
 Zero-indexed offset in pixels from the top edge.
 
-#### **Options**
+#### Options
 
 | Key    |  Type   | Optional | Min Value | Max Value | Default |
 | ------ | :-----: | :------: | :-------: | :-------: | :-----: |
 | top    | Integer |    ✓     |    n/a    |    n/a    |    0    |
 | left   | Integer |    ✓     |    n/a    |    n/a    |    0    |
-| width  | Integer |    x     |    n/a    |    n/a    |    0    |
-| height | Integer |    x     |    n/a    |    n/a    |    0    |
+| bottom | Integer |    ✓     |    n/a    |    n/a    |    0    |
+| right  | Integer |    ✓     |    n/a    |    n/a    |    0    |
 
 ### `Flatten`
 
 Merge alpha transparency channel, if any, with a background, then remove the alpha channel.
 
-#### **Options**
+#### Options
 
 | Key        |  Type  | Optional | Min Value | Max Value | Default |
 | ---------- | :----: | :------: | :-------: | :-------: | :-----: |
@@ -133,17 +211,33 @@ Merge alpha transparency channel, if any, with a background, then remove the alp
 
 Flip the image about the vertical Y axis.
 
-#### **Options**
+#### Options
 
 No options available
+
+#### Example
+
+<Image operation={{ operation: 'flip' }} />
+
+```json
+{ "operation": "flip" }
+```
 
 ### `Flop`
 
 Flop the image about the horizontal X axis.
 
-#### **Options**
+#### Options
 
 No options available
+
+#### Example
+
+<Image operation={{ operation: 'flop' }} />
+
+```json
+{ "operation": "flop" }
+```
 
 ### `Gamma`
 
@@ -157,12 +251,20 @@ JPEG and WebP input images will not take advantage of the shrink-on-load perform
 
 when applying a gamma correction.
 
-#### **Options**
+#### Options
 
 | Key      |  Type  | Optional | Min Value | Max Value | Default |
 | -------- | :----: | :------: | :-------: | :-------: | :-----: |
-| gamma    | String |    ✓     |    1.0    |    3.0    |   1.0   |
+| gamma    | String |    x     |    1.0    |    3.0    |   1.0   |
 | gammaOut | String |    ✓     |    1.0    |    3.0    |   n/a   |
+
+#### Example
+
+<Image operation={{ operation: 'gamma', gamma: 2.2, gammaOut: 2.2 }} />
+
+```json
+{ "operation": "gamma", "gamma": 2.2, "gammaOut": 2.2 }
+```
 
 ### `Grayscale`
 
@@ -176,22 +278,38 @@ JPEG and WebP input images will not take advantage of the shrink-on-load perform
 
 when applying a gamma correction.
 
-#### **Options**
+#### Options
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
 | grayscale | Boolean |    x     |    n/a    |    n/a    |  true   |
 
+#### Example
+
+<Image operation={{ operation: 'grayscale' }} />
+
+```json
+{ "operation": "grayscale" }
+```
+
 ### `Linear`
 
 Apply the linear formula a \* input + b to the image (levels adjustment)
 
-#### **Options**
+#### Options
 
 | Key | Type  | Optional | Min Value | Max Value | Default |
 | --- | :---: | :------: | :-------: | :-------: | :-----: |
-| a   | Float |    ✓     |    n/a    |    n/a    |   1.0   |
+| a   | Float |    ✓     |    n/a    |    n/a    |   0.0   |
 | b   | Float |    ✓     |    n/a    |    n/a    |   0.0   |
+
+#### Example
+
+<Image operation={{ operation: 'linear', a: 4, b: 8 }} />
+
+```json
+{ "operation": "linear", "a": 4, "b": 8 }
+```
 
 ### `Median`
 
@@ -201,59 +319,112 @@ Note larger sizes can significantly reduce the performance of processing image
 
 e.g. a size of 15 on a 500x500 image adds around 1.5s to processing time.
 
-#### **Options**
+#### Options
 
-| Key  |  Type   | Optional | Min Value | Max Value | Default |
-| ---- | :-----: | :------: | :-------: | :-------: | :-----: |
-| size | Integer |    ✓     |     1     |   1000    |    3    |
+| Key  | Type  | Optional | Min Value | Max Value | Default |
+| ---- | :---: | :------: | :-------: | :-------: | :-----: |
+| size | Float |    ✓     |     1     |   1000    |    3    |
+
+#### Example
+
+<Image operation={{ operation: 'median', size: 3 }} />
+
+```json
+{ "operation": "median", "size": 3 }
+```
 
 ### `Modulate`
 
 Transforms the image using brightness, saturation and hue rotation.
 
-#### **Options**
+#### Options
 
-| Key        |  Type   | Optional | Min Value | Max Value | Default |
-| ---------- | :-----: | :------: | :-------: | :-------: | :-----: |
-| brightness | Integer |    ✓     |     1     |   1000    |    3    |
-| saturation | Integer |    ✓     |     1     |   1000    |    3    |
-| hue        | Integer |    ✓     |     1     |   1000    |    3    |
-| lightness  | Integer |    ✓     |     1     |   1000    |    3    |
+| Key  | Type  | Optional | Min Value | Max Value | Default |
+| ---- | :---: | :------: | :-------: | :-------: | :-----: |
+| size | Float |    ✓     |     1     |   1000    |    3    |
+
+#### Example
+
+<Image
+  operation={{
+    operation: 'modulate',
+    brightness: 0.5,
+    saturation: 0.5,
+    hue: 90,
+  }}
+/>
+
+```json
+{
+  "operation": "modulate",
+  "brightness": 0.5,
+  "saturation": 0.5,
+  "hue": 90
+}
+```
 
 ### `Negate`
 
 Produce a "negative" of the image.
 
-#### **Options**
+#### Options
 
 No options available
+
+#### Example
+
+<Image operation={{ operation: 'negate' }} />
+
+```json
+{ "operation": "negate" }
+```
 
 ### `Recomb`
 
 Transforms the image using brightness, saturation and hue rotation.
 
-#### **Options**
+#### Options
 
 | Key    |      Type      | Optional | Min Value | Max Value | Default |
 | ------ | :------------: | :------: | :-------: | :-------: | :-----: |
 | matrix | Array(Integer) |    x     |     3     |    n/a    |   n/a   |
 
+#### Example
+
+<Image
+  operation={{
+    operation: 'recomb',
+    matrix: [
+      [0.3588, 0.7044, 0.1368],
+      [0.299, 0.587, 0.114],
+      [0.2392, 0.4696, 0.0912],
+    ],
+  }}
+/>
+
+```json
+{
+  "operation": "recomb",
+  "matrix": [
+    [0.3588, 0.7044, 0.1368],
+    [0.299, 0.587, 0.114],
+    [0.2392, 0.4696, 0.0912]
+  ]
+}
+```
+
 ### `Resize`
 
 How the image should be resized to fit both provided dimensions.
 
-#### **Options**
+#### Options
 
-| Key                |                                                                                                                                  Type                                                                                                                                  | Optional | Min Value | Max Value | Default |
-| ------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
-| width              |                                                                                           Enum([operationResizeFit](/storage-image-processing-api/types/operationResizeFit))                                                                                           |    ✓     |    n/a    |    n/a    |   n/a   |
-| height             |                                                                                           Enum([operationResizeFit](/storage-image-processing-api/types/operationResizeFit))                                                                                           |    ✓     |    n/a    |    n/a    |   n/a   |
-| fit                |                                                                                           Enum([operationResizeFit](/storage-image-processing-api/types/operationResizeFit))                                                                                           |    ✓     |    n/a    |    n/a    |   n/a   |
-| position           | Enum([operationResizePosition](/storage-image-processing-api/types/operationResizePosition)) / Enum([operationResizeStrategy](/storage-image-processing-api/types/operationResizeStrategy)) / / Enum([imageGravity](/storage-image-processing-api/types/imageGravity)) |    ✓     |    n/a    |    n/a    |   n/a   |
-| kernel             |                                                                                        Enum([operationResizeKernel](/storage-image-processing-api/types/operationResizeKernel))                                                                                        |    ✓     |    n/a    |    n/a    |   n/a   |
-| background         |                                                                                                                                 String                                                                                                                                 |    ✓     |    n/a    |    n/a    |   n/a   |
-| withoutEnlargement |                                                                                                                                Boolean                                                                                                                                 |    ✓     |    n/a    |    n/a    |   n/a   |
-| fastShrinkOnLoad   |                                                                                                                                Boolean                                                                                                                                 |    ✓     |    n/a    |    n/a    |   n/a   |
+| Key                     |                                             Type                                             | Optional | Min Value | Max Value | Default |
+| ----------------------- | :------------------------------------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
+| operationResizeFit      |      Enum([operationResizeFit](/storage-image-processing-api/types/operationResizeFit))      |    x     |    n/a    |    n/a    |   n/a   |
+| operationResizePosition | Enum([operationResizePosition](/storage-image-processing-api/types/operationResizePosition)) |    x     |    n/a    |    n/a    |   n/a   |
+| operationResizeKernel   |   Enum([operationResizeKernel](/storage-image-processing-api/types/operationResizeKernel))   |    x     |    n/a    |    n/a    |   n/a   |
+| operationResizeStrategy | Enum([operationResizeStrategy](/storage-image-processing-api/types/operationResizeStrategy)) |    x     |    n/a    |    n/a    |   n/a   |
 
 ### `Rotate`
 
@@ -271,11 +442,19 @@ Mirroring is supported and may infer the use of a flip operation.
 
 The use of rotate implies the removal of the EXIF Orientation tag, if any.
 
-#### **Options**
+#### Options
 
 | Key   |  Type   | Optional | Min Value | Max Value | Default |
 | ----- | :-----: | :------: | :-------: | :-------: | :-----: |
-| angle | Integer |    ✓     |    n/a    |    n/a    |  auto   |
+| angle | Integer |    ✓     |    n/a    |    n/a    |   n/a   |
+
+#### Example
+
+<Image operation={{ operation: 'rotate', angle: 20 }} />
+
+```json
+{ "operation": "rotate", "angle": 20 }
+```
 
 ### `Sharpen`
 
@@ -285,7 +464,7 @@ When a sigma is provided, performs a slower, more accurate sharpen of the L chan
 
 Separate control over the level of sharpening in "flat" and "jagged" areas is available.
 
-#### **Options**
+#### Options
 
 | Key    |  Type   | Optional | Min Value | Max Value | Default |
 | ------ | :-----: | :------: | :-------: | :-------: | :-----: |
@@ -293,16 +472,27 @@ Separate control over the level of sharpening in "flat" and "jagged" areas is av
 | flat   | Integer |    ✓     |     0     |   10000   |   1.0   |
 | jagged | Integer |    ✓     |     0     |   10000   |   2.0   |
 
+#### Example
+
+<Image operation={{ operation: 'sharpen', sigma: 1000 }} />
+
+```json
+{ "operation": "sharpen", "sigma": 1000 }
+```
+
 ### `Text`
 
-A string of text that will be rendered over your image.
+Sharpen the image. When used without parameters, performs a fast, mild sharpen of the output image.
 
-#### **Options**
+When a sigma is provided, performs a slower, more accurate sharpen of the L channel in the LAB colour space.
+
+Separate control over the level of sharpening in "flat" and "jagged" areas is available.
+
+#### Options
 
 | Key             |                               Type                               | Optional | Min Value | Max Value |     Default     |
 | --------------- | :--------------------------------------------------------------: | :------: | :-------: | :-------: | :-------------: |
-| value           |                              String                              |    x     |    n/a    |    n/a    | 30px sans-serif |
-| font            |                              String                              |    ✓     |    n/a    |    n/a    | 30px sans-serif |
+| font            |                              String                              |    ✓     |   0.01    |   1000    | 30px sans-serif |
 | textAlign       | Enum([textAlign](/storage-image-processing-api/types/textAlign)) |    ✓     |    n/a    |    n/a    |       n/a       |
 | textColor       |                             Integer                              |    ✓     |    n/a    |    n/a    |      white      |
 | backgroundColor |                              String                              |    ✓     |    n/a    |    n/a    |       n/a       |
@@ -313,7 +503,7 @@ A string of text that will be rendered over your image.
 | borderColor     |                              String                              |    ✓     |    n/a    |    n/a    |      black      |
 | wrap            |                             Boolean                              |    ✓     |    n/a    |    n/a    |       n/a       |
 | maxWidth        |                             Integer                              |    ✓     |    n/a    |    n/a    |       n/a       |
-| blend           |     Enum([Blend](/storage-image-processing-api/types/blend))     |    ✓     |    n/a    |    n/a    |      over       |
+| blend           |     Enum([Blend](/storage-image-processing-api/types/blend))     |    ✓     |    n/a    |    n/a    |        0        |
 | gravity         |   Enum([Gravity](/storage-image-processing-api/types/gravity))   |    ✓     |    n/a    |    n/a    |       n/a       |
 | top             |                             Integer                              |    ✓     |    n/a    |    n/a    |       n/a       |
 | left            |                             Integer                              |    ✓     |    n/a    |    n/a    |       n/a       |
@@ -322,12 +512,20 @@ A string of text that will be rendered over your image.
 
 Any pixel value greater than or equal to the threshold value will be set to 255, otherwise it will be set to 0.
 
-#### **Options**
+#### Options
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
 | threshold | String  |    ✓     |     0     |    255    |   128   |
 | grayscale | Boolean |    ✓     |    n/a    |    n/a    |   n/a   |
+
+#### Example
+
+<Image operation={{ operation: 'threshold', threshold: 128 }} />
+
+```json
+{ "operation": "threshold", "threshold": 128 }
+```
 
 ### `Tint`
 
@@ -335,7 +533,7 @@ Tint the image using the provided chroma while preserving the image luminance.
 
 An alpha channel if present will be unchanged by the operation.
 
-#### **Options**
+#### Options
 
 | Key |  Type  | Optional | Min Value | Max Value | Default |
 | --- | :----: | :------: | :-------: | :-------: | :-----: |
@@ -347,8 +545,34 @@ Tint the image using the provided chroma while preserving the image luminance.
 
 An alpha channel if present will be unchanged by the operation.
 
-#### **Options**
+#### Options
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
-| threshold | Integer |    ✓     |     0     |    n/a    |   10    |
+| threshold | Integer |    ✓     |     0     |    n/a    |   n/a   |
+
+export const EXTENSION_URL =
+  'https://europe-central2-dev-extensions-testing.cloudfunctions.net/ext-storage-image-processing-api-ri3r-handler/process';
+
+export const IMAGE_URL =
+  'https://cdn.pixabay.com/photo/2018/04/29/01/23/skin-3358873_960_720.jpg';
+
+export const INPUT_OPERATION = {
+  operation: 'input',
+  type: 'url',
+  url: IMAGE_URL,
+};
+
+export const OUTPUT_OPERATION = { operation: 'output', format: 'jpeg' };
+
+export const Image = ({ operation }) => (
+  <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+    <img src={IMAGE_URL} style={{ width: '49.5%', borderRadius: 6 }} />
+    <img
+      style={{ width: '49.5%', marginLeft: '1%', borderRadius: 6 }}
+      src={`${EXTENSION_URL}?operations=${encodeURIComponent(
+        JSON.stringify([INPUT_OPERATION, operation, OUTPUT_OPERATION]),
+      )}`}
+    />
+  </div>
+);

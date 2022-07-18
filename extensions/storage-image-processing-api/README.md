@@ -2,7 +2,23 @@
 
 **Author**: Invertase (**[https://invertase.io](https://invertase.io)**)
 
-**Description**: TODO
+**Description**: The Image Processing API allows you to process images in real-time.
+
+---
+
+### Console
+
+[![Install the Storage Image Processing API extension](https://github.com/FirebaseExtended/experimental-extensions/raw/next/install-extension.png?raw=true)](https://console.firebase.google.com/project/_/extensions/install?ref=invertase/storage-image-processing-api)
+
+### Firebase CLI
+
+```bash
+firebase ext:install invertase/storage-image-processing-api --project=projectId-or-alias
+```
+
+> Learn more about installing extensions in the Firebase Extensions documentation: [console](https://firebase.google.com/docs/extensions/install-extensions?platform=console), [CLI](https://firebase.google.com/docs/extensions/install-extensions?platform=cli)
+
+---
 
 **Configuration Parameters:**
 

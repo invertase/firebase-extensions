@@ -6,10 +6,10 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "dev": "EXPRESS_SERVER=true ../../../node_modules/.bin/nodemon",
-    "emulator:local": "FIREBASE_STORAGE_EMULATOR_HOST='localhost:9199' firebase ext:dev:emulators:start --test-config=__tests__/test-firebase.json --test-params=__tests__/test-params.env --project=extensions-testing --import=./__tests__/data",
+    "emulator": "FIREBASE_STORAGE_EMULATOR_HOST='localhost:9199' firebase ext:dev:emulators:start --test-config=__tests__/test-firebase.json --test-params=__tests__/test-params.env --project=extensions-testing --import=./__tests__/data",
     "generate-readme": "firebase ext:info .. --markdown > ../README.md",
     "test:watch": "jest --config=./jest.config.js --watch",
-    "test": "FIREBASE_STORAGE_EMULATOR_HOST='localhost:9199' firebase ext:dev:emulators:exec ./node_modules/.bin/jest --test-config=__tests__/test-firebase.json --test-params=__tests__/test-params.env --project=extensions-testing --import=./__tests__/data",
+    "test": "jest --config=./jest.config.js",
     "deploy": "firebase ext:install ../ --project=extensions-testing"
   },
   "engines": {

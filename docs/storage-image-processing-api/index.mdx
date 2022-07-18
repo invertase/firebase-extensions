@@ -1,9 +1,72 @@
-# Storage Image Processing Api
+# Storage Image Processing API
 
-Welcome to Storage Image Processing Api!
+The Storage Image Processing API extension (`storage-image-processing-api`) lets you optimize and transform images in the [Cloud Storage](https://firebase.google.com/docs/storage) bucket via a powerful HTTP API. The API provides more than 30 different operations to enhance and manipulate your images, including image composition, cropping, flipping, color reduction, sharpening, filtering, and much more. See the full list of available operations in the [Operations](/operations) documentation.
 
-Optimize and transform images from your Cloud Storage buckets via a powerful HTTP API. Library Supports over 30 different image operations to optimize and manipulate your images.
+<video width="100%" controls muted autoPlay loop>
+  <source
+    src="https://user-images.githubusercontent.com/35961879/175304684-9bb464b6-996e-4923-b65b-cb1afd9519b4.mp4"
+    type="video/mp4"
+  />
+  Your browser does not support the video tag.
+</video>
 
-## Getting started
+## Install the extension
 
-Follow our guide on how to setup and process images [here](/getting-started).
+To install the extension, follow the steps on the [Install Firebase Extension](https://firebase.google.com/docs/extensions/install-extensions) page. In summary, do one of the following:
+
+- **Firebase console:** Click the following link:
+
+  <a
+    href="https://console.firebase.google.com/project/_/extensions/install?ref=invertase/storage-image-processing-api"
+    target="_blank"
+  >
+    <img
+      src="https://github.com/FirebaseExtended/experimental-extensions/raw/next/install-extension.png?raw=true"
+      alt="Install the Storage Image Processing API extension"
+    />
+  </a>
+
+- **CLI:** Run the following command:
+
+  ```bash
+  firebase ext:install invertase/storage-image-processing-api --project=projectId-or-alias
+  ```
+
+During the installation of the extension, you will be prompted to specify a number of configuration parameters:
+
+- **Cloud Functions location:**
+
+  Select the location of where you want to deploy the functions created for this extension. You usually want a location close to your database. For help selecting a location, refer to the [location selection guide](https://firebase.google.com/docs/functions/locations).
+
+- **Cloud Storage bucket:**
+
+  Cloud storage bucket, where the images to be processed are located.
+
+- **Cloud Storage path for caching images:**
+
+  A relative path in which the processed images are cached in the specified Cloud Storage bucket. If you prefer to store resized images at the default location, leave this field empty.
+
+- **Allowed CORS origins:**
+
+  A comma-delimited value of allowed `CORS` origins. Use the default of `*` to allow all origins. This is useful to lock down your API and only allow your own website to embed the images directly. Note this will not prevent non-browser requests from accessing your API.
+
+## Use the extension
+
+After installation, a new Cloud Function called `process` will be added to your project. You can make HTTP requests to this function specifying a method of `GET` and a single query parameter `operations` with a JSON array of operations you'd like to perform. For example:
+
+```bash
+curl -X GET \
+  https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/{EXTENSION_INSTANCE_ID}-handler/process?operations=...
+```
+
+- **`{LOCATION}`**: The Cloud Functions location that was specified during the installation of the extension.
+- **`{PROJECT_ID}`**: The Firebase project ID.
+- **`{EXTENSION_INSTANCE_ID}`**: The extension instance ID.
+
+### Operations
+
+The `operations` query parameter is a JSON array of operations to perform. Each operation is a JSON object with an `operation` property specifying the operation to perform and other properties depending on the operation.
+
+The first operation in the array must be an `input` operation. This operation specifies the image to be processed. Read the [input](/input) operation documentation for more information.
+
+Also, the last operation in the array must be an `output` operation. This operation specifies the `format` of the image to be created. Read the [output](/output) operation documentation for more information.
