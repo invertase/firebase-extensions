@@ -4,7 +4,7 @@ You can test out this extension right away!
 
 Use the following URL to access the image processing API:
 
-[https://{param:LOCATION}-{param:PROJECT_ID}.cloudfunctions.net/{param:EXTENSION_INSTANCE_ID}-handler/process](https://{param:LOCATION}-{param:PROJECT_ID}.cloudfunctions.net/{param:EXTENSION_INSTANCE_ID}-handler/process)
+[https://{param:LOCATION}-{param:PROJECT_ID}.cloudfunctions.net/ext-storage-image-processing-api-handler/process](https://{param:LOCATION}-{param:PROJECT_ID}.cloudfunctions.net/ext-storage-image-processing-api-handler/process)
 
 ### Using the extension
 
