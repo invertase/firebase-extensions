@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs';
 
 const apiEndpointUrl =
   'http://localhost:5001/extensions-testing/europe-west2/handler/process';
@@ -7,12 +8,15 @@ const remoteImgUrl =
   'https://images.unsplash.com/photo-1512546321483-c0468b7b8a95';
 
 const buildUrl = (...operations) =>
-  `${apiEndpointUrl}?operations=${encodeURIComponent(
-    JSON.stringify([
-      { operation: 'input', type: 'url', url: remoteImgUrl },
-      ...operations,
-      { operation: 'output', format: 'jpeg' },
-    ]),
+  `${apiEndpointUrl}?${qs.stringify(
+    {
+      operations: [
+        { operation: 'input', type: 'url', url: remoteImgUrl },
+        ...operations,
+        { operation: 'output', format: 'jpeg' },
+      ],
+    },
+    { encodeValuesOnly: true },
   )}`;
 
 describe('operations testing', () => {
