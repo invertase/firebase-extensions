@@ -35,6 +35,7 @@ import {
 } from './utils';
 import { Operation, ValidatedOperation } from './types';
 import { extensionConfiguration } from './config';
+import { utilities } from './utilities';
 
 async function processImageRequest(
   validatedOperations: ValidatedOperation[],
@@ -118,32 +119,100 @@ app.get(
   '/process',
   expressAsyncHandlerWrapper(async (req, res, next) => {
     const operationsString = req.query.operations as string;
-    if (!operationsString || !operationsString.length) {
-      return next(
-        new AssertionError({
-          message: `An 'operations' query parameter - a json array of operations to perform - converted to a json string and url encoded.`,
-        }),
-      );
-    }
-    let operations: Operation[] = null;
-    try {
-      operations = JSON.parse(decodeURIComponent(operationsString));
-    } catch (e) {
-      return next(
-        new AssertionError({
-          message: `Invalid operations JSON string. ${e.message}`,
-        }),
-      );
+
+    // process html version for now.
+    if (true) {
+      /**
+       *  Can do block of operations seperated by slash
+       *  Then seperate by commas.
+       *  Running just based on a single comma block for now.
+       */
+
+      console.log('operationsString >>>> ', operationsString);
+
+      console.log('Step 0 >>>>>');
+      const inputOperation = {
+        operation: 'input',
+        options: {
+          type: 'create',
+          height: 500,
+          width: 500,
+          channels: 4,
+          noiseMean: 0,
+          noiseSigma: 0,
+          format: 'png',
+        },
+        rawOptions: {},
+      } as Operation;
+
+      const utilityOps = [];
+
+      for (var util of operationsString.split('/')) {
+        /** Find first option */
+        const options = util.split(',');
+
+        /** Find first utility */
+        const [op] = options[0].split('_');
+        const utilty = utilities[op];
+
+        console.log('options >>>> ', options);
+
+        /** Add op, if exists */
+        if (utilty) {
+          const operation = utilty(options);
+          utilityOps.push(operation);
+        }
+      }
+
+      const outputOperation = {
+        operation: 'output',
+        options: { format: 'png' },
+        rawOptions: {},
+      } as Operation;
+
+      const operations = [
+        inputOperation,
+        ...utilityOps,
+        outputOperation,
+      ] as ValidatedOperation[];
+
+      console.log('processing >>>', operations);
+
+      /** TODO: Validate the operations */
+
+      /** process image */
+      const [processError] = await a2a(processImageRequest(operations, res));
+      if (processError) {
+        return next(processError);
+      }
     }
 
-    const validatedOperations: ValidatedOperation[] =
-      jsonAsValidatedOperations(operations);
-    const [processError] = await a2a(
-      processImageRequest(validatedOperations, res),
-    );
-    if (processError) {
-      return next(processError);
-    }
+    // if (!operationsString || !operationsString.length) {
+    //   return next(
+    //     new AssertionError({
+    //       message: `An 'operations' query parameter - a json array of operations to perform - converted to a json string and url encoded.`,
+    //     }),
+    //   );
+    // }
+    // let operations: Operation[] = null;
+    // try {
+    //   operations = JSON.parse(decodeURIComponent(operationsString));
+    // } catch (e) {
+    //   return next(
+    //     new AssertionError({
+    //       message: `Invalid operations JSON string. ${e.message}`,
+    //     }),
+    //   );
+    // }
+
+    // const validatedOperations: ValidatedOperation[] =
+    //   jsonAsValidatedOperations(operations);
+    // const [processError] = await a2a(
+    //   processImageRequest(validatedOperations, res),
+    // );
+    // if (processError) {
+    //   return next(processError);
+    // }
   }),
 );
 

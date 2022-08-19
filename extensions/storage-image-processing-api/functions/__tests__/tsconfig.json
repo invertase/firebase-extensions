@@ -2,8 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "lib": ["es2017"],
-    "types": ["jest", "node"],
-    "rootDir": "./"
+    "types": ["jest", "node"]
   },
   "include": ["../__tests__"],
   "exclude": ["../node_modules"]

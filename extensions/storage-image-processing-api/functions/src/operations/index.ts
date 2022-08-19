@@ -119,6 +119,7 @@ const builders: { [key: string]: OperationBuilder } = {
 
 export function builderForOperation(operation: Operation): OperationBuilder {
   const operationName = operation.operation;
+  console.log('checking operation: ', operationName);
   return builders[operationName];
 }
 
@@ -235,6 +236,7 @@ export async function asBuiltOperation(
 ): Promise<BuiltOperation> {
   const actionBuilder =
     builderForOperation(validatedOperation)?.build || defaultActionsBuilder;
+
   let builtActions = actionBuilder(validatedOperation, fileMetadata);
   if (builtActions instanceof Promise) {
     builtActions = await builtActions;
@@ -253,10 +255,12 @@ export async function applyValidatedOperation(
   const currentMetadata = currentInstance
     ? await currentInstance.metadata()
     : null;
+
   const builtOperation = await asBuiltOperation(
     validatedOperation,
     currentMetadata,
   );
+
   for (let i = 0; i < builtOperation.actions.length; i++) {
     const action = builtOperation.actions[i];
     if (action.method == 'constructor') {
