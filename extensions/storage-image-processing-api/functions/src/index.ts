@@ -17,92 +17,19 @@
 import { AssertionError } from 'assert';
 import a2a from 'a2a';
 import cors from 'cors';
-import express, { Response } from 'express';
+import express from 'express';
 import * as firebase from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import helmet from 'helmet';
 import { StructError } from 'superstruct';
 
-import {
-  applyValidatedOperation,
-  asValidatedOperations,
-  jsonAsValidatedOperations,
-} from './operations';
-import {
-  expressAsyncHandlerWrapper,
-  fileMetadataBufferKeys,
-  omitKeys,
-} from './utils';
+import { asValidatedOperations, jsonAsValidatedOperations } from './operations';
+import { expressAsyncHandlerWrapper } from './utils';
 import { Operation, ValidatedOperation } from './types';
 import { extensionConfiguration } from './config';
-import { utilities } from './utilities';
-
-async function processImageRequest(
-  validatedOperations: ValidatedOperation[],
-  res: Response,
-): Promise<void> {
-  const firstOperation = validatedOperations[0];
-  const lastOperation = validatedOperations[validatedOperations.length - 1];
-
-  // Ensure input is the first operation.
-  if (firstOperation.operation != 'input') {
-    throw new AssertionError({
-      message: `An input operation must be the first operation.`,
-    });
-  }
-
-  // Ensure output is the last operation.
-  if (lastOperation.operation != 'output') {
-    throw new AssertionError({
-      message: `An output operation must be the last operation.`,
-    });
-  }
-
-  // Apply operations.
-  let instance = null;
-  for (let i = 0; i < validatedOperations.length; i++) {
-    const validatedOperation = validatedOperations[i];
-    instance = await applyValidatedOperation(instance, validatedOperation);
-  }
-
-  const finalFileMetadata = omitKeys(
-    await instance.metadata(),
-    fileMetadataBufferKeys,
-  );
-
-  if (lastOperation.options.debug == true) {
-    res.json({
-      operations: validatedOperations,
-      metadata: finalFileMetadata,
-    });
-    return;
-  }
-
-  const output = await instance.toBuffer({ resolveWithObject: true });
-  const { data, info } = output;
-
-  functions.logger.debug(`Processed a new request.`, validatedOperations);
-
-  const headers = {
-    'Content-Type': `image/${info.format}`,
-    'Content-Length': Buffer.byteLength(data),
-    'Content-Disposition': `inline; filename=image.${info.format}`,
-    'Cache-control': 'public, max-age=31536000', // 1 Year
-  };
-
-  // Attach output information as response headers.
-  Object.entries(info).forEach(entry => {
-    headers[`ext-output-info-${entry[0].toLowerCase()}`] = `${entry[1]}`;
-  });
-
-  // Attach sharp metadata as response headers.
-  Object.entries(finalFileMetadata).forEach(entry => {
-    headers[`ext-metadata-${entry[0].toLowerCase()}`] = `${entry[1]}`;
-  });
-
-  res.writeHead(200, headers);
-  res.end(data);
-}
+import { JSONParser } from './parsers/jsonParser';
+import { HTMLParser } from './parsers/htmlParser';
+import { processImageRequest } from './processImageRequest';
 
 const app = express();
 
@@ -118,101 +45,30 @@ app.use(
 app.get(
   '/process',
   expressAsyncHandlerWrapper(async (req, res, next) => {
-    const operationsString = req.query.operations as string;
+    let operationsString = req.query.operations as string;
 
-    // process html version for now.
-    if (true) {
-      /**
-       *  Can do block of operations seperated by slash
-       *  Then seperate by commas.
-       *  Running just based on a single comma block for now.
-       */
+    let operations: Operation[];
 
-      console.log('operationsString >>>> ', operationsString);
+    /** Check QueryString type */
+    try {
+      JSON.parse(operationsString);
 
-      console.log('Step 0 >>>>>');
-      const inputOperation = {
-        operation: 'input',
-        options: {
-          type: 'create',
-          height: 500,
-          width: 500,
-          channels: 4,
-          noiseMean: 0,
-          noiseSigma: 0,
-          format: 'png',
-        },
-        rawOptions: {},
-      } as Operation;
-
-      const utilityOps = [];
-
-      for (var util of operationsString.split('/')) {
-        /** Find first option */
-        const options = util.split(',');
-
-        /** Find first utility */
-        const [op] = options[0].split('_');
-        const utilty = utilities[op];
-
-        console.log('options >>>> ', options);
-
-        /** Add op, if exists */
-        if (utilty) {
-          const operation = utilty(options);
-          utilityOps.push(operation);
-        }
-      }
-
-      const outputOperation = {
-        operation: 'output',
-        options: { format: 'png' },
-        rawOptions: {},
-      } as Operation;
-
-      const operations = [
-        inputOperation,
-        ...utilityOps,
-        outputOperation,
-      ] as ValidatedOperation[];
-
-      console.log('processing >>>', operations);
-
-      /** TODO: Validate the operations */
-
-      /** process image */
-      const [processError] = await a2a(processImageRequest(operations, res));
-      if (processError) {
-        return next(processError);
-      }
+      /** Run JSON based operations */
+      operations = JSONParser(operationsString, next);
+    } catch (e) {
+      /** Run HTML based operations */
+      operations = HTMLParser(operationsString, next);
     }
 
-    // if (!operationsString || !operationsString.length) {
-    //   return next(
-    //     new AssertionError({
-    //       message: `An 'operations' query parameter - a json array of operations to perform - converted to a json string and url encoded.`,
-    //     }),
-    //   );
-    // }
-    // let operations: Operation[] = null;
-    // try {
-    //   operations = JSON.parse(decodeURIComponent(operationsString));
-    // } catch (e) {
-    //   return next(
-    //     new AssertionError({
-    //       message: `Invalid operations JSON string. ${e.message}`,
-    //     }),
-    //   );
-    // }
+    const validatedOperations: ValidatedOperation[] =
+      jsonAsValidatedOperations(operations);
 
-    // const validatedOperations: ValidatedOperation[] =
-    //   jsonAsValidatedOperations(operations);
-    // const [processError] = await a2a(
-    //   processImageRequest(validatedOperations, res),
-    // );
-    // if (processError) {
-    //   return next(processError);
-    // }
+    const [processError] = await a2a(
+      processImageRequest(validatedOperations, res),
+    );
+    if (processError) {
+      return next(processError);
+    }
   }),
 );
 
@@ -223,6 +79,7 @@ app.get(
     if (!operationsString || !operationsString.length) {
       return next();
     }
+
     const validatedOperations: ValidatedOperation[] =
       asValidatedOperations(operationsString);
     const [processError] = await a2a(

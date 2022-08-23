@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiEndpointUrl =
-  'http://localhost:5001/extensions-testing/europe-west2/handler/process';
+  'http://localhost:5001/demo-test/europe-west2/ext-storage-image-processing-api-handler/process';
 
 const remoteImgUrl =
   'https://images.unsplash.com/photo-1512546321483-c0468b7b8a95';

@@ -1,21 +1,9 @@
 import { Operation } from '../types';
 
-const utilMapping = {
-  w: 'width',
-  h: 'height',
-};
-
-export const utilityWidth = (utilities: string[]) => {
-  const options = {};
-
-  for (const utility of utilities) {
-    const [op, opValue] = utility.split('_');
-    options[utilMapping[op]] = parseInt(opValue);
-  }
-
+export const utilityWidth = options => {
   const operation: Operation = {
     operation: 'resize',
-    options,
+    width: options[0],
   };
 
   return operation;

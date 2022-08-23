@@ -1,10 +1,12 @@
 import { Operation } from '../types';
 
 const utilMapping = {
-  bg: 'background',
+  w: 'width',
+  h: 'height',
+  k: 'kernel',
 };
 
-export const utilityFlatten = (utilities: string[]) => {
+export const utilityConvolve = (utilities: string[]) => {
   const options = {};
 
   for (const utility of utilities) {
@@ -15,7 +17,7 @@ export const utilityFlatten = (utilities: string[]) => {
   }
 
   const operation: Operation = {
-    operation: 'flatten',
+    operation: 'convolve',
     ...options,
   };
 

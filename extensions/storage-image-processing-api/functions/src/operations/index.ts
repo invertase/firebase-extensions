@@ -119,7 +119,6 @@ const builders: { [key: string]: OperationBuilder } = {
 
 export function builderForOperation(operation: Operation): OperationBuilder {
   const operationName = operation.operation;
-  console.log('checking operation: ', operationName);
   return builders[operationName];
 }
 
@@ -128,6 +127,7 @@ export function asValidatedOperationOptions(
 ): OperationOptions {
   const operation = input as Operation;
   const operationName = operation.operation;
+
   const operationBuilder = builderForOperation(input);
 
   if (!operationBuilder) {
@@ -172,8 +172,10 @@ export function jsonAsValidatedOperations(
   for (let i = 0; i < operations.length; i++) {
     const rawOptions = operations[i];
     const operation = rawOptions.operation;
+
     try {
       const options = asValidatedOperationOptions(rawOptions);
+
       output.push({
         source: null,
         operation,

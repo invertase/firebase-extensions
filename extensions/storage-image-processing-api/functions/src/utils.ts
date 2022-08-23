@@ -80,6 +80,18 @@ export function coerceStringToArray<T>(
   });
 }
 
+export function coerceStringToNumericArray<T>(
+  struct: superstruct.Struct<T>,
+): superstruct.Struct<T> {
+  return superstruct.coerce(struct, superstruct.string(), value => {
+    try {
+      return [...value.match(/-?\d/g).map($ => parseInt($))];
+    } catch {
+      return null;
+    }
+  });
+}
+
 export function omitUndefinedValues<T>(object: T): T {
   Object.keys(object).forEach(key =>
     object[key] === undefined ? delete object[key] : {},

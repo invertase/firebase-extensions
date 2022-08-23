@@ -58,12 +58,18 @@ const structCreateNewImage = superstruct.object({
   /**
    * Integer width of new image.
    */
-  width: utils.coerceStringToInt(superstruct.min(superstruct.integer(), 1)),
+  width: superstruct.defaulted(
+    utils.coerceStringToInt(superstruct.min(superstruct.integer(), 1)),
+    12,
+  ),
 
   /**
    * Integer height of the new image.
    */
-  height: utils.coerceStringToInt(superstruct.min(superstruct.integer(), 1)),
+  height: superstruct.defaulted(
+    utils.coerceStringToInt(superstruct.min(superstruct.integer(), 1)),
+    12,
+  ),
 
   /**
    * Background color to fill new pixels with.
@@ -76,7 +82,9 @@ const structCreateNewImage = superstruct.object({
    * Integral number of channels, either 3 (RGB) or 4 (RGBA).
    * Defaults to 4 (RGBA).
    */
-  channels: superstruct.defaulted(superstruct.enums([3, 4]), 4),
+  channels: utils.coerceStringToInt(
+    superstruct.defaulted(superstruct.enums([3, 4]), 4),
+  ),
 
   /**
    * Mean of pixels in generated noise
@@ -164,6 +172,9 @@ async function fetchGcsFile(
   options: OperationInput,
 ): Promise<OperationAction[]> {
   if (options.type !== 'gcs') return;
+
+  console.log('Step 1: Fetching file from GCS');
+
   const firebaseStorageApi =
     process.env.NODE_ENV === 'production'
       ? 'https://firebasestorage.googleapis.com'
@@ -184,6 +195,12 @@ async function fetchGcsFile(
         message: `Input 'source' does not appear to be a valid storage download url or is not specifically for the bucket '${extensionConfiguration.bucket}'`,
       });
     }
+    console.log('Downloading file from GCS >>', {
+      ...options,
+      url: options.source,
+      type: 'url',
+    });
+
     return fetchUrl({ ...options, url: options.source, type: 'url' });
   }
 
@@ -192,6 +209,13 @@ async function fetchGcsFile(
       message: `Input 'source' does not appear to be a valid storage path. Paths must not start with '/'.`,
     });
   }
+
+  console.log(
+    'Downloading file from GCS >>',
+    `${firebaseStorageApi}/v0/b/${
+      extensionConfiguration.bucket
+    }/o/${encodeURIComponent(options.source)}?alt=media`,
+  );
 
   return fetchUrl({
     ...options,
