@@ -1,0 +1,17 @@
+{
+  "name": "meow.png",
+  "bucket": "demo-test.appspot.com",
+  "contentType": "image/png",
+  "metageneration": 1,
+  "generation": 1625834405336,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": ["4724548e-7d67-4cf7-9b56-e434d730d1fb"],
+  "timeCreated": "2021-07-09T12:40:05.335Z",
+  "updated": "2021-07-09T12:40:05.337Z",
+  "size": 18565,
+  "md5Hash": "eyz+6+8r6JIsxqXpUegDJA==",
+  "crc32c": "3848596070"
+}
