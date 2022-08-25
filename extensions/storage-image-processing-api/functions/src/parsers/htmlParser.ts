@@ -36,8 +36,6 @@ export function HTMLParser(operationsString: string, next): Operation[] {
 
       const [op, opOptions] = operation.split(':');
 
-      console.log('Checking >>>>>>>>', op, opOptions);
-
       /** Single based boolean value */
       if (!opOptions) {
         operations.push({

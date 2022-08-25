@@ -147,6 +147,7 @@ export function asValidatedOperationOptions(
 
   // Use the struct for default validation.
   const struct = operationBuilder.struct as superstruct.Struct<Operation>;
+
   return omitKey(
     omitUndefinedValues<Operation>(struct.create(operation)),
     'operation',
