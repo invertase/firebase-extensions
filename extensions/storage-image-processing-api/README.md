@@ -32,7 +32,7 @@ firebase ext:install invertase/storage-image-processing-api --project=projectId-
 
 **Cloud Functions:**
 
-- **api:** TODO
+- **api:** Creates a cloud function used for processing new and existing images.
 
 **APIs Used**:
 
