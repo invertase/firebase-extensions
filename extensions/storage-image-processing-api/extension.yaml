@@ -3,7 +3,7 @@ version: 0.0.2
 specVersion: v1beta
 
 displayName: Image Processing API
-description: Processor for creating and editing images.
+description: Processing Api for creating and editing images.
 
 license: Apache-2.0
 
