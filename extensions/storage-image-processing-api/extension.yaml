@@ -3,7 +3,8 @@ version: 0.0.2
 specVersion: v1beta
 
 displayName: Image Processing API
-description: TODO
+description: >-
+  Use this extension to optimize and transform images via a powerful HTTP API with over 30 different image operations to enhance and manipulate your images.
 
 license: Apache-2.0
 
@@ -27,13 +28,13 @@ apis:
 
 roles:
   - role: storage.admin
-    reason: Allows the extension to store resized images in Cloud Storage
+    reason: Allows the extension to read images in Cloud Storage
 
 resources:
   - name: handler
     type: firebaseextensions.v1beta.function
     description: >-
-      TODO
+      Serves a API accepting incoming HTTP requests. 
     properties:
       location: ${param:LOCATION}
       runtime: nodejs14
@@ -118,12 +119,3 @@ params:
     example: '*.example.com,invertase.io'
     default: '*'
     required: true
-
-  - param: CACHED_IMAGES_PATH
-    label: Cloud Storage path where processed images will be cached.
-    description: >
-      A relative path in which to store cached images. For example,
-      `cache`. If you prefer to store resized images at the default
-      location, leave this field empty.
-    example: processed_images_cache
-    required: false

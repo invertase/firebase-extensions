@@ -42,10 +42,6 @@ During the installation of the extension, you will be prompted to specify a numb
 
   Cloud storage bucket, where the images to be processed are located.
 
-- **Cloud Storage path for caching images:**
-
-  A relative path in which the processed images are cached in the specified Cloud Storage bucket. If you prefer to store resized images at the default location, leave this field empty.
-
 - **Allowed CORS origins:**
 
   A comma-delimited value of allowed `CORS` origins. Use the default of `*` to allow all origins. This is useful to lock down your API and only allow your own website to embed the images directly. Note this will not prevent non-browser requests from accessing your API.
@@ -62,10 +58,74 @@ curl -X GET \
 - **`{LOCATION}`**: The Cloud Functions location that was specified during the installation of the extension.
 - **`{PROJECT_ID}`**: The Firebase project ID.
 
-### Operations
+### Operation usage
 
 The `operations` query parameter is a JSON array of operations to perform. Each operation is a JSON object with an `operation` property specifying the operation to perform and other properties depending on the operation.
+The parameter follows a couple of rules:
 
-The first operation in the array must be an `input` operation. This operation specifies the image to be processed. Read the [input](/input) operation documentation for more information.
+1. The first operation in the array must be an `input` operation. This operation specifies the image to be processed. Read the [input](/input) operation documentation for more information.
+1. The last operation in the array must be an `output` operation. This operation specifies the `format` of the image to be created. Read the [output](/output) operation documentation for more information.
 
-Also, the last operation in the array must be an `output` operation. This operation specifies the `format` of the image to be created. Read the [output](/output) operation documentation for more information.
+The following example details a remote `input` operation and the `output` type:
+
+```js
+[
+  {
+    operation: 'input',
+    type: 'url',
+    url: 'https://example.com/image.jpg',
+  },
+  // Other operations...
+  {
+    operation: 'output',
+    format: 'webp',
+  },
+];
+```
+
+Additional operations can be placed inbetween to process the image operation types outline in the [documentation](/operations), for example to flip then rotate the image 90 degrees:
+
+```js
+[
+  {
+    operation: 'input',
+    type: 'url',
+    url: 'https://example.com/image.jpg',
+  },
+  {
+    operation: 'flip',
+  },
+  {
+    operation: 'rotate',
+    angle: 90,
+  },
+  {
+    operation: 'output',
+    format: 'webp',
+  },
+];
+```
+
+### Providing the operations
+
+The `operations` query parameter accepts a strigified JSON object as a value. This should be encoded as a URI component, for example:
+
+```js
+const operations = [
+  {
+    operation: 'input',
+    type: 'url',
+    url: 'https://example.com/image.jpg',
+  },
+  {
+    operation: 'flip',
+  },
+  {
+    operation: 'output',
+    format: 'webp',
+  },
+];
+
+const encodedOperations = encodeURIComponent(JSON.stringify(operations));
+const url = `https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/ext-storage-image-processing-api-handler/process?operations=${encodedOperations}`;
+```

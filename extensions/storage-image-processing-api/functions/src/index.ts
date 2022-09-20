@@ -17,7 +17,7 @@
 import { AssertionError } from 'assert';
 import a2a from 'a2a';
 import cors from 'cors';
-import express, { Response } from 'express';
+import express, { Request, Response } from 'express';
 import * as firebase from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import helmet from 'helmet';
@@ -168,7 +168,7 @@ app.get(
 // Express requires the function to have 4 arguments for a handler
 // to be treated as an error handler.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use(function handleError(error, req, res, next) {
+app.use(function handleError(error: Error, req: Request, res: Response) {
   if (error instanceof StructError || error instanceof AssertionError) {
     functions.logger.warn(error.message, {
       url: req.url,
