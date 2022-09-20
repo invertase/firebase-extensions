@@ -24,7 +24,7 @@ const operations = [
 2. Stringify and encode the list:
 
 ```js
-encodeURIComponent(JSON.stringify(operations))
+encodeURIComponent(JSON.stringify(operations));
 ```
 
 3. Call the deployed `process` Cloud Function:
