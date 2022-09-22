@@ -87,3 +87,5 @@ yarn.lock
 
 #vscode
 .vscode
+
+dist
