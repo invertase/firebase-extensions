@@ -1,7 +1,7 @@
 {
   "name": "@invertase/image-processing-api",
   "version": "0.1.0",
-  "description": "A JavaScript utility library for the Firebase Storage Image Processing API Extension.",
+  "description": "A JavaScript utility library for the Firebase Image Processing API Extension.",
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.es.js",
   "types": "dist/index.d.ts",

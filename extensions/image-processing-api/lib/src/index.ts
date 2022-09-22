@@ -121,7 +121,7 @@ type Operations = Array<
   }
 >;
 
-class StorageImageProcessingApi {
+class ImageProcessingApi {
   #input: OperationInput | undefined = undefined;
   #output: OperationOutput | undefined = undefined;
   #operations: Operations = [];
@@ -429,7 +429,7 @@ class StorageImageProcessingApi {
 }
 
 /**
- * Returns a new instance of the StorageImageProcessingApi.
+ * Returns a new instance of the ImageProcessingApi.
  *
  * Example:
  *
@@ -447,8 +447,8 @@ class StorageImageProcessingApi {
  *  .toJSON();
  * ```
  *
- * @returns {StorageImageProcessingApi}
+ * @returns {ImageProcessingApi}
  */
-export function builder(): StorageImageProcessingApi {
-  return new StorageImageProcessingApi();
+export function builder(): ImageProcessingApi {
+  return new ImageProcessingApi();
 }

@@ -5,7 +5,7 @@
   "sidebar": [
     ["Overview", "/"],
     [
-      "Storage Image Processing Api",
+      "Image Processing Api",
       [
         ["Overview", "/image-processing-api"],
         ["Input", "/image-processing-api/input"],
