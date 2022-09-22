@@ -117,24 +117,7 @@ app.use(
 app.get(
   '/process',
   expressAsyncHandlerWrapper(async (req, res, next) => {
-    const operationsString = req.query.operations as string;
-    if (!operationsString || !operationsString.length) {
-      return next(
-        new AssertionError({
-          message: `An 'operations' query parameter - a json array of operations to perform - converted to a json string and url encoded.`,
-        }),
-      );
-    }
-    let operations: Operation[] = null;
-    try {
-      operations = JSON.parse(decodeURIComponent(operationsString));
-    } catch (e) {
-      return next(
-        new AssertionError({
-          message: `Invalid operations JSON string. ${e.message}`,
-        }),
-      );
-    }
+    const operations = req.query.operations as Operation[];
 
     const validatedOperations: ValidatedOperation[] =
       jsonAsValidatedOperations(operations);
