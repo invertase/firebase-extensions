@@ -8,7 +8,7 @@ This provides the format of the generated image along with additional (optional)
 
 This mandatory and dictates which optional output operations can be applied.
 
-This must be one of the following...
+The `format` property should be one of `jpeg`, `webp`, `tiff`, `avif` or `png`.
 
 ### jpeg
 
@@ -16,7 +16,7 @@ This must be one of the following...
 | ----------------- | :-----: | :------: | :-----: |
 | progressive       | Boolean |    ✓     |   n/a   |
 | compressionLevel  | Integer |    ✓     |   n/a   |
-| adaptiveFiltering | Integer |    ✓     |   n/a   |
+| adaptiveFiltering | Boolean |    ✓     |   n/a   |
 | palette           | Boolean |    ✓     |   n/a   |
 | quality           | Integer |    ✓     |   n/a   |
 | colours           | Integer |    ✓     |   n/a   |
@@ -66,9 +66,9 @@ Force PNG output, otherwise attempt to use input format (optional, default true)
 | --------------- | :-----: | :------: | :-------: | :-------: | :-----: |
 | quality         | Boolean |    ✓     |     1     |    100    |   80    |
 | alphaQuality    | Integer |    ✓     |     0     |    100    |   100   |
-| lossless        | Integer |    ✓     |    n/a    |    n/a    |   n/a   |
+| lossless        | Boolean |    ✓     |    n/a    |    n/a    |   n/a   |
 | nearLossless    | Boolean |    ✓     |    n/a    |    n/a    |   n/a   |
-| smartSubsample  | Integer |    ✓     |    n/a    |    n/a    |   n/a   |
+| smartSubsample  | Boolean |    ✓     |    n/a    |    n/a    |   n/a   |
 | reductionEffort | Integer |    ✓     |     0     |     6     |    4    |
 | pageHeight      | Integer |    ✓     |    n/a    |    n/a    |   n/a   |
 | force           | Boolean |    ✓     |    n/a    |    n/a    |   n/a   |
@@ -107,19 +107,19 @@ Force WebP output, otherwise attempt to use input format (optional, default true
 
 ### tiff
 
-| Key         |        Type         | Optional | Min Value | Max Value | Default |
-| ----------- | :-----------------: | :------: | :-------: | :-------: | :-----: |
-| quality     |       Boolean       |    ✓     |     1     |    100    |   80    |
-| force       |       Boolean       |    ✓     |    n/a    |    n/a    |   n/a   |
-| compression | [Enum](compression) |    ✓     |    n/a    |    n/a    |   n/a   |
-| predictor   |  [Enum](predictor)  |    ✓     |    n/a    |    n/a    |   n/a   |
-| pyramid     |       Boolean       |    ✓     |    n/a    |    n/a    |   n/a   |
-| tile        |       Boolean       |    ✓     |    n/a    |    n/a    |   n/a   |
-| tileWidth   |       Integer       |    ✓     |    n/a    |    n/a    |   n/a   |
-| tileHeight  |       Integer       |    ✓     |    n/a    |    n/a    |   n/a   |
-| xres        |       Integer       |    ✓     |    n/a    |    n/a    |   n/a   |
-| yres        |       Integer       |    ✓     |    n/a    |    n/a    |   n/a   |
-| bitdepth    |       Integer       |    ✓     |    n/a    |    n/a    |   n/a   |
+| Key         |                                 Type                                 | Optional | Min Value | Max Value |   Default    |
+| ----------- | :------------------------------------------------------------------: | :------: | :-------: | :-------: | :----------: |
+| quality     |                               Integer                                |    ✓     |     1     |    100    |      80      |
+| force       |                               Boolean                                |    ✓     |    n/a    |    n/a    |     n/a      |
+| compression | Enum([Compression](/storage-image-processing-api/types/compression)) |    ✓     |    n/a    |    n/a    |    'jpeg'    |
+| predictor   |   Enum([Predictor](/storage-image-processing-api/types/Predictor))   |    ✓     |    n/a    |    n/a    | 'horizontal' |
+| pyramid     |                               Boolean                                |    ✓     |    n/a    |    n/a    |     n/a      |
+| tile        |                               Boolean                                |    ✓     |    n/a    |    n/a    |     n/a      |
+| tileWidth   |                               Integer                                |    ✓     |    n/a    |    n/a    |     n/a      |
+| tileHeight  |                               Integer                                |    ✓     |    n/a    |    n/a    |     n/a      |
+| xres        |                               Integer                                |    ✓     |    n/a    |    n/a    |     n/a      |
+| yres        |                               Integer                                |    ✓     |    n/a    |    n/a    |     n/a      |
+| bitdepth    |                               Integer                                |    ✓     |    n/a    |    n/a    |     n/a      |
 
 #### `quality`
 

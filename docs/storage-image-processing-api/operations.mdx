@@ -8,15 +8,13 @@ This provides a list of `optional` operations for transforming an image.
 
 Perform an affine transform on an image. You must provide a matrix array of length 4 affine transformation matrix.
 
-By default, new pixels are filled with a black background. You can provide a background color with the background option.
-
-A particular interpolator may also be specified via the interpolator option.
+By default, new pixels are filled with a black background. You can provide a background color with the background option. A particular interpolator may also be specified via the interpolator option.
 
 #### Options
 
 | Key          |                                  Type                                  | Optional | Default |
 | ------------ | :--------------------------------------------------------------------: | :------: | :-----: |
-| matrix       |                             Array(Integer)                             |    x     |   n/a   |
+| matrix       |                             Array(Number)                              |    x     |   n/a   |
 | idx          |                                Integer                                 |    ✓     |   n/a   |
 | idy          |                                Integer                                 |    ✓     |   n/a   |
 | odx          |                                Integer                                 |    ✓     |   n/a   |
@@ -41,7 +39,7 @@ When a sigma is provided, performs a slower, more accurate Gaussian blur.
 
 | Key   | Type  | Optional | Min Value | Max Value | Default |
 | ----- | :---: | :------: | :-------: | :-------: | ------- |
-| sigma | Float |    x     |    0.3    |   1000    | n/a     |
+| sigma | Float |    ✓     |    0.3    |   1000    | n/a     |
 
 #### Example
 
@@ -65,12 +63,6 @@ This will, in general, enhance the clarity of the image by bringing out darker d
 | height   | Integer |    x     |     1     |    n/a    |   n/a   |
 | maxSlope | Integer |    ✓     |     0     |    100    |   n/a   |
 
-#### Options
-
-| Key   | Type  | Optional | Min Value | Max Value | Default |
-| ----- | :---: | :------: | :-------: | :-------: | :-----: |
-| sigma | Float |    x     |    0.3    |   1000    |   n/a   |
-
 #### Example
 
 <Image operation={{ operation: 'clahe', width: 3, height: 3 }} />
@@ -85,15 +77,13 @@ Output colourspace e.g. srgb, rgb, cmyk, lab, b-w ...
 
 #### Options
 
-| Key   |                                 Type                                 | Optional | Min Value | Max Value | Default |
-| ----- | :------------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
-| width | Enum([Colorspace](/storage-image-processing-api/types/interpolator)) |    x     |    n/a    |    n/a    |   n/a   |
+| Key        |                                Type                                | Optional | Min Value | Max Value | Default |
+| ---------- | :----------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
+| colorspace | Enum([Colorspace](/storage-image-processing-api/types/colorspace)) |    x     |    n/a    |    n/a    |   n/a   |
 
 ### `Composite`
 
-Composite an image over the base image. The image to composite must be the same size
-
-or smaller than the base image.
+Composite an image over the base image. The image to composite must be the same size or smaller than the base image.
 
 If both `top` and `left` options are provided, they take precedence over `gravity`.
 
@@ -102,13 +92,13 @@ If both `top` and `left` options are provided, they take precedence over `gravit
 | Key           |                             Type                             | Optional | Min Value | Max Value | Default |
 | ------------- | :----------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
 | input         |                            string                            |    x     |    n/a    |    n/a    |   n/a   |
-| blend         |   Enum([Blend](/storage-image-processing-api/types/blend))   |    x     |    n/a    |    n/a    |   n/a   |
+| blend         |   Enum([Blend](/storage-image-processing-api/types/blend))   |    ✓     |    n/a    |    n/a    |  over   |
 | gravity       | Enum([Gravity](/storage-image-processing-api/types/gravity)) |    ✓     |    n/a    |    n/a    |   n/a   |
 | top           |                           Integer                            |    ✓     |    n/a    |    n/a    |   n/a   |
 | left          |                           Integer                            |    ✓     |    n/a    |    n/a    |   n/a   |
 | tile          |                           Boolean                            |    ✓     |    n/a    |    n/a    |   n/a   |
-| premultiplied |                            string                            |    x     |    n/a    |    n/a    |   n/a   |
-| density       |                           Integer                            |    x     |    n/a    |    n/a    |   72    |
+| premultiplied |                           Boolean                            |    ✓     |    n/a    |    n/a    |   n/a   |
+| density       |                           Integer                            |    ✓     |    n/a    |    n/a    |   72    |
 
 ### `Convolve`
 
@@ -116,13 +106,13 @@ Convolve the image with the specified kernel.
 
 #### Options
 
-| Key    |                               Type                                | Optional | Min Value | Max Value | Default |
-| ------ | :---------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
-| width  |                              string                               |    x     |     3     |   1001    |   n/a   |
-| height |                              Integer                              |    x     |     3     |   1001    |   n/a   |
-| kernel | Array(Enum([Number](/storage-image-processing-api/types/number))) |    x     |    n/a    |    n/a    |   n/a   |
-| scale  |                              Integer                              |    ✓     |    n/a    |    n/a    |   n/a   |
-| offset |                              Integer                              |    ✓     |    n/a    |    n/a    |   n/a   |
+| Key    |     Type      | Optional | Min Value | Max Value | Default |
+| ------ | :-----------: | :------: | :-------: | :-------: | :-----: |
+| width  |    Integer    |    x     |     3     |   1001    |   n/a   |
+| height |    Integer    |    x     |     3     |   1001    |   n/a   |
+| kernel | Array(Number) |    x     |    n/a    |    n/a    |   n/a   |
+| scale  |    Integer    |    ✓     |    n/a    |    n/a    |   n/a   |
+| offset |    Integer    |    ✓     |    n/a    |    n/a    |   n/a   |
 
 #### Example
 
@@ -152,13 +142,14 @@ This operation will always occur after resizing and extraction, if any.
 
 #### Options
 
-| Key    |  Type   | Optional | Min Value | Max Value | Default |
-| ------ | :-----: | :------: | :-------: | :-------: | :-----: |
-| all    | Integer |    ✓     |    n/a    |    n/a    |    0    |
-| top    | Integer |    ✓     |    n/a    |    n/a    |    0    |
-| left   | Integer |    ✓     |    n/a    |    n/a    |    0    |
-| bottom | Integer |    ✓     |    n/a    |    n/a    |    0    |
-| right  | Integer |    ✓     |    n/a    |    n/a    |    0    |
+| Key        |  Type   | Optional | Min Value | Max Value | Default |
+| ---------- | :-----: | :------: | :-------: | :-------: | :-----: |
+| all        | Integer |    ✓     |    n/a    |    n/a    |    0    |
+| top        | Integer |    ✓     |    n/a    |    n/a    |    0    |
+| left       | Integer |    ✓     |    n/a    |    n/a    |    0    |
+| bottom     | Integer |    ✓     |    n/a    |    n/a    |    0    |
+| right      | Integer |    ✓     |    n/a    |    n/a    |    0    |
+| background | String  |    ✓     |    n/a    |    n/a    | '#000'  |
 
 #### Example
 
@@ -205,7 +196,7 @@ Merge alpha transparency channel, if any, with a background, then remove the alp
 
 | Key        |  Type  | Optional | Min Value | Max Value | Default |
 | ---------- | :----: | :------: | :-------: | :-------: | :-----: |
-| background | String |    ✓     |    n/a    |    n/a    |   n/a   |
+| background | String |    ✓     |    n/a    |    n/a    | '#000'  |
 
 ### `Flip`
 
@@ -241,22 +232,17 @@ No options available
 
 ### `Gamma`
 
-Apply a gamma correction by reducing the encoding (darken) pre-resize at a factor of 1/gamma then
-
-increasing the encoding (brighten) post-resize at a factor of gamma.
-
+Apply a gamma correction by reducing the encoding (darken) pre-resize at a factor of 1/gamma then increasing the encoding (brighten) post-resize at a factor of gamma.
 This can improve the perceived brightness of a resized image in non-linear colour spaces.
 
-JPEG and WebP input images will not take advantage of the shrink-on-load performance optimization
-
-when applying a gamma correction.
+JPEG and WebP input images will not take advantage of the shrink-on-load performance optimization when applying a gamma correction.
 
 #### Options
 
 | Key      |  Type  | Optional | Min Value | Max Value | Default |
 | -------- | :----: | :------: | :-------: | :-------: | :-----: |
-| gamma    | String |    x     |    1.0    |    3.0    |   1.0   |
-| gammaOut | String |    ✓     |    1.0    |    3.0    |   n/a   |
+| gamma    | Number |    ✓     |    1.0    |    3.0    |   1.0   |
+| gammaOut | Number |    ✓     |    1.0    |    3.0    |   n/a   |
 
 #### Example
 
@@ -268,21 +254,16 @@ when applying a gamma correction.
 
 ### `Grayscale`
 
-Apply a gamma correction by reducing the encoding (darken) pre-resize at a factor of 1/gamma then
-
-increasing the encoding (brighten) post-resize at a factor of gamma.
-
+Apply a gamma correction by reducing the encoding (darken) pre-resize at a factor of 1/gamma then increasing the encoding (brighten) post-resize at a factor of gamma.
 This can improve the perceived brightness of a resized image in non-linear colour spaces.
 
-JPEG and WebP input images will not take advantage of the shrink-on-load performance optimization
-
-when applying a gamma correction.
+JPEG and WebP input images will not take advantage of the shrink-on-load performance optimization when applying a gamma correction.
 
 #### Options
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
-| grayscale | Boolean |    x     |    n/a    |    n/a    |  true   |
+| grayscale | Boolean |    ✓     |    n/a    |    n/a    |  true   |
 
 #### Example
 
@@ -294,13 +275,13 @@ when applying a gamma correction.
 
 ### `Linear`
 
-Apply the linear formula a \* input + b to the image (levels adjustment)
+Apply the linear formula a \* input + b to the image (levels adjustment).
 
 #### Options
 
 | Key | Type  | Optional | Min Value | Max Value | Default |
 | --- | :---: | :------: | :-------: | :-------: | :-----: |
-| a   | Float |    ✓     |    n/a    |    n/a    |   0.0   |
+| a   | Float |    ✓     |    n/a    |    n/a    |   1.0   |
 | b   | Float |    ✓     |    n/a    |    n/a    |   0.0   |
 
 #### Example
@@ -315,15 +296,13 @@ Apply the linear formula a \* input + b to the image (levels adjustment)
 
 Square mask size: size x size.
 
-Note larger sizes can significantly reduce the performance of processing image
-
-e.g. a size of 15 on a 500x500 image adds around 1.5s to processing time.
+Note larger sizes can significantly reduce the performance of processing image e.g. a size of 15 on a 500x500 image adds around 1.5s to processing time.
 
 #### Options
 
-| Key  | Type  | Optional | Min Value | Max Value | Default |
-| ---- | :---: | :------: | :-------: | :-------: | :-----: |
-| size | Float |    ✓     |     1     |   1000    |    3    |
+| Key  |  Type   | Optional | Min Value | Max Value | Default |
+| ---- | :-----: | :------: | :-------: | :-------: | :-----: |
+| size | Integer |    ✓     |     1     |   1000    |    3    |
 
 #### Example
 
@@ -339,9 +318,12 @@ Transforms the image using brightness, saturation and hue rotation.
 
 #### Options
 
-| Key  | Type  | Optional | Min Value | Max Value | Default |
-| ---- | :---: | :------: | :-------: | :-------: | :-----: |
-| size | Float |    ✓     |     1     |   1000    |    3    |
+| Key        |  Type  | Optional | Min Value | Max Value | Default |
+| ---------- | :----: | :------: | :-------: | :-------: | :-----: |
+| brightness | Number |    ✓     |     0     |    n/a    |   n/a   |
+| saturation | Number |    ✓     |     0     |    n/a    |   n/a   |
+| hue        | Number |    ✓     |     0     |    n/a    |   n/a   |
+| lightness  | Number |    ✓     |     0     |    n/a    |   n/a   |
 
 #### Example
 
@@ -383,11 +365,13 @@ No options available
 
 Transforms the image using brightness, saturation and hue rotation.
 
+The `matrix` option is an array of 3 arrays with 3 numbers values.
+
 #### Options
 
-| Key    |      Type      | Optional | Min Value | Max Value | Default |
-| ------ | :------------: | :------: | :-------: | :-------: | :-----: |
-| matrix | Array(Integer) |    x     |     3     |    n/a    |   n/a   |
+| Key    |         Type          | Optional | Min Value | Max Value | Default |
+| ------ | :-------------------: | :------: | :-------: | :-------: | :-----: |
+| matrix | Array(Array(Integer)) |    x     |    n/a    |    n/a    |   n/a   |
 
 #### Example
 
@@ -419,28 +403,25 @@ How the image should be resized to fit both provided dimensions.
 
 #### Options
 
-| Key                     |                                             Type                                             | Optional | Min Value | Max Value | Default |
-| ----------------------- | :------------------------------------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
-| operationResizeFit      |      Enum([operationResizeFit](/storage-image-processing-api/types/operationResizeFit))      |    x     |    n/a    |    n/a    |   n/a   |
-| operationResizePosition | Enum([operationResizePosition](/storage-image-processing-api/types/operationResizePosition)) |    x     |    n/a    |    n/a    |   n/a   |
-| operationResizeKernel   |   Enum([operationResizeKernel](/storage-image-processing-api/types/operationResizeKernel))   |    x     |    n/a    |    n/a    |   n/a   |
-| operationResizeStrategy | Enum([operationResizeStrategy](/storage-image-processing-api/types/operationResizeStrategy)) |    x     |    n/a    |    n/a    |   n/a   |
+| Key                |                                             Type                                             | Optional | Min Value | Max Value |  Default   |
+| ------------------ | :------------------------------------------------------------------------------------------: | :------: | :-------: | :-------: | :--------: |
+| width              |                                            Number                                            |    ✓     |     0     |    n/a    |    n/a     |
+| height             |                                            Number                                            |    ✓     |     0     |    n/a    |    n/a     |
+| fit                |      Enum([OperationResizeFit](/storage-image-processing-api/types/operationResizeFit))      |    ✓     |    n/a    |    n/a    |  'cover'   |
+| position           | Enum([OperationResizePosition](/storage-image-processing-api/types/operationResizePosition)) |    ✓     |    n/a    |    n/a    |  'center'  |
+| background         |                                            String                                            |    ✓     |    n/a    |    n/a    |   '#000'   |
+| kernel             |   Enum([OperationResizeKernel](/storage-image-processing-api/types/operationResizeKernel))   |    ✓     |    n/a    |    n/a    | 'lanczos3' |
+| withoutEnlargement |                                           Boolean                                            |    ✓     |    n/a    |    n/a    |   false    |
+| fastShrinkOnLoad   |                                           Boolean                                            |    ✓     |    n/a    |    n/a    |    true    |
 
 ### `Rotate`
 
 Rotate the output image by either an explicit angle or auto-orient based on the EXIF Orientation tag.
 
-If an angle is provided, it is converted to a valid positive degree rotation. For example, -450 will
+If an angle is provided, it is converted to a valid positive degree rotation. For example, -450 will produce a 270deg rotation.
+When rotating by an angle other than a multiple of 90, the background colour can be provided with the background option. If no angle is provided, it is determined from the EXIF data.
 
-produce a 270deg rotation.
-
-When rotating by an angle other than a multiple of 90, the background colour can be provided with the
-
-background option. If no angle is provided, it is determined from the EXIF data.
-
-Mirroring is supported and may infer the use of a flip operation.
-
-The use of rotate implies the removal of the EXIF Orientation tag, if any.
+Mirroring is supported and may infer the use of a flip operation. The use of rotate implies the removal of the EXIF Orientation tag, if any.
 
 #### Options
 
@@ -494,7 +475,7 @@ Separate control over the level of sharpening in "flat" and "jagged" areas is av
 | --------------- | :--------------------------------------------------------------: | :------: | :-------: | :-------: | :-------------: |
 | font            |                              String                              |    ✓     |   0.01    |   1000    | 30px sans-serif |
 | textAlign       | Enum([textAlign](/storage-image-processing-api/types/textAlign)) |    ✓     |    n/a    |    n/a    |       n/a       |
-| textColor       |                             Integer                              |    ✓     |    n/a    |    n/a    |      white      |
+| textColor       |                              String                              |    ✓     |    n/a    |    n/a    |      white      |
 | backgroundColor |                              String                              |    ✓     |    n/a    |    n/a    |       n/a       |
 | strokeWidth     |                             Integer                              |    ✓     |    n/a    |    n/a    |        0        |
 | strokeColor     |                              String                              |    ✓     |    n/a    |    n/a    |      white      |
@@ -516,7 +497,7 @@ Any pixel value greater than or equal to the threshold value will be set to 255,
 
 | Key       |  Type   | Optional | Min Value | Max Value | Default |
 | --------- | :-----: | :------: | :-------: | :-------: | :-----: |
-| threshold | String  |    ✓     |     0     |    255    |   128   |
+| threshold | Number  |    ✓     |     0     |    255    |   128   |
 | grayscale | Boolean |    ✓     |    n/a    |    n/a    |   n/a   |
 
 #### Example
@@ -537,13 +518,12 @@ An alpha channel if present will be unchanged by the operation.
 
 | Key |  Type  | Optional | Min Value | Max Value | Default |
 | --- | :----: | :------: | :-------: | :-------: | :-----: |
-| rgb | String |    ✓     |    n/a    |    n/a    |   n/a   |
+| rgb | String |    x     |    n/a    |    n/a    |   n/a   |
 
 ### `Trim`
 
-Tint the image using the provided chroma while preserving the image luminance.
-
-An alpha channel if present will be unchanged by the operation.
+Trim "boring" pixels from all edges that contain values similar to the top-left pixel.
+Images consisting entirely of a single colour will calculate "boring" using the alpha channel, if any.
 
 #### Options
 
