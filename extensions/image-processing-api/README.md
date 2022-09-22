@@ -28,7 +28,7 @@ const operations = [
 const params = `?operations=${encodeURIComponent(JSON.stringify(operations))}`;
 ```
 
-View the [official documentation](https://extensions.invertase.dev/storage-image-processing-api) for full usage examples.
+View the [official documentation](https://extensions.invertase.dev/image-processing-api) for full usage examples.
 
 #### Additional setup
 

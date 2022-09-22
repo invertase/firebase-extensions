@@ -7,11 +7,11 @@
     [
       "Storage Image Processing Api",
       [
-        ["Overview", "/storage-image-processing-api"],
-        ["Input", "/storage-image-processing-api/input"],
-        ["Operations", "/storage-image-processing-api/operations"],
-        ["Output", "/storage-image-processing-api/output"],
-        ["Types", "/storage-image-processing-api/types"]
+        ["Overview", "/image-processing-api"],
+        ["Input", "/image-processing-api/input"],
+        ["Operations", "/image-processing-api/operations"],
+        ["Output", "/image-processing-api/output"],
+        ["Types", "/image-processing-api/types"]
       ]
     ]
   ]

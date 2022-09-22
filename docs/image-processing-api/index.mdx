@@ -1,6 +1,6 @@
 # Storage Image Processing API
 
-The Storage Image Processing API extension (`storage-image-processing-api`) lets you optimize and transform images in the [Cloud Storage](https://firebase.google.com/docs/storage) bucket via a powerful HTTP API. The API provides more than 30 different operations to enhance and manipulate your images, including image composition, cropping, flipping, color reduction, sharpening, filtering, and much more. See the full list of available operations in the [Operations](/operations) documentation.
+The Storage Image Processing API extension (`image-processing-api`) lets you optimize and transform images in the [Cloud Storage](https://firebase.google.com/docs/storage) bucket via a powerful HTTP API. The API provides more than 30 different operations to enhance and manipulate your images, including image composition, cropping, flipping, color reduction, sharpening, filtering, and much more. See the full list of available operations in the [Operations](/operations) documentation.
 
 <video width="100%" controls muted autoPlay loop>
   <source
@@ -17,7 +17,7 @@ To install the extension, follow the steps on the [Install Firebase Extension](h
 - **Firebase console:** Click the following link:
 
   <a
-    href="https://console.firebase.google.com/project/_/extensions/install?ref=invertase/storage-image-processing-api"
+    href="https://console.firebase.google.com/project/_/extensions/install?ref=invertase/image-processing-api"
     target="_blank"
   >
     <img
@@ -29,7 +29,7 @@ To install the extension, follow the steps on the [Install Firebase Extension](h
 - **CLI:** Run the following command:
 
   ```bash
-  firebase ext:install invertase/storage-image-processing-api --project=projectId-or-alias
+  firebase ext:install invertase/image-processing-api --project=projectId-or-alias
   ```
 
 During the installation of the extension, you will be prompted to specify a number of configuration parameters:
@@ -52,7 +52,7 @@ After installation, a new Cloud Function called `process` will be added to your 
 
 ```bash
 curl -X GET \
-  https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/ext-storage-image-processing-api-handler/process?operations=...
+  https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/ext-image-processing-api-handler/process?operations=...
 ```
 
 - **`{LOCATION}`**: The Cloud Functions location that was specified during the installation of the extension.
@@ -127,7 +127,7 @@ const operations = [
 ];
 
 const encodedOperations = encodeURIComponent(JSON.stringify(operations));
-const url = `https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/ext-storage-image-processing-api-handler/process?operations=${encodedOperations}`;
+const url = `https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/ext-image-processing-api-handler/process?operations=${encodedOperations}`;
 ```
 
 ### JavaScript utility library
@@ -135,7 +135,7 @@ const url = `https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/ext-storage-imag
 Additionally, a utility library exists to provide a fully typed interface for constructing options:
 
 ```ts
-import { builder } from '@invertase/storage-image-processing-api';
+import { builder } from '@invertase/image-processing-api';
 
 const output = builder()
   .input({

@@ -12,7 +12,7 @@ access granted to the extension.
 
 > Want to install one of these? Visit each extension's linked README for installation instructions.
 
-### [Image Processing API](/extensions/storage-image-processing-api)
+### [Image Processing API](/extensions/image-processing-api)
 
 Optimize and transform images from your Cloud Storage buckets via a powerful HTTP API. Supports over 30 different image
 operations to optimize and manipulate your images.
