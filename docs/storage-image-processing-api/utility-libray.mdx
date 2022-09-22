@@ -1,0 +1,67 @@
+# Utilty Library
+
+To assist with the usage of this Extension, a [utility library](https://www.npmjs.com/package/@invertase/storage-image-processing-api) exists
+to help provide a typed API interface for easily constructing operations to send to the API.
+
+## Installation
+
+```bash
+npm i --save @invertase/storage-image-processing-api
+```
+
+## Usage
+
+Once installed, import the `builder` function from the library:
+
+```ts
+import { builder } from '@invertase/storage-image-processing-api';
+```
+
+The `builder` function returns a new `StorageImageProcessingApi` instance which provides a API for constructing operations to send to the API.
+At a minimum, you must provide an `input` and `output` operation as required by the extension itself:
+
+```ts
+import { builder } from '@invertase/storage-image-processing-api';
+
+const build = builder()
+  .input({
+    url: 'https://example.com/image.jpg',
+  })
+  .output({
+    format: 'png',
+  });
+```
+
+To provide additional operations, you can chain them together. For example,
+to apply a blur, grayscale and flip the provided input image, and return a new PNG image:
+
+```ts
+const output = builder()
+  .input({
+    url: 'https://example.com/image.jpg',
+  })
+  .blur()
+  .grayscale()
+  .flip()
+  .output({
+    format: 'png',
+  });
+```
+
+Please refer to the [operations](/operations) documentatuion for a full list of available operations, their API and examples.
+
+Once you have constructed your operations, you can return the operations as JSON, a JSON string or encoded JSON string value:
+
+```ts
+const json = output.toJSON();
+const jsonString = output.toJSONString();
+const encodedJsonString = output.toEncodedJSONString();
+```
+
+The encoded JSON string value can be passed directly to the extension as the `operations` parameter:
+
+```ts
+const encodedJsonString = output.toEncodedJSONString();
+
+const url = `https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/ext-storage-image-processing-api-handler/process?operations=${encodedJsonString}`
+```
