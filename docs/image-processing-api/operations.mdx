@@ -12,13 +12,13 @@ By default, new pixels are filled with a black background. You can provide a bac
 
 #### Options
 
-| Key          |                                  Type                                  | Optional | Default |
-| ------------ | :--------------------------------------------------------------------: | :------: | :-----: |
-| matrix       |                             Array(Number)                              |    x     |   n/a   |
-| idx          |                                Integer                                 |    ✓     |   n/a   |
-| idy          |                                Integer                                 |    ✓     |   n/a   |
-| odx          |                                Integer                                 |    ✓     |   n/a   |
-| ody          |                                Integer                                 |    ✓     |   n/a   |
+| Key          |                              Type                              | Optional | Default |
+| ------------ | :------------------------------------------------------------: | :------: | :-----: |
+| matrix       |                         Array(Number)                          |    x     |   n/a   |
+| idx          |                            Integer                             |    ✓     |   n/a   |
+| idy          |                            Integer                             |    ✓     |   n/a   |
+| odx          |                            Integer                             |    ✓     |   n/a   |
+| ody          |                            Integer                             |    ✓     |   n/a   |
 | interpolator | Enum([Interpolator](/image-processing-api/types/interpolator)) |    ✓     |   n/a   |
 
 #### Example
@@ -77,8 +77,8 @@ Output colourspace e.g. srgb, rgb, cmyk, lab, b-w ...
 
 #### Options
 
-| Key        |                                Type                                | Optional | Min Value | Max Value | Default |
-| ---------- | :----------------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
+| Key        |                            Type                            | Optional | Min Value | Max Value | Default |
+| ---------- | :--------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
 | colorspace | Enum([Colorspace](/image-processing-api/types/colorspace)) |    x     |    n/a    |    n/a    |   n/a   |
 
 ### `Composite`
@@ -89,16 +89,16 @@ If both `top` and `left` options are provided, they take precedence over `gravit
 
 #### Options
 
-| Key           |                             Type                             | Optional | Min Value | Max Value | Default |
-| ------------- | :----------------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
-| input         |                            string                            |    x     |    n/a    |    n/a    |   n/a   |
+| Key           |                         Type                         | Optional | Min Value | Max Value | Default |
+| ------------- | :--------------------------------------------------: | :------: | :-------: | :-------: | :-----: |
+| input         |                        string                        |    x     |    n/a    |    n/a    |   n/a   |
 | blend         |   Enum([Blend](/image-processing-api/types/blend))   |    ✓     |    n/a    |    n/a    |  over   |
 | gravity       | Enum([Gravity](/image-processing-api/types/gravity)) |    ✓     |    n/a    |    n/a    |   n/a   |
-| top           |                           Integer                            |    ✓     |    n/a    |    n/a    |   n/a   |
-| left          |                           Integer                            |    ✓     |    n/a    |    n/a    |   n/a   |
-| tile          |                           Boolean                            |    ✓     |    n/a    |    n/a    |   n/a   |
-| premultiplied |                           Boolean                            |    ✓     |    n/a    |    n/a    |   n/a   |
-| density       |                           Integer                            |    ✓     |    n/a    |    n/a    |   72    |
+| top           |                       Integer                        |    ✓     |    n/a    |    n/a    |   n/a   |
+| left          |                       Integer                        |    ✓     |    n/a    |    n/a    |   n/a   |
+| tile          |                       Boolean                        |    ✓     |    n/a    |    n/a    |   n/a   |
+| premultiplied |                       Boolean                        |    ✓     |    n/a    |    n/a    |   n/a   |
+| density       |                       Integer                        |    ✓     |    n/a    |    n/a    |   72    |
 
 ### `Convolve`
 
@@ -403,16 +403,16 @@ How the image should be resized to fit both provided dimensions.
 
 #### Options
 
-| Key                |                                             Type                                             | Optional | Min Value | Max Value |  Default   |
-| ------------------ | :------------------------------------------------------------------------------------------: | :------: | :-------: | :-------: | :--------: |
-| width              |                                            Number                                            |    ✓     |     0     |    n/a    |    n/a     |
-| height             |                                            Number                                            |    ✓     |     0     |    n/a    |    n/a     |
+| Key                |                                         Type                                         | Optional | Min Value | Max Value |  Default   |
+| ------------------ | :----------------------------------------------------------------------------------: | :------: | :-------: | :-------: | :--------: |
+| width              |                                        Number                                        |    ✓     |     0     |    n/a    |    n/a     |
+| height             |                                        Number                                        |    ✓     |     0     |    n/a    |    n/a     |
 | fit                |      Enum([OperationResizeFit](/image-processing-api/types/operationResizeFit))      |    ✓     |    n/a    |    n/a    |  'cover'   |
 | position           | Enum([OperationResizePosition](/image-processing-api/types/operationResizePosition)) |    ✓     |    n/a    |    n/a    |  'center'  |
-| background         |                                            String                                            |    ✓     |    n/a    |    n/a    |   '#000'   |
+| background         |                                        String                                        |    ✓     |    n/a    |    n/a    |   '#000'   |
 | kernel             |   Enum([OperationResizeKernel](/image-processing-api/types/operationResizeKernel))   |    ✓     |    n/a    |    n/a    | 'lanczos3' |
-| withoutEnlargement |                                           Boolean                                            |    ✓     |    n/a    |    n/a    |   false    |
-| fastShrinkOnLoad   |                                           Boolean                                            |    ✓     |    n/a    |    n/a    |    true    |
+| withoutEnlargement |                                       Boolean                                        |    ✓     |    n/a    |    n/a    |   false    |
+| fastShrinkOnLoad   |                                       Boolean                                        |    ✓     |    n/a    |    n/a    |    true    |
 
 ### `Rotate`
 
@@ -471,23 +471,23 @@ Separate control over the level of sharpening in "flat" and "jagged" areas is av
 
 #### Options
 
-| Key             |                               Type                               | Optional | Min Value | Max Value |     Default     |
-| --------------- | :--------------------------------------------------------------: | :------: | :-------: | :-------: | :-------------: |
-| font            |                              String                              |    ✓     |   0.01    |   1000    | 30px sans-serif |
+| Key             |                           Type                           | Optional | Min Value | Max Value |     Default     |
+| --------------- | :------------------------------------------------------: | :------: | :-------: | :-------: | :-------------: |
+| font            |                          String                          |    ✓     |   0.01    |   1000    | 30px sans-serif |
 | textAlign       | Enum([textAlign](/image-processing-api/types/textAlign)) |    ✓     |    n/a    |    n/a    |       n/a       |
-| textColor       |                              String                              |    ✓     |    n/a    |    n/a    |      white      |
-| backgroundColor |                              String                              |    ✓     |    n/a    |    n/a    |       n/a       |
-| strokeWidth     |                             Integer                              |    ✓     |    n/a    |    n/a    |        0        |
-| strokeColor     |                              String                              |    ✓     |    n/a    |    n/a    |      white      |
-| padding         |                             Integer                              |    ✓     |    n/a    |    n/a    |        0        |
-| borderWidth     |                             Integer                              |    ✓     |    n/a    |    n/a    |        0        |
-| borderColor     |                              String                              |    ✓     |    n/a    |    n/a    |      black      |
-| wrap            |                             Boolean                              |    ✓     |    n/a    |    n/a    |       n/a       |
-| maxWidth        |                             Integer                              |    ✓     |    n/a    |    n/a    |       n/a       |
+| textColor       |                          String                          |    ✓     |    n/a    |    n/a    |      white      |
+| backgroundColor |                          String                          |    ✓     |    n/a    |    n/a    |       n/a       |
+| strokeWidth     |                         Integer                          |    ✓     |    n/a    |    n/a    |        0        |
+| strokeColor     |                          String                          |    ✓     |    n/a    |    n/a    |      white      |
+| padding         |                         Integer                          |    ✓     |    n/a    |    n/a    |        0        |
+| borderWidth     |                         Integer                          |    ✓     |    n/a    |    n/a    |        0        |
+| borderColor     |                          String                          |    ✓     |    n/a    |    n/a    |      black      |
+| wrap            |                         Boolean                          |    ✓     |    n/a    |    n/a    |       n/a       |
+| maxWidth        |                         Integer                          |    ✓     |    n/a    |    n/a    |       n/a       |
 | blend           |     Enum([Blend](/image-processing-api/types/blend))     |    ✓     |    n/a    |    n/a    |        0        |
 | gravity         |   Enum([Gravity](/image-processing-api/types/gravity))   |    ✓     |    n/a    |    n/a    |       n/a       |
-| top             |                             Integer                              |    ✓     |    n/a    |    n/a    |       n/a       |
-| left            |                             Integer                              |    ✓     |    n/a    |    n/a    |       n/a       |
+| top             |                         Integer                          |    ✓     |    n/a    |    n/a    |       n/a       |
+| left            |                         Integer                          |    ✓     |    n/a    |    n/a    |       n/a       |
 
 ### `Threshhold`
 
