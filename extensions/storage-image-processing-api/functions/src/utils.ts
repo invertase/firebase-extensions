@@ -80,7 +80,9 @@ export function coerceStringToArray<T>(
   });
 }
 
-export function omitUndefinedValues<T>(object: T): T {
+export function omitUndefinedValues<T extends Record<string, unknown>>(
+  object: T,
+): T {
   Object.keys(object).forEach(key =>
     object[key] === undefined ? delete object[key] : {},
   );
@@ -127,12 +129,12 @@ export async function fetchImageBufferFromUrl(url: string): Promise<Buffer> {
       responseType: 'arraybuffer',
     }),
   );
-  let response: axios.AxiosResponse = possibleResponse;
+  let response: axios.AxiosResponse | undefined = possibleResponse;
   if (possibleError) {
     response = possibleError.response;
   }
 
-  if (response.data && response.status == 200) {
+  if (response && response.data && response.status == 200) {
     const isImage = await isImageFileType(response.data);
     if (!isImage) {
       throw new AssertionError({
@@ -143,7 +145,7 @@ export async function fetchImageBufferFromUrl(url: string): Promise<Buffer> {
     return response.data;
   }
 
-  const errorMessage = `Unable to fetch image from url "${url}", the url returned a non-successful status code of "${response.status}".`;
+  const errorMessage = `Unable to fetch image from url "${url}", the url returned a non-successful status code of "${response?.status}".`;
   throw new AssertionError({
     message: `${errorMessage} The returned error was: ${possibleError.message}`,
   });

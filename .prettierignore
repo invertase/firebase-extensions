@@ -1,4 +1,4 @@
 node_modules
 build
-lib
+functions/lib
 package-lock.json

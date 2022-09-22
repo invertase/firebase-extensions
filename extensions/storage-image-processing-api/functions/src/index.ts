@@ -35,6 +35,7 @@ import {
 } from './utils';
 import { Operation, ValidatedOperation } from './types';
 import { extensionConfiguration } from './config';
+import sharp from 'sharp';
 
 async function processImageRequest(
   validatedOperations: ValidatedOperation[],
@@ -58,14 +59,14 @@ async function processImageRequest(
   }
 
   // Apply operations.
-  let instance = null;
+  let instance: sharp.Sharp | null = null;
   for (let i = 0; i < validatedOperations.length; i++) {
     const validatedOperation = validatedOperations[i];
     instance = await applyValidatedOperation(instance, validatedOperation);
   }
 
   const finalFileMetadata = omitKeys(
-    await instance.metadata(),
+    await (instance as sharp.Sharp).metadata(),
     fileMetadataBufferKeys,
   );
 
@@ -77,7 +78,9 @@ async function processImageRequest(
     return;
   }
 
-  const output = await instance.toBuffer({ resolveWithObject: true });
+  const output = await (instance as sharp.Sharp).toBuffer({
+    resolveWithObject: true,
+  });
   const { data, info } = output;
 
   functions.logger.debug(`Processed a new request.`, validatedOperations);
@@ -125,7 +128,7 @@ app.get(
         }),
       );
     }
-    let operations: Operation[] = null;
+    let operations: Operation[] = [];
     try {
       operations = JSON.parse(decodeURIComponent(operationsString));
     } catch (e) {

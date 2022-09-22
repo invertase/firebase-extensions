@@ -1,263 +1,130 @@
-import * as superstruct from 'superstruct';
-import { Blend, Colorspace, Gravity, Interpolator, OperationResizeFit, OperationResizeKernel, OperationResizePosition, OperationResizeStrategy, TextAlign } from "./enums";
-import { operationBlur } from '../../functions/src/operations/blur';
-export type InputOptions = {
-  source: string;
-} | {
-  url: string;
-};
+import {
+  OperationAffine,
+  OperationBlur,
+  OperationClahe,
+  OperationColorspace,
+  OperationComposite,
+  OperationConvolve,
+  OperationExtend,
+  OperationExtract,
+  OperationFlatten,
+  OperationGamma,
+  OperationInput,
+  OperationInputCreateNew,
+  OperationLinear,
+  OperationMedian,
+  OperationModulate,
+  OperationOutput,
+  OperationOutputAvif,
+  OperationOutputJpeg,
+  OperationOutputPng,
+  OperationOutputTiff,
+  OperationOutputWebp,
+  OperationRecomb,
+  OperationResize,
+  OperationRotate,
+  OperationSharpen,
+  OperationText,
+  OperationThreshold,
+  OperationTint,
+  OperationTrim,
+} from './types/operations';
 
-export type OutputOptions = {
-  jpeg: OutputJpegOptions;
-} | {
-  webp: OutputWebpOptions;
-} | {
-  tiff: OutputTiffOptions;
-} | {
-  avif: OutputAvifOptions;
-} | {
-  png: OutputPngOptions;
-}
+type DistributiveOmit<T, K extends keyof any> = T extends any
+  ? Omit<T, K>
+  : never;
 
-export type OutputJpegOptions = {
-  progress?: boolean;
-  compressionLevel?: number;
-  // TODO check type
-  adaptiveFiltering?: boolean;
-  palette?: boolean;
-  quality?: number;
-  colours?: number;
-  colors?: number;
-  dither?: number;
-  force?: boolean;
-}
+export type InputOptions = DistributiveOmit<OperationInput, 'operation'>;
+export type OutputOptions =
+  | { jpeg: Omit<OperationOutputJpeg, 'operation' | 'format'> }
+  | { avif: Omit<OperationOutputAvif, 'operation' | 'format'> }
+  | { png: Omit<OperationOutputPng, 'operation' | 'format'> }
+  | { tiff: Omit<OperationOutputTiff, 'operation' | 'format'> }
+  | { webp: Omit<OperationOutputWebp, 'operation' | 'format'> };
+  
+export type AffineOptions = Omit<OperationAffine, 'operation'>;
+export type BlurOptions = Omit<OperationBlur, 'operation'>;
+export type ColorspaceOptions = Omit<OperationColorspace, 'operation'>;
+export type ClaheOptions = Omit<OperationClahe, 'operation'>;
+export type CompositeOptions = Omit<OperationComposite, 'operation'>;
+export type ConvolveOptions = Omit<OperationConvolve, 'operation'>;
+export type ExtendOptions = Omit<OperationExtend, 'operation'>;
+export type ExtractOptions = Omit<OperationExtract, 'operation'>;
+export type FlattenOptions =Omit<OperationFlatten, 'operation'>;
+export type GammaOptions = Omit<OperationGamma, 'operation'>;
+export type LinearOptions = Omit<OperationLinear, 'operation'>;
+export type MedianOptions = Omit<OperationMedian, 'operation'>;
+export type ModulateOptions = Omit<OperationModulate, 'operation'>;
+export type RecombOptions = Omit<OperationRecomb, 'operation'>;
+export type ResizeOptions = Omit<OperationResize, 'operation'>;
+export type RotateOptions = Omit<OperationRotate, 'operation'>;
+export type SharpenOptions = Omit<OperationSharpen, 'operation'>;
+export type TextOptions = Omit<OperationText, 'operation'>;
+export type ThresholdOptions = Omit<OperationThreshold, 'operation'>;
+export type TintOptions = Omit<OperationTint, 'operation'>;
+export type TrimOptions = Omit<OperationTrim, 'operation'>;
 
-export type OutputWebpOptions = {
-  quality?: number;
-  alphaQuality?: number;
-  lossless?: boolean;
-  nearLossless?: boolean;
-  smartSubsample?: boolean;
-  reductionEffort?: number;
-  pageHeight?: number;
-  force?: boolean;
-}
 
-export type OutputTiffOptions = {
-  quality?: number;
-  force?: number;
-  // TODO fix
-  compression?: any;
-  // TODO fix
-  predictor?: any;
-  pyramid?: boolean;
-  tile?: boolean;
-  tileWidth?: number;
-  tileHeight?: number;
-  xres?: number;
-  yres?: number;
-  bitdepth?: number;
-}
-
-export type OutputAvifOptions = {
-  quality?: number;
-  lossless?: boolean;
-  speed?: number;
-  chromaSubsampling?: string;
-}
-
-export type OutputPngOptions = {
-  progressive?: boolean;
-  compressionLevel?: number;
-  adaptiveFiltering?: boolean;
-  palette?: boolean;
-  quality?: number;
-  colours?: number;
-  colors?: number;
-  dither?: number;
-  force?: boolean;
-}
-
-export type AffineOptions = {
-  matrix: Array<number>;
-  idx?: number;
-  idy?: number;
-  odx?: number;
-  ody?: number;
-  interpolator?: Interpolator;
-}
-
-// export type BlurOptions = {
-//   sigma: number;
-// }
-
-export type BlurOptions = superstruct.Infer<typeof operationBlur.struct>;
-
-export type ColorspaceOptions = {
-  width: Colorspace;
-}
-
-export type ClaheOptions = {
-  width: number;
-  height: number;
-  maxSlope?: number;
-}
-
-export type CompositeOptions = {
-  input: string;
-  blend: Blend;
-  premultiplied: string;
-  density: number;
-  gravity?: Gravity;
-  top?: number;
-  left?: number;
-  tile?: Boolean;
-}
-
-export type ConvolveOptions = {
-  width: number;
-  height: number;
-  kernel: Array<-1|-2|-3|-4|-5|-6|-7|-8|-9|1|2|3|4|5|6|7|8|9>;
-  scale?: number;
-  offet?: string;
-}
-
-export type ExtendOptions = {
-  all?: number;
-  top?: number;
-  left?: number;
-  bottom?: number;
-  right?: number;
-  // TODO check if optional
-  background?: string;
-}
-
-export type ExtractOptions = {
-  top?: number;
-  left?: number;
-  bottom?: number;
-  right?: number;
-}
-
-export type FlattenOptions = {
-  background?: string;
-}
-
-// TODO confirm if string or number
-export type GammaOptions = {
-  gamma?: number;
-  gammaOut?: number;
-}
-
-export type LinearOptions = {
-  a?: number;
-  b?: number;
-}
-
-export type MedianOptions = {
-  size?: number;
-}
-
-// TODO Check if these are optional or not
-// TODO Check if this is all options
-export type ModulateOptions = {
-  brightness?: number;
-  saturation?: number;
-  hue?: number;
-}
-
-export type RecombOptions = {
-  matrix: Array<Array<number>>;
-}
-
-export type ResizeOptions = {
-  operationResizeFit: OperationResizeFit;
-  operationResizePosition: OperationResizePosition;
-  operationResizeKernel: OperationResizeKernel;
-  operationResizeStrategy: OperationResizeStrategy;
-}
-
-export type RotateOptions = {
-  angle: number;
-}
-
-export type SharpenOptions = {
-  // TODO check if this is optional
-  sigma?: number;
-  flat?: number;
-  jagged?: number;
-}
-
-export type TextOptions = {
-  font?: string;
-  textAlign?: TextAlign;
-  textColor?: string;
-  backgroundColor?: string;
-  strokeWidth?: number;
-  strokeColor?: string;
-  padding?: number;
-  borderWidth?: number;
-  borderColor?: string;
-  wrap?: boolean;
-  maxWidth?: number;
-  blend?: Blend;
-  gravity?: Gravity;
-  top?: number;
-  left?: number;
-}
-
-export type ThresholdOptions = {
-  threshold?: number;
-  // TODO Should this be here?
-  grayscale?: boolean;
-}
-
-export type TintOptions = {
-  rgb: string;
-}
-
-export type TrimOptions = {
-  // TODO
-}
-
-type OperationType = 'affine' | 'blur' | 'clahe' | 'colorspace' | 'composite' | 'convolve' | 'extend' | 'extract' | 'flatten' | 'flip' | 'flop' | 'gamma' | 'grayscale' | 'linear' | 'median' | 'modulate' | 'negate' | 'recomb' | 'resize' | 'rotate' | 'sharpen' | 'text' | 'threshold' | 'tint' | 'trim';
-
-type InputOperation = {
-  operation: 'input';
-} & ({
-  type: 'gcs';
-  source: string;
-} | {
-  type: 'url';
-  url: string;
-} | {
-  type: 'create';
-});
-
-type OutputOperation = {
-  operation: 'output';
-} & (
-  ({
-    format: 'jpeg';
-  } & OutputJpegOptions) | ({
-    format: 'webp';
-  } & OutputWebpOptions) | ({
-    format: 'tiff';
-  } & OutputTiffOptions) | ({
-    format: 'avif';
-  } & OutputAvifOptions) | ({
-    format: 'png';
-  } & OutputPngOptions)
-);
+type OperationType =
+  | 'affine'
+  | 'blur'
+  | 'clahe'
+  | 'colorspace'
+  | 'composite'
+  | 'convolve'
+  | 'extend'
+  | 'extract'
+  | 'flatten'
+  | 'flip'
+  | 'flop'
+  | 'gamma'
+  | 'grayscale'
+  | 'linear'
+  | 'median'
+  | 'modulate'
+  | 'negate'
+  | 'normalize'
+  | 'recomb'
+  | 'resize'
+  | 'rotate'
+  | 'sharpen'
+  | 'text'
+  | 'threshold'
+  | 'tint'
+  | 'trim';
 
 // A list of all available operation types.
-type Operations = Array<( AffineOptions | BlurOptions | ClaheOptions | ColorspaceOptions | CompositeOptions | ConvolveOptions | ExtendOptions | ExtractOptions | FlattenOptions | GammaOptions | LinearOptions | MedianOptions | ModulateOptions | RecombOptions | ResizeOptions | RotateOptions | SharpenOptions | TextOptions | ThresholdOptions | TintOptions | TrimOptions) & {
-  operation: OperationType;
-}>;
+type Operations = Array<
+  (
+    | AffineOptions
+    | BlurOptions
+    | ClaheOptions
+    | ColorspaceOptions
+    | CompositeOptions
+    | ConvolveOptions
+    | ExtendOptions
+    | ExtractOptions
+    | FlattenOptions
+    | GammaOptions
+    | LinearOptions
+    | MedianOptions
+    | ModulateOptions
+    | RecombOptions
+    | ResizeOptions
+    | RotateOptions
+    | SharpenOptions
+    | TextOptions
+    | ThresholdOptions
+    | TintOptions
+    | TrimOptions
+  ) & {
+    operation: OperationType;
+  }
+>;
 
 class StorageImageProcessingApi {
-  #input: InputOperation | undefined = undefined;
-  #output: OutputOperation | undefined = undefined;
+  #input: OperationInput | undefined = undefined;
+  #output: OperationOutput | undefined = undefined;
   #operations: Operations = [];
 
   public input(options: InputOptions) {
@@ -277,7 +144,7 @@ class StorageImageProcessingApi {
       this.#input = {
         operation: 'input',
         type: 'create',
-      };
+      } as OperationInputCreateNew;
     }
 
     return this;
@@ -363,7 +230,7 @@ class StorageImageProcessingApi {
 
     return this;
   }
-  
+
   public convolve(options: ConvolveOptions) {
     this.#operations.push({
       operation: 'convolve',
@@ -381,7 +248,7 @@ class StorageImageProcessingApi {
 
     return this;
   }
-  
+
   public extract(options: ExtractOptions) {
     this.#operations.push({
       operation: 'extract',
@@ -428,6 +295,7 @@ class StorageImageProcessingApi {
   public grayscale() {
     this.#operations.push({
       operation: 'grayscale',
+      grayscale: true,
     });
 
     return this;
@@ -548,12 +416,8 @@ class StorageImageProcessingApi {
     if (!this.#output) {
       throw new Error('An output operation is required.');
     }
-    
-    return [
-      this.#input,
-      ...this.#operations,
-      this.#output,
-    ];
+
+    return [this.#input, ...this.#operations, this.#output];
   }
 
   public toString() {
@@ -567,9 +431,9 @@ class StorageImageProcessingApi {
 
 /**
  * Returns a new instance of the StorageImageProcessingApi.
- * 
+ *
  * Example:
- * 
+ *
  * ```js
  * const operations = builder()
  *  .input({
@@ -583,10 +447,9 @@ class StorageImageProcessingApi {
  *  })
  *  .toJSON();
  * ```
- * 
+ *
  * @returns {StorageImageProcessingApi}
  */
 export function builder(): StorageImageProcessingApi {
   return new StorageImageProcessingApi();
 }
-

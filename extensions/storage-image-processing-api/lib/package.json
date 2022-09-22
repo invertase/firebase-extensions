@@ -1,7 +1,7 @@
 {
   "name": "@invertase/storage-image-processing-api",
   "version": "0.1.0",
-  "description": "A JavaScript utility library for Firebase Storage Image Processing API Extension.",
+  "description": "A JavaScript utility library for the Firebase Storage Image Processing API Extension.",
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.es.js",
   "types": "dist/index.d.ts",
@@ -16,7 +16,8 @@
   },
   "scripts": {
     "build": "npm run clean && rollup -c",
-    "prepublishOnly": "npm run build",
+    "update-types": "cd ../functions && npm run copy-types",
+    "prepublishOnly": "npm run update-types && npm run build",
     "clean": "rimraf dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

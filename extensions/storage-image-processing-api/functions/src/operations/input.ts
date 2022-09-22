@@ -113,7 +113,16 @@ const struct = superstruct.union([
   structCreateNewImage,
 ]);
 
-export type OperationInput = superstruct.Infer<typeof struct>;
+export type OperationInputGcs = superstruct.Infer<typeof structFromGcs>;
+export type OperationInputUrl = superstruct.Infer<typeof structFromUrl>;
+export type OperationInputCreateNew = superstruct.Infer<
+  typeof structCreateNewImage
+>;
+
+export type OperationInput =
+  | OperationInputGcs
+  | OperationInputUrl
+  | OperationInputCreateNew;
 
 export const operationInput: OperationBuilder = {
   name,
@@ -146,7 +155,7 @@ export const operationInput: OperationBuilder = {
 };
 
 async function fetchUrl(options: OperationInput): Promise<OperationAction[]> {
-  if (options.type !== 'url') return;
+  if (options.type !== 'url') return [];
   if (!options.url.startsWith('http')) {
     throw new AssertionError({
       message: `'${options.url}' does not appear to be a valid http url.`,
@@ -163,7 +172,7 @@ async function fetchUrl(options: OperationInput): Promise<OperationAction[]> {
 async function fetchGcsFile(
   options: OperationInput,
 ): Promise<OperationAction[]> {
-  if (options.type !== 'gcs') return;
+  if (options.type !== 'gcs') return [];
   const firebaseStorageApi =
     process.env.NODE_ENV === 'production'
       ? 'https://firebasestorage.googleapis.com'
@@ -203,7 +212,7 @@ async function fetchGcsFile(
 }
 
 function newImageOptions(options: OperationInput): OperationAction[] {
-  if (options.type !== 'create') return;
+  if (options.type !== 'create') return [];
   const create: Record<string, unknown | Record<string, unknown>> = {};
 
   create.width = options.width;
@@ -221,10 +230,10 @@ function newImageOptions(options: OperationInput): OperationAction[] {
     type: 'gaussian',
   };
   if (options.noiseMean != undefined) {
-    create.noise['mean'] = options.noiseMean;
+    (create.noise as Record<string, number>)['mean'] = options.noiseMean;
   }
   if (options.noiseSigma != undefined) {
-    create.noise['sigma'] = options.noiseSigma;
+    (create.noise as Record<string, number>)['sigma'] = options.noiseSigma;
   }
 
   return [
