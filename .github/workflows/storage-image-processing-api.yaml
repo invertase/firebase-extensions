@@ -1,10 +1,10 @@
-name: storage-image-processing-api
+name: image-processing-api
 
 on:
   pull_request:
     paths:
-      - 'extensions/storage-image-processing-api/**'
-      - '.github/workflows/storage-image-processing-api.yaml'
+      - 'extensions/image-processing-api/**'
+      - '.github/workflows/image-processing-api.yaml'
 
   push:
     branches:
@@ -14,7 +14,7 @@ on:
       - '**.md'
 
 env:
-  EXTENSION_PATH: 'extensions/storage-image-processing-api'
+  EXTENSION_PATH: 'extensions/image-processing-api'
 
 jobs:
   e2e:

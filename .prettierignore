@@ -1,5 +1,5 @@
 node_modules
 build
 **/functions/lib/**/*.js
-**/extensions/storage-image-processing-api/lib/src/types/**/*.ts
+**/extensions/image-processing-api/lib/src/types/**/*.ts
 package-lock.json

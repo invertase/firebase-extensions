@@ -1,21 +1,21 @@
-# Storage Image Processing API Utilities
+# Image Processing API Utilities
 
-This package contains utilities for interacting with the Firebase Storage Image Processing API Extension.
+This package contains utilities for interacting with the Firebase Image Processing API Extension.
 
 ## Installation
 
 ```bash
-npm i --save @invertase/storage-image-processing-api
+npm i --save @invertase/image-processing-api
 ```
 
 ## Usage
 
 ### `builder`
 
-Returns a `StorageImageProcessingApi` instance which can be used to build an array of operations to be applied to an image via the extension.
+Returns a `ImageProcessingApi` instance which can be used to build an array of operations to be applied to an image via the extension.
 
 ```ts
-import { builder } from '@invertase/storage-image-processing-api';
+import { builder } from '@invertase/image-processing-api';
 
 const output = builder()
   // Input required

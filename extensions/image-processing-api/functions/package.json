@@ -1,5 +1,5 @@
 {
-  "name": "storage-image-processing-api-functions",
+  "name": "image-processing-api-functions",
   "version": "0.0.1",
   "scripts": {
     "prepare": "npm run build",

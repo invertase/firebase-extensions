@@ -1,12 +1,12 @@
 # Utilty Library
 
-To assist with the usage of this Extension, a [utility library](https://www.npmjs.com/package/@invertase/storage-image-processing-api) exists
+To assist with the usage of this Extension, a [utility library](https://www.npmjs.com/package/@invertase/image-processing-api) exists
 to help provide a typed API interface for easily constructing operations to send to the API.
 
 ## Installation
 
 ```bash
-npm i --save @invertase/storage-image-processing-api
+npm i --save @invertase/image-processing-api
 ```
 
 ## Usage
@@ -14,14 +14,14 @@ npm i --save @invertase/storage-image-processing-api
 Once installed, import the `builder` function from the library:
 
 ```ts
-import { builder } from '@invertase/storage-image-processing-api';
+import { builder } from '@invertase/image-processing-api';
 ```
 
-The `builder` function returns a new `StorageImageProcessingApi` instance which provides a API for constructing operations to send to the API.
+The `builder` function returns a new `ImageProcessingApi` instance which provides a API for constructing operations to send to the API.
 At a minimum, you must provide an `input` and `output` operation as required by the extension itself:
 
 ```ts
-import { builder } from '@invertase/storage-image-processing-api';
+import { builder } from '@invertase/image-processing-api';
 
 const build = builder()
   .input({
@@ -63,5 +63,5 @@ The encoded JSON string value can be passed directly to the extension as the `op
 ```ts
 const encodedJsonString = output.toEncodedJSONString();
 
-const url = `https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/ext-storage-image-processing-api-handler/process?operations=${encodedJsonString}`;
+const url = `https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/ext-image-processing-api-handler/process?operations=${encodedJsonString}`;
 ```
