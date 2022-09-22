@@ -1,4 +1,5 @@
 node_modules
 build
 functions/lib
+lib/src/types
 package-lock.json
