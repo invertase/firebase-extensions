@@ -1,12 +1,28 @@
 Use this extension to optimize and transform images via a powerful HTTP API with over 30 different image operations to enhance and manipulate your images.
 
-A cloud function called `process` will be added to your project which you can call from your code specifying:
+This extension creates a Cloud Function named `process`, which can be called via a GET request, specifiying
+the operations to perform via the `operations` query parameter, for example:
 
-- The image to process
-- The operations to perform
-- The output image format
+```js
+const operations = [
+  {
+    operation: 'input',
+    type: 'url',
+    url: 'https://example.com/image.jpg',
+  },
+  {
+    operation: 'grayscale',
+  },
+  {
+    operation: 'output',
+    format: 'webp',
+  },
+];
 
-The output image will be generated and cashed.
+const params = `?operations=${encodeURIComponent(JSON.stringify(operations))}`;
+```
+
+View the [official documentation](https://extensions.invertase.dev/storage-image-processing-api) for full usage examples.
 
 #### Additional setup
 

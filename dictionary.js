@@ -58,4 +58,5 @@ module.exports = [
   /^invertase/,
   /^firebase/,
   /^href/,
+  /^stringified/,
 ];
