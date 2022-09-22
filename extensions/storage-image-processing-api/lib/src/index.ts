@@ -41,7 +41,7 @@ export type OutputOptions =
   | { png: Omit<OperationOutputPng, 'operation' | 'format'> }
   | { tiff: Omit<OperationOutputTiff, 'operation' | 'format'> }
   | { webp: Omit<OperationOutputWebp, 'operation' | 'format'> };
-  
+
 export type AffineOptions = Omit<OperationAffine, 'operation'>;
 export type BlurOptions = Omit<OperationBlur, 'operation'>;
 export type ColorspaceOptions = Omit<OperationColorspace, 'operation'>;
@@ -50,7 +50,7 @@ export type CompositeOptions = Omit<OperationComposite, 'operation'>;
 export type ConvolveOptions = Omit<OperationConvolve, 'operation'>;
 export type ExtendOptions = Omit<OperationExtend, 'operation'>;
 export type ExtractOptions = Omit<OperationExtract, 'operation'>;
-export type FlattenOptions =Omit<OperationFlatten, 'operation'>;
+export type FlattenOptions = Omit<OperationFlatten, 'operation'>;
 export type GammaOptions = Omit<OperationGamma, 'operation'>;
 export type LinearOptions = Omit<OperationLinear, 'operation'>;
 export type MedianOptions = Omit<OperationMedian, 'operation'>;
@@ -63,7 +63,6 @@ export type TextOptions = Omit<OperationText, 'operation'>;
 export type ThresholdOptions = Omit<OperationThreshold, 'operation'>;
 export type TintOptions = Omit<OperationTint, 'operation'>;
 export type TrimOptions = Omit<OperationTrim, 'operation'>;
-
 
 type OperationType =
   | 'affine'
