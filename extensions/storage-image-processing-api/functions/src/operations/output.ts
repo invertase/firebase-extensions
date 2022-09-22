@@ -335,7 +335,18 @@ const struct = superstruct.union([
   structAvif,
 ]);
 
-export type OperationOutput = superstruct.Infer<typeof struct>;
+export type OperationOutputPng = superstruct.Infer<typeof structPng>;
+export type OperationOutputJpeg = superstruct.Infer<typeof structJpeg>;
+export type OperationOutputWebp = superstruct.Infer<typeof structWebp>;
+export type OperationOutputTiff = superstruct.Infer<typeof structTiff>;
+export type OperationOutputAvif = superstruct.Infer<typeof structAvif>;
+
+export type OperationOutput =
+  | OperationOutputPng
+  | OperationOutputJpeg
+  | OperationOutputWebp
+  | OperationOutputTiff
+  | OperationOutputAvif;
 
 export const operationOutput: OperationBuilder = {
   name,

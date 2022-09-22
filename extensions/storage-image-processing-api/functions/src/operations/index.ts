@@ -15,7 +15,7 @@
  */
 
 import { AssertionError } from 'assert';
-import sharp from 'sharp';
+import sharp, { SharpOptions } from 'sharp';
 import superstruct from 'superstruct';
 
 import { omitKey, omitUndefinedValues } from '../utils';
@@ -174,7 +174,7 @@ export function jsonAsValidatedOperations(
     try {
       const options = asValidatedOperationOptions(rawOptions);
       output.push({
-        source: null,
+        source: '',
         operation,
         rawOptions,
         options,
@@ -260,8 +260,8 @@ export async function applyValidatedOperation(
   for (let i = 0; i < builtOperation.actions.length; i++) {
     const action = builtOperation.actions[i];
     if (action.method == 'constructor') {
-      currentInstance = sharp(...action.arguments);
-    } else {
+      currentInstance = sharp(...(action.arguments as SharpOptions[]));
+    } else if (currentInstance != null) {
       currentInstance = (
         currentInstance[action.method] as (...args: unknown[]) => sharp.Sharp
       )(...action.arguments);
@@ -269,5 +269,5 @@ export async function applyValidatedOperation(
       currentInstance = sharp(newBuffer);
     }
   }
-  return currentInstance;
+  return currentInstance as sharp.Sharp;
 }

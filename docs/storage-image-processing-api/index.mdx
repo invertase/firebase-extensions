@@ -129,3 +129,24 @@ const operations = [
 const encodedOperations = encodeURIComponent(JSON.stringify(operations));
 const url = `https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/ext-storage-image-processing-api-handler/process?operations=${encodedOperations}`;
 ```
+
+### JavaScript utility library
+
+Additionally, a utility library exists to provide a fully typed interface for constructing options:
+
+```ts
+import { builder } from '@invertase/storage-image-processing-api';
+
+const output = builder()
+  .input({
+    source: 'https://example.com/image.jpg',
+  })
+  .rotate({ angle: 90 })
+  .output({
+    format: 'png',
+  });
+
+console.log(output.toJSON());
+```
+
+For more details, [view the documentation](/utility-library).

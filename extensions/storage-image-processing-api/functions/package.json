@@ -4,13 +4,15 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "tsc",
+    "copy-types": "tsc --emitDeclarationOnly --declaration --allowJs --outDir ../lib/src/types",
     "build:watch": "tsc --watch",
     "dev": "EXPRESS_SERVER=true ../../../node_modules/.bin/nodemon",
     "emulator:local": "FIREBASE_STORAGE_EMULATOR_HOST='localhost:9199' firebase ext:dev:emulators:start --test-config=__tests__/test-firebase.json --test-params=__tests__/test-params.env --project=extensions-testing --import=./__tests__/data",
     "generate-readme": "firebase ext:info .. --markdown > ../README.md",
     "test:watch": "jest --config=./jest.config.js --watch",
     "test": "FIREBASE_STORAGE_EMULATOR_HOST='localhost:9199' firebase ext:dev:emulators:exec ./node_modules/.bin/jest --test-config=__tests__/test-firebase.json --test-params=__tests__/test-params.env --project=extensions-testing --import=./__tests__/data",
-    "deploy": "firebase ext:install ../ --project=extensions-testing"
+    "deploy": "firebase ext:install ../ --project=extensions-testing",
+    "postinstall": "npm run copy-types"
   },
   "engines": {
     "node": "14"
