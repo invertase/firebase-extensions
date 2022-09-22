@@ -129,3 +129,40 @@ const operations = [
 const encodedOperations = encodeURIComponent(JSON.stringify(operations));
 const url = `https://{LOCATION}-{PROJECT_ID}.cloudfunctions.net/ext-storage-image-processing-api-handler/process?operations=${encodedOperations}`;
 ```
+
+### JavaScript utility library
+
+Additionally, a utility library exists to provide a fully typed interface for constructing options.
+
+Firstly, install the [library](https://www.npmjs.com/package/@invertase/storage-image-processing-api) via npm:
+
+```bash
+npm i --save @invertase/storage-image-processing-api
+```
+
+Use the `builder` function to return a `StorageImageProcessingApi` instance which can be used to build an array of operations:
+
+```ts
+import { builder } from '@invertase/storage-image-processing-api';
+
+const output = builder()
+  // Input required
+  .input({
+    source: 'https://example.com/image.jpg',
+  })
+  .flip()
+  .grayscale()
+  .rotate({ angle: 90 })
+  // Output required
+  .output({
+    format: 'png',
+  });
+```
+
+Once created, the api provides the means to return the operations as JSON, a JSON string or an encoded JSON string suitable for GET requests in your browser.
+
+```ts
+const json = output.toJSON();
+const jsonString = output.toJSONString();
+const encodedJsonString = output.toEncodedJSONString();
+```
