@@ -1,3 +1,7 @@
+## Version 0.1.0
+
+Stable release with documentation.
+
 ## Version 0.0.2
 
 Updated convolve feature to allow the correct number of inputs
