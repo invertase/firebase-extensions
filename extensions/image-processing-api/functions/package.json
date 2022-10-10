@@ -12,7 +12,7 @@
     "test:watch": "jest --config=./jest.config.js --watch",
     "test": "FIREBASE_STORAGE_EMULATOR_HOST='localhost:9199' firebase ext:dev:emulators:exec ./node_modules/.bin/jest --test-config=__tests__/test-firebase.json --test-params=__tests__/test-params.env --project=extensions-testing --import=./__tests__/data",
     "deploy": "firebase ext:install ../ --project=extensions-testing",
-    "postinstall": "npm run copy-types"
+    "postinstall": "npm run copy-types || exit 0"
   },
   "engines": {
     "node": "14"
