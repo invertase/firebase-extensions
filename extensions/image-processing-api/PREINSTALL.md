@@ -22,6 +22,23 @@ const operations = [
 const params = `?operations=${encodeURIComponent(JSON.stringify(operations))}`;
 ```
 
+The extension also comes with a JavaScript utility library for simplifying the creation of operations:
+
+```ts
+import { builder } from '@invertase/image-processing-api';
+
+const output = builder()
+  .input({
+    url: 'https://example.com/image.jpg',
+  })
+  .grayscale()
+  .output({
+    format: 'webp',
+  });
+
+const params = `?operations=${output.toEncodedJSONString()}`;
+```
+
 View the [official documentation](https://extensions.invertase.dev/image-processing-api) for full usage examples.
 
 #### Additional setup
