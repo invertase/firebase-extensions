@@ -1,5 +1,5 @@
 name: image-processing-api
-version: 0.1.0
+version: 0.1.1
 specVersion: v1beta
 
 displayName: Image Processing API
@@ -34,7 +34,7 @@ resources:
   - name: handler
     type: firebaseextensions.v1beta.function
     description: >-
-      Serves a API accepting incoming HTTP requests. 
+      Serves a API accepting incoming HTTP requests.
     properties:
       location: ${param:LOCATION}
       runtime: nodejs14
