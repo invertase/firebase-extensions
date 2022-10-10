@@ -11,7 +11,8 @@
         ["Input", "/image-processing-api/input"],
         ["Operations", "/image-processing-api/operations"],
         ["Output", "/image-processing-api/output"],
-        ["Types", "/image-processing-api/types"]
+        ["Types", "/image-processing-api/types"],
+        ["Utility Library", "/image-processing-api/utility-library"]
       ]
     ]
   ]
