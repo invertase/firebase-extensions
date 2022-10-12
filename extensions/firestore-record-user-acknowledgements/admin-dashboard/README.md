@@ -7,7 +7,7 @@ This repository contains the source code for the Admin Dashboard for the Record 
 Clone this repository:
 
 ```bash
-git clone ... todo
+git clone git@github.com:invertase/firebase-extensions.git
 ```
 
 Install the dependencies:

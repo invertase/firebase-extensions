@@ -14,6 +14,13 @@
         ["Types", "/image-processing-api/types"],
         ["Utility Library", "/image-processing-api/utility-library"]
       ]
+    ],
+    [
+      "Record User Acknowledgements",
+      [
+        ["Overview", "/record-user-acknowledgements"],
+        ["Refernce API", "/record-user-acknowledgements/reference"]
+      ]
     ]
   ]
 }

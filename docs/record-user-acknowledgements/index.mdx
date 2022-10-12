@@ -1,10 +1,10 @@
-# Usage
+# Record User Acknowledgements
 
-The extension stores notices and acknowledgements as documents in a collection inside Firestore. You configure the collection during the installation process, when you set up the extension instance’s configuration parameters.
+The extension stores notices and acknowledgements as documents in a collection inside Firestore. You configure the collection during the installation process, when you set up the extension instance's configuration parameters.
 
-The extensions' source code contains a [web app providing admin utilities](admin-dashboard) that you can run locally. This contains a notice builder UI that you can use to easily create and customize notices. Setup instructions are available in the above link provided. Once set up, navigate to [localhost:3000](http://localhost:3000) to see the notice builder tool.
+The extensions' source code contains a [web app providing admin utilities](https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-record-user-acknowledgements/admin-dashboard) that you can run locally. This contains a notice builder UI that you can use to easily create and customize notices. Setup instructions are available in the above link provided. Once set up, navigate to [localhost:3000](http://localhost:3000) to see the notice builder tool.
 
-![Admin Dashboard](assets/admin-dashboard-example.png)
+![Admin Dashboard](/record-user-acknowldegements/assets/admin-dashboard-example.png)
 
 ## Retrieving a notice
 
@@ -41,7 +41,7 @@ const notice = await httpsCallable(
 });
 ```
 
-View the [reference API](REFERENCE.md) for full details on the response interface.
+View the [reference API](/record-user-acknowldegements/reference) for full details on the response interface.
 
 ## Acknowledging a notice
 
@@ -113,6 +113,6 @@ You may need to create custom notices that are shown to and can only be acknowle
 
 ## Updating a notice
 
-When it’s time to update a notice, for example when additional user preferences are required, create a new notice document with the same `type` as the existing notice you wish to update.
+When it's time to update a notice, for example when additional user preferences are required, create a new notice document with the same `type` as the existing notice you wish to update.
 
 When the notice is retrieved, a new notice document will be returned with no user acknowledgement, allowing users to acknowledge the newer notice.
