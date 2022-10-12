@@ -3,3 +3,4 @@ build
 **/functions/lib/**/*.js
 **/extensions/image-processing-api/lib/src/types/**/*.ts
 package-lock.json
+**/public/build/**
