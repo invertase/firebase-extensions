@@ -22,7 +22,7 @@
     "prepare": "npm run lerna:bootstrap && npm run lerna:link",
     "test": "lerna run test",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,mdx}\"",
-    "check:linting": "eslint . --max-warnings=0",
+    "check:linting": "eslint . --max-warnings=50",
     "check:formatting": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md,mdx}\"",
     "check:typescript": "lerna run check:typescript",
     "check:spelling": "spellchecker --quiet --files=\"docs/**/*.{md,mdx}\" --dictionaries=\"./dictionary.js\" --reports=\"spelling.json\" --plugins spell indefinite-article repeated-words syntax-mentions syntax-urls frontmatter",
