@@ -1,0 +1,48 @@
+{
+  "name": "firestore-export-user-data",
+  "description": "Export user data from Firestore to Google Cloud Storage",
+  "main": "lib/index.js",
+  "license": "Apache-2.0",
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "npm run clean && npm run compile",
+    "build:watch": "tsc --watch",
+    "format": "prettier --write \"**/*.{md,yml,ts,json,yaml}\"",
+    "lint": "prettier --list-different \"**/*.{md,yml,ts,json,yaml}\"",
+    "clean": "rimraf lib",
+    "compile": "tsc",
+    "local:emulator": "cd ../../_emulator && firebase emulators:start -P demo-experimental",
+    "test": "cd ../../_emulator && firebase emulators:exec jest -P demo-experimental",
+    "test:local": "jest",
+    "test:watch": "concurrently \"npm run local:emulator\" \"jest --watch\"",
+    "generate-readme": "firebase ext:info .. --markdown > ../README.md",
+    "publish": "firebase ext:dev:publish invertase/delete-user-data"
+  },
+  "dependencies": {
+    "@types/archiver": "^5.3.1",
+    "@types/jest": "^29.1.2",
+    "@types/uuid": "^8.3.4",
+    "archiver": "^5.3.1",
+    "csv-stringify": "^6.2.0",
+    "firebase-admin": "^11.0.1",
+    "firebase-functions": "^3.6.1",
+    "fs": "0.0.1-security",
+    "jest": "^29.2.0",
+    "json2csv": "^5.0.7",
+    "node-fetch": "^2.6.7",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.8.4",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node-fetch": "^2.6.2",
+    "@types/unzipper": "^0.10.5",
+    "concurrently": "^7.2.2",
+    "firebase-functions-test": "^0.2.1",
+    "mocked-env": "^1.3.2",
+    "prettier": "1.15.3",
+    "ts-jest": "^29.0.3",
+    "wait-for-expect": "^3.0.2"
+  },
+  "private": true
+}

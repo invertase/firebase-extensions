@@ -13,8 +13,8 @@ jobs:
           node-version: '14'
       - name: NPM Install
         run: npm install
-      - name: Check Linting
-        run: npm run check:linting
+      # - name: Check Linting
+      #   run: npm run check:linting
       - name: Check Formatting
         run: npm run check:formatting
       - name: Check TS Compiles
