@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import * as admin from "firebase-admin";
-import unzip from "unzipper";
-import waitForExpect from "wait-for-expect";
-import { UserRecord } from "firebase-functions/v1/auth";
+import * as admin from 'firebase-admin';
+import unzip from 'unzipper';
+import waitForExpect from 'wait-for-expect';
+import { UserRecord } from 'firebase-functions/v1/auth';
 import {
   createFirebaseUser,
   generateFileInUserStorage,
@@ -25,12 +25,12 @@ import {
   validateCompleteRecord,
   validatePendingRecord,
   validateZippedExport,
-} from "../helpers";
-import setupEnvironment from "../helpers/setupEnvironment";
+} from '../helpers';
+import setupEnvironment from '../helpers/setupEnvironment';
 
-import config from "../../src/config";
+import config from '../../src/config';
 
-const fft = require("firebase-functions-test")();
+const fft = require('firebase-functions-test')();
 
 if (!admin.apps.length) {
   admin.initializeApp();
@@ -38,24 +38,24 @@ if (!admin.apps.length) {
 
 setupEnvironment();
 
-jest.spyOn(admin, "initializeApp").mockImplementation();
+jest.spyOn(admin, 'initializeApp').mockImplementation();
 
-import * as funcs from "../../src/index";
+import * as funcs from '../../src/index';
 
 /** prepare extension functions */
 
 // const exportUserDatafn = fft.wrap(funcs.exportUserData);
 
-jest.mock("../../src/config", () => ({
+jest.mock('../../src/config', () => ({
   cloudStorageBucketDefault: process.env.STORAGE_BUCKET,
-  cloudStorageExportDirectory: "exports",
-  firestoreExportsCollection: "exports",
-  storagePaths: "{DEFAULT}",
+  cloudStorageExportDirectory: 'exports',
+  firestoreExportsCollection: 'exports',
+  storagePaths: '{DEFAULT}',
   zip: true,
 }));
 
-describe("extension", () => {
-  describe("top level storage file", () => {
+describe('extension', () => {
+  describe('top level storage file', () => {
     let user: UserRecord;
     let unsubscribe;
 
@@ -67,15 +67,15 @@ describe("extension", () => {
     afterEach(async () => {
       jest.clearAllMocks();
       await resetFirebaseData();
-      if (unsubscribe && typeof unsubscribe === "function") {
+      if (unsubscribe && typeof unsubscribe === 'function') {
         unsubscribe();
       }
     });
 
-    test("Can zip a top level file to storage export directory from storage", async () => {
+    test('Can zip a top level file to storage export directory from storage', async () => {
       /** Create a top level collection with a single document */
 
-      await generateFileInUserStorage(user.uid, "Hello World!");
+      await generateFileInUserStorage(user.uid, 'Hello World!');
       const exportUserDatafn = fft.wrap(funcs.exportUserData);
 
       // // watch the exports collection for changes
@@ -89,12 +89,12 @@ describe("extension", () => {
       const { exportId } = await exportUserDatafn.call(
         {},
         { uid: user.uid },
-        { auth: { uid: user.uid } }
+        { auth: { uid: user.uid } },
       );
 
       // // expect exportId to be defined and to be a string
       expect(exportId).toBeDefined();
-      expect(typeof exportId).toBe("string");
+      expect(typeof exportId).toBe('string');
 
       await waitForExpect(() => {
         expect(observer).toHaveBeenCalledTimes(3);
@@ -122,13 +122,13 @@ describe("extension", () => {
       // // expect 1 file to be exported
       expect(files.length).toBe(2);
 
-      const zipFile = files.find((file) => file.name.includes("export.zip"));
+      const zipFile = files.find(file => file.name.includes('export.zip'));
 
       await validateZippedExport(zipFile, {
         config,
         exportId,
-        contentType: "text",
-        expectedData: "Hello World!",
+        contentType: 'text',
+        expectedData: 'Hello World!',
       });
       // expect(zipFile).toBeDefined();
       // // should have the user id as the name and have the .firestore.csv extension
@@ -141,7 +141,7 @@ describe("extension", () => {
       // // should have 1 file
       const content = (await unzippedFiles[0].buffer()).toString();
 
-      expect(content).toBe("Hello World!");
+      expect(content).toBe('Hello World!');
       unsubscribe();
     });
   });

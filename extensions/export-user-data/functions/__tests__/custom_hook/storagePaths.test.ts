@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import * as admin from "firebase-admin";
-import waitForExpect from "wait-for-expect";
-import { UserRecord } from "firebase-functions/v1/auth";
+import * as admin from 'firebase-admin';
+import waitForExpect from 'wait-for-expect';
+import { UserRecord } from 'firebase-functions/v1/auth';
 import {
   createFirebaseUser,
   generateFileInUserStorage,
@@ -24,38 +24,38 @@ import {
   validateCompleteRecord,
   validateCSVFile,
   validatePendingRecord,
-} from "../helpers";
-import setupEnvironment from "../helpers/setupEnvironment";
-import config from "../../src/config";
-import fetch from "node-fetch";
-import { fetchFromCustomHook } from "../../src/utils";
-import { Response, Headers } from "node-fetch";
+} from '../helpers';
+import setupEnvironment from '../helpers/setupEnvironment';
+import config from '../../src/config';
+import fetch from 'node-fetch';
+import { fetchFromCustomHook } from '../../src/utils';
+import { Response, Headers } from 'node-fetch';
 
-const fft = require("firebase-functions-test")();
+const fft = require('firebase-functions-test')();
 
 if (!admin.apps.length) {
   admin.initializeApp();
 }
 
 setupEnvironment();
-jest.spyOn(admin, "initializeApp").mockImplementation();
+jest.spyOn(admin, 'initializeApp').mockImplementation();
 
-import * as funcs from "../../src/index";
+import * as funcs from '../../src/index';
 
 /** prepare extension functions */
 
 // const exportUserDatafn = fft.wrap(funcs.exportUserData);
 
-jest.mock("../../src/config", () => ({
+jest.mock('../../src/config', () => ({
   cloudStorageBucketDefault: process.env.STORAGE_BUCKET,
-  cloudStorageExportDirectory: "exports",
-  firestoreExportsCollection: "exports",
+  cloudStorageExportDirectory: 'exports',
+  firestoreExportsCollection: 'exports',
   customHookEndpoint: `http://localhost:1123`,
   zip: false,
 }));
 
-jest.mock("../../src/utils", () => {
-  const data = { storagePaths: ["{DEFAULT}/test/{UID}.txt"] };
+jest.mock('../../src/utils', () => {
+  const data = { storagePaths: ['{DEFAULT}/test/{UID}.txt'] };
 
   const response = Promise.resolve({
     ok: true,
@@ -64,15 +64,15 @@ jest.mock("../../src/utils", () => {
     text: () => JSON.stringify(data),
   });
 
-  const original = jest.requireActual("../../src/utils"); // Step 2.
+  const original = jest.requireActual('../../src/utils'); // Step 2.
   return {
     ...original,
     fetchFromCustomHook: () => response,
   };
 });
 
-describe("extension", () => {
-  describe("custom hooks", () => {
+describe('extension', () => {
+  describe('custom hooks', () => {
     let user: UserRecord;
     let unsubscribe;
 
@@ -84,16 +84,16 @@ describe("extension", () => {
     afterEach(async () => {
       jest.clearAllMocks();
       // await resetFirebaseData(user);
-      if (unsubscribe && typeof unsubscribe === "function") {
+      if (unsubscribe && typeof unsubscribe === 'function') {
         unsubscribe();
       }
     });
 
-    test("can export from storage based on custom hook, to a csv", async () => {
-      await generateFileInUserStorage(user.uid, "Hello World!");
+    test('can export from storage based on custom hook, to a csv', async () => {
+      await generateFileInUserStorage(user.uid, 'Hello World!');
 
       const exportUserDatafn = fft.wrap(funcs.exportUserData);
-      console.log("USER", user.uid);
+      console.log('USER', user.uid);
 
       // // // watch the exports collection for changes
       const coll = admin
@@ -106,20 +106,20 @@ describe("extension", () => {
       const { exportId } = await exportUserDatafn.call(
         {},
         { uid: user.uid },
-        { auth: { uid: user.uid } }
+        { auth: { uid: user.uid } },
       );
 
       // // // expect exportId to be defined and to be a string
       expect(exportId).toBeDefined();
-      expect(typeof exportId).toBe("string");
+      expect(typeof exportId).toBe('string');
       //wait 1 second
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       // // // wait for the record to have been updated
 
       await waitForExpect(async () => {
-        expect(await coll.get().then((s) => s.docs.map((d) => d.id))).toContain(
-          exportId
+        expect(await coll.get().then(s => s.docs.map(d => d.id))).toContain(
+          exportId,
         );
       });
 
@@ -150,7 +150,7 @@ describe("extension", () => {
       const file = files[0];
 
       const fileName = file.name;
-      const parts = fileName.split("/");
+      const parts = fileName.split('/');
       // // should be in the exports directory
       expect(parts[0]).toBe(config.cloudStorageExportDirectory);
       // // should be in the export directory
@@ -161,7 +161,7 @@ describe("extension", () => {
 
       const content = downloadResponse[0].toString();
 
-      expect(content).toBe("Hello World!");
+      expect(content).toBe('Hello World!');
     });
   });
 });

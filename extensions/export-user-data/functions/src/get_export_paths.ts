@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import config from "./config";
-import * as log from "./logs";
-import { fetchFromCustomHook } from "./utils";
+import config from './config';
+import * as log from './logs';
+import { fetchFromCustomHook } from './utils';
 export interface ExportPaths {
   firestorePaths: unknown[];
   databasePaths: unknown[];
@@ -73,19 +73,19 @@ function getPathsFromConfig(uid: string): ExportPaths {
   let storagePathsList: string[] = [];
 
   if (config.firestorePaths) {
-    firestorePathsList = config.firestorePaths.split(",");
+    firestorePathsList = config.firestorePaths.split(',');
   } else {
     log.firestoreConfigPathsNotConfigured();
   }
 
   if (config.databasePaths) {
-    databasePathsList = config.databasePaths.split(",");
+    databasePathsList = config.databasePaths.split(',');
   } else {
     log.rtdbConfigPathsNotConfigured();
   }
 
   if (config.storagePaths) {
-    storagePathsList = config.storagePaths.split(",");
+    storagePathsList = config.storagePaths.split(',');
   } else {
     log.storageConfigPathsNotConfigured();
   }
@@ -141,7 +141,7 @@ interface ValidatedReponseJson {
 }
 
 function validateResponseJson(
-  data: Record<string, unknown>
+  data: Record<string, unknown>,
 ): ValidatedReponseJson {
   if (data.firestorePaths && !Array.isArray(data.firestorePaths)) {
     throw new Error();

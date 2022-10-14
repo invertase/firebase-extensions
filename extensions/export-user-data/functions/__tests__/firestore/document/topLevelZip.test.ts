@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import * as admin from "firebase-admin";
-import unzip from "unzipper";
+import * as admin from 'firebase-admin';
+import unzip from 'unzipper';
 
-import waitForExpect from "wait-for-expect";
-import { UserRecord } from "firebase-functions/v1/auth";
+import waitForExpect from 'wait-for-expect';
+import { UserRecord } from 'firebase-functions/v1/auth';
 import {
   clearFirestore,
   clearStorage,
@@ -29,12 +29,12 @@ import {
   validateCompleteRecord,
   validatePendingRecord,
   validateZippedExport,
-} from "../../helpers";
-import setupEnvironment from "../../helpers/setupEnvironment";
+} from '../../helpers';
+import setupEnvironment from '../../helpers/setupEnvironment';
 
-import config from "../../../src/config";
+import config from '../../../src/config';
 
-const fft = require("firebase-functions-test")();
+const fft = require('firebase-functions-test')();
 
 if (!admin.apps.length) {
   admin.initializeApp();
@@ -42,24 +42,24 @@ if (!admin.apps.length) {
 
 setupEnvironment();
 
-jest.spyOn(admin, "initializeApp").mockImplementation();
+jest.spyOn(admin, 'initializeApp').mockImplementation();
 
-import * as funcs from "../../../src/index";
+import * as funcs from '../../../src/index';
 
 /** prepare extension functions */
 
 // const exportUserDatafn = fft.wrap(funcs.exportUserData);
 
-jest.mock("../../../src/config", () => ({
+jest.mock('../../../src/config', () => ({
   cloudStorageBucketDefault: process.env.STORAGE_BUCKET,
-  cloudStorageExportDirectory: "exports",
-  firestoreExportsCollection: "exports",
-  firestorePaths: "users/{UID}",
+  cloudStorageExportDirectory: 'exports',
+  firestoreExportsCollection: 'exports',
+  firestorePaths: 'users/{UID}',
   zip: true,
 }));
 
-describe("firestore", () => {
-  describe("top level collection", () => {
+describe('firestore', () => {
+  describe('top level collection', () => {
     let user: UserRecord;
     let unsubscribe;
 
@@ -71,15 +71,15 @@ describe("firestore", () => {
     afterEach(async () => {
       jest.clearAllMocks();
       await resetFirebaseData();
-      if (unsubscribe && typeof unsubscribe === "function") {
+      if (unsubscribe && typeof unsubscribe === 'function') {
         unsubscribe();
       }
     });
 
-    test("can export zip of a top level collection with an id of {userId}", async () => {
+    test('can export zip of a top level collection with an id of {userId}', async () => {
       /** Create a top level collection with a single document */
 
-      await generateUserDocument("users", user.uid, { foo: "bar" });
+      await generateUserDocument('users', user.uid, { foo: 'bar' });
 
       const exportUserDatafn = fft.wrap(funcs.exportUserData);
 
@@ -93,12 +93,12 @@ describe("firestore", () => {
       const { exportId } = await exportUserDatafn.call(
         {},
         { uid: user.uid },
-        { auth: { uid: user.uid } }
+        { auth: { uid: user.uid } },
       );
 
       // expect exportId to be defined and to be a string
       expect(exportId).toBeDefined();
-      expect(typeof exportId).toBe("string");
+      expect(typeof exportId).toBe('string');
 
       // wait for the record to have been updated
       await waitForExpect(() => {
@@ -133,14 +133,14 @@ describe("firestore", () => {
       const file = files[0];
 
       const expectedData = [
-        ["FIRESTORE", `users/${user.uid}/foo`, '"""bar"""'],
+        ['FIRESTORE', `users/${user.uid}/foo`, '"""bar"""'],
       ];
 
       await validateZippedExport(file, {
         config,
         exportId,
         expectedUnzippedPath: `users/${user.uid}.firestore.csv`,
-        contentType: "csv",
+        contentType: 'csv',
         expectedData,
       });
     });

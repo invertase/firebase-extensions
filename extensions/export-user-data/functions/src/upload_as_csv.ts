@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import * as admin from "firebase-admin";
-import config from "./config";
-import * as log from "./logs";
+import * as admin from 'firebase-admin';
+import config from './config';
+import * as log from './logs';
 import {
   constructDatabaseCSV,
   constructFirestoreCollectionCSV,
   constructFirestoreDocumentCSV,
-} from "./construct_exports";
-import { ExportPaths } from "./get_export_paths";
-import { replaceUID } from "./utils";
-import { eventChannel } from ".";
+} from './construct_exports';
+import { ExportPaths } from './get_export_paths';
+import { replaceUID } from './utils';
+import { eventChannel } from '.';
 
 interface CSVUploadCount {
   firestoreCount: number;
@@ -34,7 +34,7 @@ interface CSVUploadCount {
 export async function uploadAsCSVs(
   exportPaths: ExportPaths,
   storagePrefix: string,
-  uid: string
+  uid: string,
 ): Promise<CSVUploadCount> {
   const promises = [];
   let firestoreCollectionsUploaded = 0;
@@ -42,9 +42,9 @@ export async function uploadAsCSVs(
   let databaseNodesUploaded = 0;
 
   for (let path of exportPaths.firestorePaths) {
-    if (typeof path === "string") {
+    if (typeof path === 'string') {
       const pathWithUID = replaceUID(path, uid);
-      if (pathWithUID.split("/").length % 2 === 1) {
+      if (pathWithUID.split('/').length % 2 === 1) {
         const snap = await admin.firestore().collection(pathWithUID).get();
         if (!snap.empty) {
           log.firestorePathExporting(pathWithUID);
@@ -66,11 +66,11 @@ export async function uploadAsCSVs(
               csv,
               storagePrefix,
               pathWithUID,
-              ".firestore.csv"
+              '.firestore.csv',
             ).then(() => {
               log.firestorePathExported(pathWithUID);
               firestoreCollectionsUploaded++;
-            })
+            }),
           );
         }
       } else {
@@ -92,18 +92,18 @@ export async function uploadAsCSVs(
             csv,
             storagePrefix,
             pathWithUID,
-            ".firestore.csv"
+            '.firestore.csv',
           ).then(() => {
             log.firestorePathExported(pathWithUID);
             firestoreDocumentsUploaded++;
-          })
+          }),
         );
       }
     }
   }
 
   for (let path of exportPaths.databasePaths) {
-    if (typeof path === "string") {
+    if (typeof path === 'string') {
       const pathWithUID = replaceUID(path, uid);
       const snap = await admin.database().ref(pathWithUID).get();
 
@@ -125,11 +125,11 @@ export async function uploadAsCSVs(
             csv,
             storagePrefix,
             pathWithUID,
-            ".database.csv"
+            '.database.csv',
           ).then(() => {
             log.rtdbPathExported(pathWithUID);
             databaseNodesUploaded++;
-          })
+          }),
         );
       }
     }
@@ -147,9 +147,9 @@ const uploadCSVToStorage = async (
   csv: string,
   storagePrefix: string,
   path: string,
-  extension: string = ".csv"
+  extension: string = '.csv',
 ) => {
-  const formattedPath = path.replace(/\//g, "_");
+  const formattedPath = path.replace(/\//g, '_');
   const storagePath = `${storagePrefix}/${formattedPath}${extension}`;
 
   const file = admin

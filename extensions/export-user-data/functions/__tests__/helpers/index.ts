@@ -1,15 +1,15 @@
-import * as admin from "firebase-admin";
-import { UserRecord } from "firebase-functions/v1/auth";
-import setupEnvironment from "./setupEnvironment";
-import fetch from "node-fetch";
-import { File } from "@google-cloud/storage";
-import unzip from "unzipper";
+import * as admin from 'firebase-admin';
+import { UserRecord } from 'firebase-functions/v1/auth';
+import setupEnvironment from './setupEnvironment';
+import fetch from 'node-fetch';
+import { File } from '@google-cloud/storage';
+import unzip from 'unzipper';
 
 if (!admin.apps.length) {
   admin.initializeApp({
-    projectId: "demo-experimental",
+    projectId: 'demo-experimental',
     storageBucket: process.env.STORAGE_BUCKET,
-    databaseURL: "http://localhost:9000/?ns=demo-experimental",
+    databaseURL: 'http://localhost:9000/?ns=demo-experimental',
   });
 }
 
@@ -49,13 +49,13 @@ export const generateDatabaseNode = async (data, userId: string) => {
 export const generateUserDocument = async (
   collectionId: string,
   userId: string,
-  data
+  data,
 ) => {
   await firestore
     .collection(collectionId)
     .doc(`${userId}`)
     .set(data)
-    .catch((err) => console.warn("Error appears here, ignoring for now"));
+    .catch(err => console.warn('Error appears here, ignoring for now'));
 };
 
 export const generateFileInUserStorage = async (userId, value) => {
@@ -75,8 +75,8 @@ export const resetFirebaseData = async (user?: UserRecord) => {
 
 export const clearFirestore = async () => {
   await fetch(
-    "http://localhost:8080/emulator/v1/projects/demo-experimental/databases/(default)/documents",
-    { method: "DELETE" }
+    'http://localhost:8080/emulator/v1/projects/demo-experimental/databases/(default)/documents',
+    { method: 'DELETE' },
   );
 };
 
@@ -88,14 +88,14 @@ export const clearStorage = async () => {
 };
 
 export const clearDatabase = async () => {
-  database.ref("/").set({});
+  database.ref('/').set({});
 };
 
 type validateDocumentZippedExportOptions = {
   config: Record<string, any>;
   exportId: string;
   expectedUnzippedPath?: string;
-  contentType: "csv" | "text";
+  contentType: 'csv' | 'text';
   expectedData: string[][] | string;
 };
 
@@ -107,10 +107,10 @@ export const validateZippedExport = async (
     expectedUnzippedPath,
     contentType,
     expectedData,
-  }: validateDocumentZippedExportOptions
+  }: validateDocumentZippedExportOptions,
 ) => {
   const fileName = file.name;
-  const parts = fileName.split("/");
+  const parts = fileName.split('/');
   // should be in the exports directory
   expect(parts[0]).toBe(config.cloudStorageExportDirectory);
   // should be in the export directory
@@ -136,14 +136,14 @@ export const validateZippedExport = async (
 
   // should have the correct content
   const content = (await unzippedFiles[0].buffer()).toString();
-  if (contentType === "csv") {
+  if (contentType === 'csv') {
     // parse the csv string into arrays
-    const lines = content.split("\n");
-    const csvData = lines.map((line) => line.split(","));
+    const lines = content.split('\n');
+    const csvData = lines.map(line => line.split(','));
     // should have 2 lines with content and the last will be empty.
     validateCSVData(csvData, expectedData);
   }
-  if (contentType === "text") {
+  if (contentType === 'text') {
     expect(content).toBe(expectedData);
   }
 };
@@ -162,10 +162,10 @@ export const validateCSVFile = async (
     exportId,
     expectedFileName,
     expectedCSVData,
-  }: validateDocumentCSVFileOptions
+  }: validateDocumentCSVFileOptions,
 ) => {
   const fileName = file.name;
-  const parts = fileName.split("/");
+  const parts = fileName.split('/');
   // should be in the exports directory
   expect(parts[0]).toBe(config.cloudStorageExportDirectory);
   // should be in the export directory
@@ -178,16 +178,16 @@ export const validateCSVFile = async (
   const content = downloadResponse[0].toString();
 
   // parse the csv string into arrays
-  const lines = content.split("\n");
-  const csvData = lines.map((line) => line.split(","));
+  const lines = content.split('\n');
+  const csvData = lines.map(line => line.split(','));
 
   validateCSVData(csvData, expectedCSVData);
 };
 
-const validateCSVHeaders = (headers) => {
-  expect(headers[0]).toBe("TYPE");
-  expect(headers[1]).toBe("path");
-  expect(headers[2]).toBe("data");
+const validateCSVHeaders = headers => {
+  expect(headers[0]).toBe('TYPE');
+  expect(headers[1]).toBe('path');
+  expect(headers[2]).toBe('data');
 };
 
 const validateCSVData = (csvData: string[][], expected) => {
@@ -203,13 +203,13 @@ const validateCSVData = (csvData: string[][], expected) => {
 
 export const validatePendingRecord = (
   pendingRecordData: Record<string, any>,
-  { user }: { user: UserRecord }
+  { user }: { user: UserRecord },
 ) => {
-  expect(pendingRecordData.status).toBe("pending");
+  expect(pendingRecordData.status).toBe('pending');
   expect(pendingRecordData.uid).toBe(user.uid);
   // // should be a server timestamp
-  expect(pendingRecordData.startedAt).toHaveProperty("_nanoseconds");
-  expect(pendingRecordData.startedAt).toHaveProperty("_seconds");
+  expect(pendingRecordData.startedAt).toHaveProperty('_nanoseconds');
+  expect(pendingRecordData.startedAt).toHaveProperty('_seconds');
 };
 
 type validateCompleteRecordOptions = {
@@ -228,25 +228,25 @@ export const validateCompleteRecord = (
     exportId,
     shouldZip,
     fileNumber,
-  }: validateCompleteRecordOptions
+  }: validateCompleteRecordOptions,
 ) => {
   // // should be success
-  expect(completeRecordData.status).toBe("complete");
+  expect(completeRecordData.status).toBe('complete');
   expect(completeRecordData.uid).toBe(user.uid);
   // // should be a server timestamp
-  expect(completeRecordData.startedAt).toHaveProperty("_nanoseconds");
-  expect(completeRecordData.startedAt).toHaveProperty("_seconds");
+  expect(completeRecordData.startedAt).toHaveProperty('_nanoseconds');
+  expect(completeRecordData.startedAt).toHaveProperty('_seconds');
 
   // // should have a null zipPath
   if (shouldZip) {
     const zipPath = completeRecordData.zipPath;
 
-    const zipPathParts = zipPath.split("/");
+    const zipPathParts = zipPath.split('/');
 
     // should have a record of the correct path to the zip in storage
     expect(zipPathParts[0]).toBe(config.cloudStorageExportDirectory);
     expect(zipPathParts[1]).toBe(exportId);
-    expect(zipPathParts[2]).toBe("export.zip");
+    expect(zipPathParts[2]).toBe('export.zip');
   } else {
     expect(completeRecordData.zipPath).toBeNull();
   }
@@ -256,10 +256,10 @@ export const validateCompleteRecord = (
 
   // // should have a string storage path
   expect(completeRecordData.storagePath).toBeDefined();
-  expect(typeof completeRecordData.storagePath).toBe("string");
+  expect(typeof completeRecordData.storagePath).toBe('string');
 
   const recordedStoragePath = completeRecordData.storagePath;
-  const recordedStoragePathParts = recordedStoragePath.split("/");
+  const recordedStoragePathParts = recordedStoragePath.split('/');
 
   // // should have a record of the correct path to the export in storage
   expect(recordedStoragePathParts[0]).toBe(config.firestoreExportsCollection);

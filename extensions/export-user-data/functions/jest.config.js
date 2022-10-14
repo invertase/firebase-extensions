@@ -15,15 +15,15 @@
  */
 
 module.exports = {
-  preset: "ts-jest",
-  testEnvironment: "node",
-  testMatch: ["**/__tests__/**/**.test.ts"],
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  testMatch: ['**/__tests__/**/**.test.ts'],
   moduleNameMapper: {
-    "^csv-stringify/sync":
-      "<rootDir>/node_modules/csv-stringify/dist/cjs/sync.cjs",
-    "firebase-admin/eventarc":
-      "<rootDir>/node_modules/firebase-admin/lib/eventarc/index.js",
+    '^csv-stringify/sync':
+      '<rootDir>/node_modules/csv-stringify/dist/cjs/sync.cjs',
+    'firebase-admin/eventarc':
+      '<rootDir>/node_modules/firebase-admin/lib/eventarc/index.js',
   },
-  setupFiles: ["<rootDir>/__tests__/jest.setup.ts"],
+  setupFiles: ['<rootDir>/__tests__/jest.setup.ts'],
   maxConcurrency: 1,
 };

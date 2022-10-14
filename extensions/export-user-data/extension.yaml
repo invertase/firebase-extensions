@@ -2,7 +2,7 @@ name: export-user-data
 displayName: Export User Data
 
 description: >-
- Export certain data keyed on a user ID from Firestore, Realtime Database, or Cloud Storage to a Google Cloud Storage bucket.
+  Export certain data keyed on a user ID from Firestore, Realtime Database, or Cloud Storage to a Google Cloud Storage bucket.
 
 billingRequired: true
 
@@ -106,7 +106,7 @@ params:
     default: exports
     example: exports
     required: false
-    validationRegex: "^[^/]+(/[^/]+/[^/]+)*$"
+    validationRegex: '^[^/]+(/[^/]+/[^/]+)*$'
     validationErrorMessage: Must be a valid Cloud Firestore collection
 
   - param: FIRESTORE_PATHS
@@ -177,7 +177,7 @@ params:
       ID-labeled directory and all its files (like `media/{UID}`), enter
       `{DEFAULT}/{UID}-pic.png,my-app-logs/{UID}-logs.txt,{DEFAULT}/media/{UID}`.
     type: string
-    example: "{DEFAULT}/{UID}-pic.png,my-awesome-app-logs/{UID}-logs.txt"
+    example: '{DEFAULT}/{UID}-pic.png,my-awesome-app-logs/{UID}-logs.txt'
     required: false
 
   - param: CUSTOM_HOOK_ENDPOINT
@@ -201,7 +201,6 @@ params:
         value: no
     default: no
     required: false
-  
 
 events:
   - type: firebase.extensions.export-user-data.v1.firestore

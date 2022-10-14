@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import archiver, { Archiver } from "archiver";
-import { ExportPaths } from "./get_export_paths";
-import config from "./config";
-import * as log from "./logs";
-import admin from "firebase-admin";
+import archiver, { Archiver } from 'archiver';
+import { ExportPaths } from './get_export_paths';
+import config from './config';
+import * as log from './logs';
+import admin from 'firebase-admin';
 import {
   constructDatabaseCSV,
   constructFirestoreCollectionCSV,
   constructFirestoreDocumentCSV,
-} from "./construct_exports";
-import { replaceUID } from "./utils";
-import { eventChannel } from ".";
-import { File } from "@google-cloud/storage";
+} from './construct_exports';
+import { replaceUID } from './utils';
+import { eventChannel } from '.';
+import { File } from '@google-cloud/storage';
 
 interface UploadAsZipParams {
   exportPaths: ExportPaths;
@@ -49,10 +49,10 @@ export async function uploadDataAsZip({
   filesToZip,
 }: UploadAsZipParams) {
   return new Promise<ZipUploadCount>(async (resolve, reject) => {
-    const archive = archiver("zip", {
+    const archive = archiver('zip', {
       zlib: { level: 9 }, // Sets the compression level.
     });
-    archive.on("error", reject);
+    archive.on('error', reject);
 
     const storagePath = `${storagePrefix}/export.zip`;
 
@@ -64,7 +64,7 @@ export async function uploadDataAsZip({
 
     archive.pipe(stream);
     // TODO: log that we're done zipping
-    stream.on("finish", async () => {});
+    stream.on('finish', async () => {});
 
     const count: ZipUploadCount = await appendToArchive({
       archive,
@@ -100,29 +100,29 @@ async function appendToArchive({
   };
 
   for (let path of exportPaths.firestorePaths) {
-    if (typeof path === "string") {
+    if (typeof path === 'string') {
       const pathWithUID = replaceUID(path, uid);
       // If it's a path to a collection
-      if (pathWithUID.split("/").length % 2 === 1) {
+      if (pathWithUID.split('/').length % 2 === 1) {
         promises.push(
           appendFirestoreCollectionToArchive(archive, pathWithUID, uid).then(
-            (didAppend) => {
+            didAppend => {
               if (didAppend) {
                 count.firestoreCount++;
               }
-            }
-          )
+            },
+          ),
         );
         // else it is a path to a document
       } else {
         promises.push(
           appendFirestoreDocumentToArchive(archive, pathWithUID, uid).then(
-            (didAppend) => {
+            didAppend => {
               if (didAppend) {
                 count.firestoreCount++;
               }
-            }
-          )
+            },
+          ),
         );
       }
     } else {
@@ -131,16 +131,16 @@ async function appendToArchive({
   }
 
   for (let path of exportPaths.databasePaths) {
-    if (typeof path === "string") {
+    if (typeof path === 'string') {
       const pathWithUID = replaceUID(path, uid);
       promises.push(
         appendDatabaseNodeToArchive(archive, pathWithUID, uid).then(
-          (didAppend) => {
+          didAppend => {
             if (didAppend) {
               count.firestoreCount++;
             }
-          }
-        )
+          },
+        ),
       );
     } else {
       log.rtdbPathNotString();
@@ -148,11 +148,11 @@ async function appendToArchive({
   }
   for (let file of filesToZip) {
     promises.push(
-      pushFileToArchive(file, archive).then((didAppend) => {
+      pushFileToArchive(file, archive).then(didAppend => {
         if (didAppend) {
           count.storageCount++;
         }
-      })
+      }),
     );
   }
 
@@ -164,7 +164,7 @@ async function appendToArchive({
 async function appendFirestoreCollectionToArchive(
   archive: Archiver,
   path: string,
-  uid: string
+  uid: string,
 ): Promise<boolean> {
   log.firestorePathExporting(path);
 
@@ -191,7 +191,7 @@ async function appendFirestoreCollectionToArchive(
 async function appendFirestoreDocumentToArchive(
   archive: Archiver,
   path: string,
-  uid: string
+  uid: string,
 ) {
   log.firestorePathExporting(path);
 
@@ -218,7 +218,7 @@ async function appendFirestoreDocumentToArchive(
 async function appendDatabaseNodeToArchive(
   archive: Archiver,
   path: string,
-  uid: string
+  uid: string,
 ) {
   log.rtdbPathExporting(path);
 

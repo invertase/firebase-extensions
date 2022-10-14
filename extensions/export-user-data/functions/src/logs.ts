@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-import { logger } from "firebase-functions";
-import config from "./config";
+import { logger } from 'firebase-functions';
+import config from './config';
 
 export const completeExport = (uid: string) => {
   logger.log(`Successfully exported data for user: ${uid}`);
 };
 
 export const firestoreExported = () => {
-  logger.log("Finished Exporting user data from Cloud Firestore");
+  logger.log('Finished Exporting user data from Cloud Firestore');
 };
 
 export const firestoreExporting = () => {
-  logger.log("Exporting user data from Cloud Firestore");
+  logger.log('Exporting user data from Cloud Firestore');
 };
 
 export const firestoreConfigPathsNotConfigured = () => {
-  logger.log("Cloud Firestore paths are not configured, skipping");
+  logger.log('Cloud Firestore paths are not configured, skipping');
 };
 
 export const customHookNotConfigured = () => {
-  logger.log("paths from a custom hook are not configured, skipping");
+  logger.log('paths from a custom hook are not configured, skipping');
 };
 
 export const firestorePathExported = (path: string) => {
@@ -53,30 +53,30 @@ export const exportError = (err: Error, path?: string) => {
   if (path) {
     logger.error(`Error exporting: '${path}'`, err);
   } else {
-    logger.error("Error exporting", err);
+    logger.error('Error exporting', err);
   }
 };
 
 export const firestorePathNotString = () => {
   logger.error(
-    "Firestore paths must be strings, skipping. Check your custom hook response."
+    'Firestore paths must be strings, skipping. Check your custom hook response.',
   );
 };
 
 export const rtdbPathNotString = () => {
   logger.error(
-    "Database paths must be strings, skipping. Check your custom hook response."
+    'Database paths must be strings, skipping. Check your custom hook response.',
   );
 };
 
 export const storagePathNotString = () => {
   logger.error(
-    "Storage paths must be strings, skipping. Check your custom hook response."
+    'Storage paths must be strings, skipping. Check your custom hook response.',
   );
 };
 
 export const init = () => {
-  logger.log("Initializing extension with configuration", config);
+  logger.log('Initializing extension with configuration', config);
 };
 
 export const rtdbPathExported = (path: string) => {
@@ -84,7 +84,7 @@ export const rtdbPathExported = (path: string) => {
 };
 
 export const rtdbConfigPathsNotConfigured = () => {
-  logger.log("Realtime Database paths are not configured, skipping");
+  logger.log('Realtime Database paths are not configured, skipping');
 };
 
 export const rtdbPathExporting = (path: string) => {
@@ -94,14 +94,14 @@ export const rtdbPathExporting = (path: string) => {
 export const rtdbPathError = (path: string, err: Error) => {
   logger.error(
     `Error when Exporting: '${path}' from the Realtime Database`,
-    err
+    err,
   );
 };
 
 export const startExport = (uid: string) => {
   logger.log(
     `Started extension execution with configuration for ${uid}`,
-    config
+    config,
   );
 };
 
@@ -123,24 +123,24 @@ export const StoragePathExported = (path: string) => {
 
 export const customHookBadResponse = (endpoint: string) => {
   logger.error(
-    `Custom hook endpoint ${endpoint} did not return a 200 response`
+    `Custom hook endpoint ${endpoint} did not return a 200 response`,
   );
 };
 
 export const customHookInvalidData = (endpoint: string) => {
   logger.error(
-    `Custom hook endpoint ${endpoint} did not return JSON in the valid format`
+    `Custom hook endpoint ${endpoint} did not return JSON in the valid format`,
   );
 };
 
 export const rtdbLocationNotConfigured = () => {
   logger.log(
-    "Realtime Database paths are provided but no database location is configured, skipping Realtime Database exports"
+    'Realtime Database paths are provided but no database location is configured, skipping Realtime Database exports',
   );
 };
 
 export const storageConfigPathsNotConfigured = () => {
-  logger.log("Cloud Storage paths are not configured, skipping");
+  logger.log('Cloud Storage paths are not configured, skipping');
 };
 
 export const genericLog = (message: string) => {

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import * as admin from "firebase-admin";
-import unzip from "unzipper";
-import waitForExpect from "wait-for-expect";
-import { UserRecord } from "firebase-functions/v1/auth";
+import * as admin from 'firebase-admin';
+import unzip from 'unzipper';
+import waitForExpect from 'wait-for-expect';
+import { UserRecord } from 'firebase-functions/v1/auth';
 import {
   clearFirestore,
   clearStorage,
@@ -27,12 +27,12 @@ import {
   validateCompleteRecord,
   validatePendingRecord,
   validateZippedExport,
-} from "../helpers";
-import setupEnvironment from "../helpers/setupEnvironment";
+} from '../helpers';
+import setupEnvironment from '../helpers/setupEnvironment';
 
-import config from "../../src/config";
+import config from '../../src/config';
 
-const fft = require("firebase-functions-test")();
+const fft = require('firebase-functions-test')();
 
 if (!admin.apps.length) {
   admin.initializeApp();
@@ -40,24 +40,24 @@ if (!admin.apps.length) {
 
 setupEnvironment();
 
-jest.spyOn(admin, "initializeApp").mockImplementation();
+jest.spyOn(admin, 'initializeApp').mockImplementation();
 
-import * as funcs from "../../src/index";
+import * as funcs from '../../src/index';
 
 /** prepare extension functions */
 
 // const exportUserDatafn = fft.wrap(funcs.exportUserData);
 
-jest.mock("../../src/config", () => ({
+jest.mock('../../src/config', () => ({
   cloudStorageBucketDefault: process.env.STORAGE_BUCKET,
-  cloudStorageExportDirectory: "exports",
-  firestoreExportsCollection: "exports",
-  databasePaths: "{UID}",
+  cloudStorageExportDirectory: 'exports',
+  firestoreExportsCollection: 'exports',
+  databasePaths: '{UID}',
   zip: true,
 }));
 
-describe("extension", () => {
-  describe("top level node", () => {
+describe('extension', () => {
+  describe('top level node', () => {
     let user: UserRecord;
     let unsubscribe;
 
@@ -69,15 +69,15 @@ describe("extension", () => {
     afterEach(async () => {
       jest.clearAllMocks();
       await resetFirebaseData();
-      if (unsubscribe && typeof unsubscribe === "function") {
+      if (unsubscribe && typeof unsubscribe === 'function') {
         unsubscribe();
       }
     });
 
-    test("can zip a top level rtdb node with an key of {userId}", async () => {
+    test('can zip a top level rtdb node with an key of {userId}', async () => {
       /** Create a top level collection with a single document */
 
-      const ref = await generateDatabaseNode({ foo: "bar" }, user.uid);
+      const ref = await generateDatabaseNode({ foo: 'bar' }, user.uid);
       const exportUserDatafn = fft.wrap(funcs.exportUserData);
 
       // watch the exports collection for changes
@@ -90,12 +90,12 @@ describe("extension", () => {
       const { exportId } = await exportUserDatafn.call(
         {},
         { uid: user.uid },
-        { auth: { uid: user.uid } }
+        { auth: { uid: user.uid } },
       );
 
       // // expect exportId to be defined and to be a string
       expect(exportId).toBeDefined();
-      expect(typeof exportId).toBe("string");
+      expect(typeof exportId).toBe('string');
 
       // wait for the record to have been updated
       await waitForExpect(() => {
@@ -126,7 +126,7 @@ describe("extension", () => {
       const expectedUnzippedPath = `${user.uid}.database.csv`;
       const expectedData = [
         [
-          "DATABASE",
+          'DATABASE',
           `${user.uid}/${ref.key}`,
           // TODO: why so many quotes?
           '"{""foo"":""bar""}"',
@@ -137,7 +137,7 @@ describe("extension", () => {
         exportId,
         expectedUnzippedPath,
         expectedData,
-        contentType: "csv",
+        contentType: 'csv',
       });
     });
   });

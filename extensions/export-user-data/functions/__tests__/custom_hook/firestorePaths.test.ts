@@ -14,47 +14,47 @@
  * limitations under the License.
  */
 
-import * as admin from "firebase-admin";
-import waitForExpect from "wait-for-expect";
-import { UserRecord } from "firebase-functions/v1/auth";
+import * as admin from 'firebase-admin';
+import waitForExpect from 'wait-for-expect';
+import { UserRecord } from 'firebase-functions/v1/auth';
 import {
   createFirebaseUser,
   resetFirebaseData,
   validateCompleteRecord,
   validateCSVFile,
   validatePendingRecord,
-} from "../helpers";
-import setupEnvironment from "../helpers/setupEnvironment";
-import config from "../../src/config";
-import fetch from "node-fetch";
-import { fetchFromCustomHook } from "../../src/utils";
-import { Response, Headers } from "node-fetch";
+} from '../helpers';
+import setupEnvironment from '../helpers/setupEnvironment';
+import config from '../../src/config';
+import fetch from 'node-fetch';
+import { fetchFromCustomHook } from '../../src/utils';
+import { Response, Headers } from 'node-fetch';
 
-const fft = require("firebase-functions-test")();
+const fft = require('firebase-functions-test')();
 
 if (!admin.apps.length) {
   admin.initializeApp();
 }
 
 setupEnvironment();
-jest.spyOn(admin, "initializeApp").mockImplementation();
+jest.spyOn(admin, 'initializeApp').mockImplementation();
 
-import * as funcs from "../../src/index";
+import * as funcs from '../../src/index';
 
 /** prepare extension functions */
 
 // const exportUserDatafn = fft.wrap(funcs.exportUserData);
 
-jest.mock("../../src/config", () => ({
+jest.mock('../../src/config', () => ({
   cloudStorageBucketDefault: process.env.STORAGE_BUCKET,
-  cloudStorageExportDirectory: "exports",
-  firestoreExportsCollection: "exports",
+  cloudStorageExportDirectory: 'exports',
+  firestoreExportsCollection: 'exports',
   customHookEndpoint: `http://localhost:1123`,
   zip: false,
 }));
 
-jest.mock("../../src/utils", () => {
-  const data = { firestorePaths: ["users/{UID}/comments"] };
+jest.mock('../../src/utils', () => {
+  const data = { firestorePaths: ['users/{UID}/comments'] };
 
   const response = Promise.resolve({
     ok: true,
@@ -63,15 +63,15 @@ jest.mock("../../src/utils", () => {
     text: () => JSON.stringify(data),
   });
 
-  const original = jest.requireActual("../../src/utils"); // Step 2.
+  const original = jest.requireActual('../../src/utils'); // Step 2.
   return {
     ...original,
     fetchFromCustomHook: () => response,
   };
 });
 
-describe("extension", () => {
-  describe("custom hooks", () => {
+describe('extension', () => {
+  describe('custom hooks', () => {
     let user: UserRecord;
     let unsubscribe;
 
@@ -83,19 +83,19 @@ describe("extension", () => {
     afterEach(async () => {
       jest.clearAllMocks();
       await resetFirebaseData();
-      if (unsubscribe && typeof unsubscribe === "function") {
+      if (unsubscribe && typeof unsubscribe === 'function') {
         unsubscribe();
       }
     });
 
-    test("can subcollection a top level collection with an id of {userId} to a csv", async () => {
+    test('can subcollection a top level collection with an id of {userId} to a csv', async () => {
       /** Create a top level collection with a single document */
       const ref = await admin
         .firestore()
-        .collection("users")
+        .collection('users')
         .doc(user.uid)
-        .collection("comments")
-        .add({ content: "hello world" });
+        .collection('comments')
+        .add({ content: 'hello world' });
 
       /** Create a subcollection with a single document */
 
@@ -113,12 +113,12 @@ describe("extension", () => {
       const { exportId } = await exportUserDatafn.call(
         {},
         { uid: user.uid },
-        { auth: { uid: user.uid } }
+        { auth: { uid: user.uid } },
       );
 
       // // // expect exportId to be defined and to be a string
       expect(exportId).toBeDefined();
-      expect(typeof exportId).toBe("string");
+      expect(typeof exportId).toBe('string');
 
       // // // wait for the record to have been updated
       await waitForExpect(() => {
@@ -151,7 +151,7 @@ describe("extension", () => {
       const expectedFileName = `users_${user.uid}_comments.firestore.csv`;
       const expectedCSVData = [
         [
-          "FIRESTORE",
+          'FIRESTORE',
           `users/${user.uid}/comments/${commentId}`,
           // TODO: why so many quotation marks?
           '"{""content"":""hello world""}"',

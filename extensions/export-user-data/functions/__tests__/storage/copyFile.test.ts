@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import * as admin from "firebase-admin";
-import waitForExpect from "wait-for-expect";
-import { UserRecord } from "firebase-functions/v1/auth";
+import * as admin from 'firebase-admin';
+import waitForExpect from 'wait-for-expect';
+import { UserRecord } from 'firebase-functions/v1/auth';
 import {
   createFirebaseUser,
   generateFileInUserStorage,
   resetFirebaseData,
   validateCompleteRecord,
   validatePendingRecord,
-} from "../helpers";
-import setupEnvironment from "../helpers/setupEnvironment";
+} from '../helpers';
+import setupEnvironment from '../helpers/setupEnvironment';
 
-import config from "../../src/config";
+import config from '../../src/config';
 
-const fft = require("firebase-functions-test")();
+const fft = require('firebase-functions-test')();
 
 if (!admin.apps.length) {
   admin.initializeApp();
@@ -36,24 +36,24 @@ if (!admin.apps.length) {
 
 setupEnvironment();
 
-jest.spyOn(admin, "initializeApp").mockImplementation();
+jest.spyOn(admin, 'initializeApp').mockImplementation();
 
-import * as funcs from "../../src/index";
+import * as funcs from '../../src/index';
 
 /** prepare extension functions */
 
 // const exportUserDatafn = fft.wrap(funcs.exportUserData);
 
-jest.mock("../../src/config", () => ({
+jest.mock('../../src/config', () => ({
   cloudStorageBucketDefault: process.env.STORAGE_BUCKET,
-  cloudStorageExportDirectory: "exports",
-  firestoreExportsCollection: "exports",
-  storagePaths: "{DEFAULT}/test/{UID}.txt",
+  cloudStorageExportDirectory: 'exports',
+  firestoreExportsCollection: 'exports',
+  storagePaths: '{DEFAULT}/test/{UID}.txt',
   zip: false,
 }));
 
-describe("extension", () => {
-  describe("top level storage file", () => {
+describe('extension', () => {
+  describe('top level storage file', () => {
     let user: UserRecord;
     let unsubscribe;
 
@@ -66,15 +66,15 @@ describe("extension", () => {
     afterEach(async () => {
       jest.clearAllMocks();
       // await resetFirebaseData();
-      if (unsubscribe && typeof unsubscribe === "function") {
+      if (unsubscribe && typeof unsubscribe === 'function') {
         unsubscribe();
       }
     });
 
-    test("Can copy a top level file to storage export directory from storage", async () => {
+    test('Can copy a top level file to storage export directory from storage', async () => {
       /** Create a top level collection with a single document */
 
-      await generateFileInUserStorage(user.uid, "Hello World!");
+      await generateFileInUserStorage(user.uid, 'Hello World!');
       const exportUserDatafn = fft.wrap(funcs.exportUserData);
 
       // // watch the exports collection for changes
@@ -88,14 +88,14 @@ describe("extension", () => {
       const { exportId } = await exportUserDatafn.call(
         {},
         { uid: user.uid },
-        { auth: { uid: user.uid } }
+        { auth: { uid: user.uid } },
       );
       // const data = await waitForDocumentUpdate(admin.firestore().collection(config.firestoreExportsCollection).doc(exportId));
 
       // console.log(data.data());
       // // expect exportId to be defined and to be a string
       expect(exportId).toBeDefined();
-      expect(typeof exportId).toBe("string");
+      expect(typeof exportId).toBe('string');
 
       await waitForExpect(() => {
         expect(observer).toHaveBeenCalledTimes(3);
@@ -123,7 +123,7 @@ describe("extension", () => {
       const file = files[0];
 
       const fileName = file.name;
-      const parts = fileName.split("/");
+      const parts = fileName.split('/');
       // // should be in the exports directory
       expect(parts[0]).toBe(config.cloudStorageExportDirectory);
       // // should be in the export directory
@@ -134,7 +134,7 @@ describe("extension", () => {
 
       const content = downloadResponse[0].toString();
 
-      expect(content).toBe("Hello World!");
+      expect(content).toBe('Hello World!');
       unsubscribe();
     });
   });

@@ -14,39 +14,39 @@
  * limitations under the License.
  */
 
-import admin from "firebase-admin";
-import { eventChannel } from ".";
-import config from "./config";
-import { ExportPaths } from "./get_export_paths";
-import fetch, { Response } from "node-fetch";
+import admin from 'firebase-admin';
+import { eventChannel } from '.';
+import config from './config';
+import { ExportPaths } from './get_export_paths';
+import fetch, { Response } from 'node-fetch';
 
-import * as log from "./logs";
+import * as log from './logs';
 
 export const replaceUID = (path: string, uid: string) =>
   path.replace(/{UID}/g, uid);
 
 export function getDatabaseUrl(
   selectedDatabaseInstance?: string,
-  selectedDatabaseLocation?: string
+  selectedDatabaseLocation?: string,
 ): string {
   if (!selectedDatabaseLocation || !selectedDatabaseInstance)
     return process.env.DATABASE_URL;
 
-  if (selectedDatabaseLocation === "us-central1")
+  if (selectedDatabaseLocation === 'us-central1')
     return `https://${selectedDatabaseInstance}.firebaseio.com`;
 
   return `https://${selectedDatabaseInstance}.${selectedDatabaseLocation}.firebasedatabase.app`;
 }
 
 export const getFilesFromStoragePath = async (path: string) => {
-  const parts = path.split("/");
+  const parts = path.split('/');
   const bucketName = parts[0];
   const bucket =
-    bucketName === "{DEFAULT}"
+    bucketName === '{DEFAULT}'
       ? admin.storage().bucket(config.cloudStorageBucketDefault)
       : admin.storage().bucket(bucketName);
 
-  const prefix = parts.slice(1).join("/");
+  const prefix = parts.slice(1).join('/');
   const files = await bucket.getFiles({ prefix });
 
   return files;
@@ -64,10 +64,10 @@ export const initializeExport = async (uid: string) => {
 
   const exportDoc = await admin
     .firestore()
-    .collection(config.firestoreExportsCollection || "exports")
+    .collection(config.firestoreExportsCollection || 'exports')
     .add({
       uid,
-      status: "pending",
+      status: 'pending',
       startedAt,
     });
 
@@ -100,13 +100,13 @@ export const finalizeExport = async (
     database: number;
     storageCopied: number;
     storageZipped: number;
-  }
+  },
 ) => {
   await admin
     .firestore()
     .doc(`exports/${exportId}`)
     .update({
-      status: "complete",
+      status: 'complete',
       storagePath: `${storagePrefix}`,
       zipPath: config.zip ? `${storagePrefix}/export.zip` : null,
       exportedFileCount: Object.values(exportCounts).reduce((a, b) => a + b, 0),
@@ -131,8 +131,8 @@ export const finalizeExport = async (
 
 export async function fetchFromCustomHook(uid: string): Promise<Response> {
   return fetch(config.customHookEndpoint, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({ data: { uid } }),
-    headers: { "Content-Type": "application/json" },
+    headers: { 'Content-Type': 'application/json' },
   });
 }

@@ -46,12 +46,12 @@ By default the extension will generate a list of CSV files. If you wish to addit
 To manually export the data into an archive, the following code snippet can be used on a NodeJS environment using the archiver package:
 
 ```js
-const admin = require("firebase-admin");
-const archiver = require("archiver");
-const fs = require("fs");
+const admin = require('firebase-admin');
+const archiver = require('archiver');
+const fs = require('fs');
 
 function zipDirectory(storagePath, bucketName, outPath) {
-  const archive = archiver("zip", { zlib: { level: 9 } });
+  const archive = archiver('zip', { zlib: { level: 9 } });
   const stream = fs.createWriteStream(outPath);
   archive.pipe(stream);
 
@@ -61,14 +61,14 @@ function zipDirectory(storagePath, bucketName, outPath) {
       .getFiles({
         prefix: storagePath,
       })
-      .then((files) => {
-        files.forEach((file) => {
+      .then(files => {
+        files.forEach(file => {
           archive.append(file.createReadStream(), { name: file.name });
         });
         archive.finalize();
       });
 
-    stream.on("close", () => resolve(false));
+    stream.on('close', () => resolve(false));
   });
 }
 ```
@@ -159,7 +159,7 @@ listResults.forEach((result) => {
 To generate download links for the client, use the `getDownloadURL` function using a export files path:
 
 ```js
-import { listAll, ref, getDownloadURL } from "firebase/storage";
+import { listAll, ref, getDownloadURL } from 'firebase/storage';
 
 const url = await getDownloadURL(ref(getStorage(), fullPath));
 ```

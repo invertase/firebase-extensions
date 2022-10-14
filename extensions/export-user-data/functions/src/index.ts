@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-import * as admin from "firebase-admin";
-import { getEventarc } from "firebase-admin/eventarc";
-import * as functions from "firebase-functions";
-import config from "./config";
-import * as log from "./logs";
-import { getExportPaths } from "./get_export_paths";
-import { uploadDataAsZip } from "./upload_as_zip";
-import { uploadAsCSVs } from "./upload_as_csv";
-import { finalizeExport, getDatabaseUrl, initializeExport } from "./utils";
-import { copyStorageFilesToExportDirectory } from "./construct_exports";
+import * as admin from 'firebase-admin';
+import { getEventarc } from 'firebase-admin/eventarc';
+import * as functions from 'firebase-functions';
+import config from './config';
+import * as log from './logs';
+import { getExportPaths } from './get_export_paths';
+import { uploadDataAsZip } from './upload_as_zip';
+import { uploadAsCSVs } from './upload_as_csv';
+import { finalizeExport, getDatabaseUrl, initializeExport } from './utils';
+import { copyStorageFilesToExportDirectory } from './construct_exports';
 
 const databaseURL = getDatabaseUrl(
   config.selectedDatabaseInstance,
-  config.selectedDatabaseLocation
+  config.selectedDatabaseLocation,
 );
 
 log.genericLog(`databaseURL is ${databaseURL}`);
@@ -70,7 +70,7 @@ export const exportUserData = functions.https.onCall(async (_data, context) => {
   const filesToZip = await copyStorageFilesToExportDirectory(
     exportPaths.storagePaths,
     uid,
-    storagePrefix
+    storagePrefix,
   );
 
   exportCounts.storageCopied = filesToZip.length;
@@ -95,7 +95,7 @@ export const exportUserData = functions.https.onCall(async (_data, context) => {
     const { firestoreCount, databaseCount } = await uploadAsCSVs(
       exportPaths,
       storagePrefix,
-      uid
+      uid,
     );
     exportCounts.firestore = firestoreCount;
     exportCounts.database = databaseCount;
