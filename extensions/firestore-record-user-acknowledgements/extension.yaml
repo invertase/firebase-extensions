@@ -1,5 +1,5 @@
 name: firestore-record-user-acknowledgements
-version: 0.0.1
+version: 0.1.0
 specVersion: v1beta
 
 displayName: Record User Acknowledgements
@@ -11,13 +11,8 @@ sourceUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions
 releaseNotesUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-record-user-acknowledgements/CHANGELOG.md
 
 author:
-  authorName: Firebase
-  url: https://firebase.google.com
-
-contributors:
-  - authorName: Invertase
-    email: oss@invertase.io
-    url: https://github.com/invertase
+  authorName: Invertase
+  url: https://github.com/invertase
 
 billingRequired: true
 
@@ -28,8 +23,7 @@ roles:
 resources:
   - name: getNotice
     type: firebaseextensions.v1beta.function
-    description:
-      Returns the latest notice document type along with any user acknowledgement documents. Optionally, a version can be specified to return a specific notice. 
+    description: Returns the latest notice document type along with any user acknowledgement documents. Optionally, a version can be specified to return a specific notice.
     properties:
       location: ${LOCATION}
       runtime: nodejs14
@@ -37,8 +31,7 @@ resources:
 
   - name: acknowledgeNotice
     type: firebaseextensions.v1beta.function
-    description:
-      Acknowledges a notice by ID.
+    description: Acknowledges a notice by ID.
     properties:
       location: ${LOCATION}
       runtime: nodejs14
@@ -46,8 +39,7 @@ resources:
 
   - name: unacknowledgeNotice
     type: firebaseextensions.v1beta.function
-    description:
-      Unacknowledges a notice by ID.
+    description: Unacknowledges a notice by ID.
     properties:
       location: ${LOCATION}
       runtime: nodejs14
@@ -55,17 +47,15 @@ resources:
 
   - name: getAcknowledgements
     type: firebaseextensions.v1beta.function
-    description:
-      Returns a list of all user acknowledgements in creation order, including the notice document.
+    description: Returns a list of all user acknowledgements in creation order, including the notice document.
     properties:
       location: ${LOCATION}
       runtime: nodejs14
       httpsTrigger: {}
-  
+
   - name: createIndex
     type: firebaseextensions.v1beta.function
-    description:
-      A function used to help with creating Firestore indices that are required for this extension.
+    description: A function used to help with creating Firestore indices that are required for this extension.
     properties:
       location: ${LOCATION}
       runtime: nodejs14
