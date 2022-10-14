@@ -195,7 +195,7 @@ export function createIndexUrlOnRequestHandler(
     return;
   }
   const indexFields: IndexFieldOptions[] = [];
-  for (var i = 0; i < fieldValues.length; i += 2) {
+  for (let i = 0; i < fieldValues.length; i += 2) {
     const [fieldPath, order] = fieldValues.slice(i, i + 2);
     if (!['asc', 'desc'].includes(order)) {
       res.status(400).send(fieldsError);
