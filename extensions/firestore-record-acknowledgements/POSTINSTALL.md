@@ -4,12 +4,12 @@ The first thing you’ll want to do is create a notice in Firestore. To do this,
 
 ```bash
 git clone git@github.com:invertase/firebase-extensions.git
-cd firebase-extensions/firestore-record-user-acknowledgements/admin-dashboard
+cd firebase-extensions/firestore-record-acknowledgements/admin-dashboard
 npm install
 npm run dev
 ```
 
-Head over to the locally running application and create a new notice. View the dashboard [README](https://github.cominvertase/firebase-extensions/blob/main/firestore-record-user-acknowledgements/admin-dashboard/README.md) for more information.
+Head over to the locally running application and create a new notice. View the dashboard [README](https://github.cominvertase/firebase-extensions/blob/main/firestore-record-acknowledgements/admin-dashboard/README.md) for more information.
 
 This extension requires a number of [Firestore indexes](https://firebase.google.com/docs/firestore/query-data/indexing) - to create these click each of the links and then press create on the opened Firebase Console window.
 

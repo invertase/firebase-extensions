@@ -36,7 +36,7 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:underline"
-                  href="https://firebase.google.com/products/extensions/record-user-acknowledgements"
+                  href="https://firebase.google.com/products/extensions/firestore-record-acknowledgements"
                 >
                   View Extension
                 </a>

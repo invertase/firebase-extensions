@@ -22,7 +22,7 @@ Also, make sure that you've set up [Firebase Authentication](https://firebase.go
 
 #### Getting Started
 
-See the [Getting Started](https://extensions.invertase.dev/record-user-acknowledgements) page for detailed documentation on creating notices, and how to retrieve them and track acknowledgments from your app. An [API reference](https://extensions.invertase.dev/record-user-acknowledgements/reference) is available providing detailed information on the available interfaces and configuration this extension offers.
+See the [Getting Started](https://extensions.invertase.dev/firestore-record-acknowledgements) page for detailed documentation on creating notices, and how to retrieve them and track acknowledgments from your app. An [API reference](https://extensions.invertase.dev/firestore-record-acknowledgements/reference) is available providing detailed information on the available interfaces and configuration this extension offers.
 
 #### Billing
 

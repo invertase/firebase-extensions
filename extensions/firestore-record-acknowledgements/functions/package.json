@@ -1,5 +1,5 @@
 {
-  "name": "firestore-record-user-acknowledgements",
+  "name": "firestore-record-acknowledgements",
   "version": "0.0.1",
   "scripts": {
     "prepare": "npm run build",
