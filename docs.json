@@ -3,67 +3,31 @@
   "twitter": "invertaseio",
   "theme": "#FFA03F",
   "sidebar": [
-    [
-      "Overview",
-      "/"
-    ],
+    ["Overview", "/"],
     [
       "Image Processing Api",
       [
-        [
-          "Overview",
-          "/image-processing-api"
-        ],
-        [
-          "Input",
-          "/image-processing-api/input"
-        ],
-        [
-          "Operations",
-          "/image-processing-api/operations"
-        ],
-        [
-          "Output",
-          "/image-processing-api/output"
-        ],
-        [
-          "Types",
-          "/image-processing-api/types"
-        ],
-        [
-          "Utility Library",
-          "/image-processing-api/utility-library"
-        ]
+        ["Overview", "/image-processing-api"],
+        ["Input", "/image-processing-api/input"],
+        ["Operations", "/image-processing-api/operations"],
+        ["Output", "/image-processing-api/output"],
+        ["Types", "/image-processing-api/types"],
+        ["Utility Library", "/image-processing-api/utility-library"]
       ]
     ],
     [
       "Record User Acknowledgements",
       [
-        [
-          "Overview",
-          "/record-user-acknowledgements"
-        ],
-        [
-          "Reference API",
-          "/record-user-acknowledgements/reference"
-        ]
+        ["Overview", "/record-user-acknowledgements"],
+        ["Reference API", "/record-user-acknowledgements/reference"]
       ]
     ],
     [
       "Export User Data",
       [
-        [
-          "Overview",
-          "/export-user-data"
-        ],
-        [
-          "Usage",
-          "/export-user-data/usage"
-        ],
-        [
-          "Reference API",
-          "/export-user-data/reference"
-        ]
+        ["Overview", "/export-user-data"],
+        ["Usage", "/export-user-data/usage"],
+        ["Reference API", "/export-user-data/reference"]
       ]
     ]
   ]
