@@ -1,6 +1,6 @@
-# Record User Acknowledgments - Admin Dashboard
+# Firestore Record Acknowledgments - Admin Dashboard
 
-This repository contains the source code for the Admin Dashboard for the Record User Acknowledgments extension. Use this to locally create and manage notices, and view notice acknowledgments.
+This repository contains the source code for the Admin Dashboard for the Firestore Record Acknowledgments extension. Use this to locally create and manage notices, and view notice acknowledgments.
 
 ## Installation
 

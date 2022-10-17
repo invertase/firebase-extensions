@@ -54,7 +54,7 @@ const notice = await httpsCallable(functions, 'ext-${param:EXT_INSTANCE_ID}-getN
 });
 ```
 
-A user acknowledgment contains the following data:
+An acknowledgment contains the following data:
 
 - `userId`: The authenticated users UID.
 - `noticeId` The notice ID of this acknowledgment.
@@ -130,7 +130,7 @@ In-case a notice is only specific to certain users, specify an `allowList` array
 
 When it’s time to update a notice, for example when additional user preferences are required, create a new notice document with the same `type` of the existing notice you wish to update.
 
-When the notice is retrieved, a new notice document will be returned with no user acknowledgment, allowing users to acknowledge the newer notice.
+When the notice is retrieved, a new notice document will be returned with no acknowledgment, allowing users to acknowledge the newer notice.
 
 ### Monitoring
 

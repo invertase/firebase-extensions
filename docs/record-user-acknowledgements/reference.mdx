@@ -1,6 +1,6 @@
 # API Reference
 
-Below contains an overview of the specifications for the Record User Acknowledgments extension, including TypeScript definitions & detailed descriptions.
+Below contains an overview of the specifications for the Firestore Record Acknowledgments extension, including TypeScript definitions & detailed descriptions.
 
 ## `NoticeDocument` Interface
 
@@ -80,7 +80,7 @@ export type GetNoticeResponse = Omit<NoticeDocument, ‘allowList’> & {
  // The timestamp when the notice was unacknowledged by the user (undefined if the user has not unacknowledged this notice).
  unacknowledgedAt?: Timestamp;
 
- // An ordered array of user acknowledgments.
+ // An ordered array of acknowledgments.
  acknowledgments: AcknowledgmentDocument[];
 }
 ```

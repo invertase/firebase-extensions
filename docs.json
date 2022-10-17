@@ -16,7 +16,7 @@
       ]
     ],
     [
-      "Record User Acknowledgments",
+      "Firestore Record Acknowledgments",
       [
         ["Overview", "/record-user-acknowledgments"],
         ["Reference API", "/record-user-acknowledgments/reference"]

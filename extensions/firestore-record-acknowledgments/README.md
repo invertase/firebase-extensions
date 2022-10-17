@@ -1,4 +1,4 @@
-# Record User Acknowledgments
+# Firestore Record Acknowledgments
 
 **Author**: Firebase (**[https://firebase.google.com](https://firebase.google.com)**)
 
@@ -43,13 +43,13 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 
 **Cloud Functions:**
 
-- **getNotice:** Returns the latest notice document type along with any user acknowledgment documents. Optionally, a version can be specified to return a specific notice.
+- **getNotice:** Returns the latest notice document type along with any acknowledgment documents. Optionally, a version can be specified to return a specific notice.
 
 - **acknowledgeNotice:** Acknowledges a notice by ID.
 
 - **unacknowledgeNotice:** Unacknowledges a notice by ID.
 
-- **getAcknowledgments:** Returns a list of all user acknowledgments in creation order, including the notice document.
+- **getAcknowledgments:** Returns a list of all acknowledgments in creation order, including the notice document.
 
 - **createIndex:** A function used to help with creating Firestore indices that are required for this extension.
 
