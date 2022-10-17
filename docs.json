@@ -19,7 +19,15 @@
       "Record User Acknowledgements",
       [
         ["Overview", "/record-user-acknowledgements"],
-        ["Refernce API", "/record-user-acknowledgements/reference"]
+        ["Reference API", "/record-user-acknowledgements/reference"]
+      ]
+    ],
+    [
+      "Export User Data",
+      [
+        ["Overview", "/export-user-data"],
+        ["Usage", "/export-user-data/usage"],
+        ["Reference API", "/export-user-data/reference"]
       ]
     ]
   ]
