@@ -2,7 +2,7 @@ name: firestore-record-acknowledgments
 version: 0.1.0
 specVersion: v1beta
 
-displayName: Record Acknowledgments
+displayName: Firestore Record Acknowledgments
 description: Provides an out of the box acknowledgment management extension for Firestore
 
 license: Apache-2.0
