@@ -1,14 +1,14 @@
-name: firestore-record-user-acknowledgements
+name: firestore-record-user-acknowledgments
 version: 0.1.0
 specVersion: v1beta
 
-displayName: Record User Acknowledgements
-description: Provides an out of the box acknowledgement management extension for Firestore
+displayName: Record User Acknowledgments
+description: Provides an out of the box acknowledgment management extension for Firestore
 
 license: Apache-2.0
 
-sourceUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-record-user-acknowledgements
-releaseNotesUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-record-user-acknowledgements/CHANGELOG.md
+sourceUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-record-user-acknowledgments
+releaseNotesUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-record-user-acknowledgments/CHANGELOG.md
 
 author:
   authorName: Invertase
@@ -18,12 +18,12 @@ billingRequired: true
 
 roles:
   - role: datastore.user
-    reason: Allows this extension to access Cloud Firestore to read and process acknowledgements.
+    reason: Allows this extension to access Cloud Firestore to read and process acknowledgments.
 
 resources:
   - name: getNotice
     type: firebaseextensions.v1beta.function
-    description: Returns the latest notice document type along with any user acknowledgement documents. Optionally, a version can be specified to return a specific notice.
+    description: Returns the latest notice document type along with any user acknowledgment documents. Optionally, a version can be specified to return a specific notice.
     properties:
       location: ${LOCATION}
       runtime: nodejs14
@@ -45,9 +45,9 @@ resources:
       runtime: nodejs14
       httpsTrigger: {}
 
-  - name: getAcknowledgements
+  - name: getAcknowledgments
     type: firebaseextensions.v1beta.function
-    description: Returns a list of all user acknowledgements in creation order, including the notice document.
+    description: Returns a list of all user acknowledgments in creation order, including the notice document.
     properties:
       location: ${LOCATION}
       runtime: nodejs14
@@ -123,17 +123,17 @@ params:
     required: true
     immutable: false
 
-  - param: ACKNOWLEDGEMENTS_COLLECTION
-    label: Acknowledgements collection
+  - param: ACKNOWLEDGMENTS_COLLECTION
+    label: Acknowledgments collection
     description: >-
-      What is the collection name that you would like to use to store acknowledgements?
+      What is the collection name that you would like to use to store acknowledgments?
     type: string
-    default: acknowledgements
+    default: acknowledgments
     required: true
     immutable: false
 
 events:
-  - type: firebase.extensions.firestore-record-user-acknowledgements.v1.acknowledgement
+  - type: firebase.extensions.firestore-record-user-acknowledgments.v1.acknowledgment
     description: Event indicating that the Notice has been acknowledged.
-  - type: firebase.extensions.firestore-record-user-acknowledgements.v1.unacknowledgement
+  - type: firebase.extensions.firestore-record-user-acknowledgments.v1.unacknowledgment
     description: Event indicating that the Notice has been unacknowledged.

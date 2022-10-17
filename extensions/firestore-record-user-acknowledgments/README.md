@@ -1,15 +1,15 @@
-# Record User Acknowledgements
+# Record User Acknowledgments
 
 **Author**: Firebase (**[https://firebase.google.com](https://firebase.google.com)**)
 
-**Description**: Provides an out of the box acknowledgement management extension for Firestore
+**Description**: Provides an out of the box acknowledgment management extension for Firestore
 
 **Details**: This extension makes it easy to add notices to your application that your users can acknowledge. The extension helps with:
 
 - Storing/retrieving notices with versioning built in
-- Marking notices with an acknowledgement type (including notice ID/version/timestamp recorded)
+- Marking notices with an acknowledgment type (including notice ID/version/timestamp recorded)
 - Retrieving a historical log of which users have acknowledged which notices
-- Collecting custom acknowledgement metadata (such as additional user preferences) for a notice
+- Collecting custom acknowledgment metadata (such as additional user preferences) for a notice
 - Allowing notices to be only acknowledged by a select group of users
 
 You can see this extension in use on the [Kara’s Coffee demo application](https://karas-coffee.web.app/), or [view the source code](https://github.com/FirebaseExtended/karas-coffee).
@@ -18,11 +18,11 @@ You can see this extension in use on the [Kara’s Coffee demo application](http
 
 Before installing this extension, make sure that you've [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
 
-Also, make sure that you've set up [Firebase Authentication](https://firebase.google.com/docs/auth) to manage your users. All acknowledgement records in Firestore created by this extension are associated with a Firebase Auth UID.
+Also, make sure that you've set up [Firebase Authentication](https://firebase.google.com/docs/auth) to manage your users. All acknowledgment records in Firestore created by this extension are associated with a Firebase Auth UID.
 
 #### Getting Started
 
-See the [Getting Started](https://extensions.invertase.dev/record-user-acknowledgements) page for detailed documentation on creating notices, and how to retrieve them and track acknowledgments from your app. An [API reference](https://extensions.invertase.dev/record-user-acknowledgements/reference) is available providing detailed information on the available interfaces and configuration this extension offers.
+See the [Getting Started](https://extensions.invertase.dev/record-user-acknowledgments) page for detailed documentation on creating notices, and how to retrieve them and track acknowledgments from your app. An [API reference](https://extensions.invertase.dev/record-user-acknowledgments/reference) is available providing detailed information on the available interfaces and configuration this extension offers.
 
 #### Billing
 
@@ -39,17 +39,17 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 
 - Notices collection: What is the collection name that you would like to use to store notices?
 
-- Acknowledgements collection: What is the collection name that you would like to use to store acknowledgements?
+- Acknowledgments collection: What is the collection name that you would like to use to store acknowledgments?
 
 **Cloud Functions:**
 
-- **getNotice:** Returns the latest notice document type along with any user acknowledgement documents. Optionally, a version can be specified to return a specific notice.
+- **getNotice:** Returns the latest notice document type along with any user acknowledgment documents. Optionally, a version can be specified to return a specific notice.
 
 - **acknowledgeNotice:** Acknowledges a notice by ID.
 
 - **unacknowledgeNotice:** Unacknowledges a notice by ID.
 
-- **getAcknowledgements:** Returns a list of all user acknowledgements in creation order, including the notice document.
+- **getAcknowledgments:** Returns a list of all user acknowledgments in creation order, including the notice document.
 
 - **createIndex:** A function used to help with creating Firestore indices that are required for this extension.
 
@@ -57,4 +57,4 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 
 This extension will operate with the following project IAM roles:
 
-- datastore.user (Reason: Allows this extension to access Cloud Firestore to read and process acknowledgements.)
+- datastore.user (Reason: Allows this extension to access Cloud Firestore to read and process acknowledgments.)

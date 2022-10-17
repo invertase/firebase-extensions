@@ -19,3 +19,5 @@ jobs:
         run: npm run check:formatting
       - name: Check TS Compiles
         run: npm run check:typescript
+      - name: Check Spelling & Grammar
+        run: npm run check:spelling

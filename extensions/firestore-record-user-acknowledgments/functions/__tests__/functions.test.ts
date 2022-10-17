@@ -23,7 +23,7 @@ import { waitForDocumentToExistInCollection } from './helpers';
 /** prepare extension functions */
 const acknowledgeNoticeFn = fft.wrap(funcs.acknowledgeNotice);
 const getNoticeFn = fft.wrap(funcs.getNotice);
-const getAcknowledgements = fft.wrap(funcs.getAcknowledgements);
+const getAcknowledgments = fft.wrap(funcs.getAcknowledgments);
 
 const auth = admin.auth();
 
@@ -52,7 +52,7 @@ describe('functions testing', () => {
     user = await auth.createUser({});
   });
 
-  describe('acknowledgements', () => {
+  describe('acknowledgments', () => {
     let noticeId;
 
     beforeEach(async () => {
@@ -75,7 +75,7 @@ describe('functions testing', () => {
       /** Get notice */
       const AckCollection = noticesCollection
         .doc(noticeId)
-        .collection(config.default.acknowledgementsCollection);
+        .collection(config.default.acknowledgmentsCollection);
 
       /** Set query */
       const query = AckCollection.where('userId', '==', user.uid);
@@ -83,14 +83,14 @@ describe('functions testing', () => {
       /** Wait for update */
       const snapshot = await query.limit(1).get();
 
-      /** Get the acknowledgement document */
-      const acknowledgement = snapshot.docs[0].data();
+      /** Get the acknowledgment document */
+      const acknowledgment = snapshot.docs[0].data();
 
       /** Assert data */
-      expect(acknowledgement.type).toBe('seen');
-      expect(acknowledgement.noticeId).toBe(noticeId);
-      expect(acknowledgement.userId).toBe(user.uid);
-      expect(acknowledgement.metadata.test).toEqual('value');
+      expect(acknowledgment.type).toBe('seen');
+      expect(acknowledgment.noticeId).toBe(noticeId);
+      expect(acknowledgment.userId).toBe(user.uid);
+      expect(acknowledgment.metadata.test).toEqual('value');
     });
 
     test('will throw an error with no authentication provided', () => {

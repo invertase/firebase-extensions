@@ -1,6 +1,6 @@
-# Record User Acknowledgements - Admin Dashboard
+# Record User Acknowledgments - Admin Dashboard
 
-This repository contains the source code for the Admin Dashboard for the Record User Acknowledgements extension. Use this to locally create and manage notices, and view notice acknowledgements.
+This repository contains the source code for the Admin Dashboard for the Record User Acknowledgments extension. Use this to locally create and manage notices, and view notice acknowledgments.
 
 ## Installation
 
@@ -36,5 +36,5 @@ If you have a none default path for where notices are stored in Firestore (defau
 
 ```bash
 NOTICES_COLLECTION=app_notices
-ACKNOWLEDGEMENTS_COLLECTION=app_acknowledgements
+ACKNOWLEDGMENTS_COLLECTION=app_acknowledgments
 ```
