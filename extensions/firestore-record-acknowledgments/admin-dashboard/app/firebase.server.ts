@@ -1,12 +1,12 @@
 import { initializeApp, getApps, applicationDefault } from 'firebase-admin/app';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 import type { QuerySnapshot } from 'firebase-admin/firestore';
-import type { Acknowledgement, Notice } from './types';
+import type { Acknowledgment, Notice } from './types';
 
 const projectId = process.env.PROJECT_ID;
 const noticesCollection = process.env.NOTICES_COLLECTION || 'notices';
-const acknowledgementsCollection =
-  process.env.ACKNOWLEDGEMENTS_COLLECTION || 'acknowledgements';
+const acknowledgmentsCollection =
+  process.env.ACKNOWLEDGMENTS_COLLECTION || 'acknowledgments';
 
 if (getApps().length === 0) {
   if (!projectId) {
@@ -55,18 +55,18 @@ export async function getNotice(id: string): Promise<Notice | null> {
   return null;
 }
 
-// Returns a list of acknowledgements.
-export async function getAcknowledgements(
+// Returns a list of acknowledgments.
+export async function getAcknowledgments(
   noticeId: string,
-): Promise<Acknowledgement[]> {
+): Promise<Acknowledgment[]> {
   const snapshot = await firestore
     .collection(noticesCollection)
     .doc(noticeId)
-    .collection(acknowledgementsCollection)
+    .collection(acknowledgmentsCollection)
     .orderBy('createdAt', 'desc')
     .get();
 
-  return snapshotToArray<Acknowledgement>(snapshot);
+  return snapshotToArray<Acknowledgment>(snapshot);
 }
 
 // Creates a new notice, and returns the new ID.

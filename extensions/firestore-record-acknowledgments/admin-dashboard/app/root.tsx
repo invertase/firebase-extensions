@@ -11,7 +11,7 @@ import styles from './tailwind.css';
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
-  title: 'Record User Acknowledgements - Admin Dashboard',
+  title: 'Firestore Record Acknowledgments - Admin Dashboard',
   viewport: 'width=device-width,initial-scale=1',
 });
 
@@ -28,7 +28,7 @@ export default function App() {
         <header className="bg-slate-800">
           <div className="max-w-5xl mx-auto py-6 text-white flex items-center">
             <h1 className="flex-grow text-2xl font-bold leading-tight tracking-tight">
-              <a href="/">Record User Acknowledgements</a>
+              <a href="/">Firestore Record Acknowledgments</a>
             </h1>
             <ul className="flex items-center gap-4">
               <li>
@@ -36,7 +36,7 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:underline"
-                  href="https://firebase.google.com/products/extensions/record-user-acknowledgements"
+                  href="https://firebase.google.com/products/extensions/firestore-record-acknowledgments"
                 >
                   View Extension
                 </a>

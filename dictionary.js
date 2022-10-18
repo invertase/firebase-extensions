@@ -59,7 +59,11 @@ module.exports = [
   /^firebase/,
   /^href/,
   /^stringified/,
-  /^acknowledgement/,
-  /^acknowledgements/,
+  /^acknowledgment/,
+  /^acknowledgments/,
   /^unacknowledge/,
+  /^uid/,
+  /^nodemailer/,
+  /^archiver/,
+  /^unacknowledgment/,
 ];

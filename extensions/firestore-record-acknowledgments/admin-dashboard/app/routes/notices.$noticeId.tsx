@@ -4,21 +4,17 @@ import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { Label } from '~/components/Label';
 
-import type { Notice, Acknowledgement } from '~/types';
-import {
-  getAcknowledgements,
-  getNotice,
-  updateNotice,
-} from '~/firebase.server';
+import type { Notice, Acknowledgment } from '~/types';
+import { getAcknowledgments, getNotice, updateNotice } from '~/firebase.server';
 import { Input } from '~/components/form';
 import { Button } from '~/components/Button';
 
 export const loader: LoaderFunction = async ({ params }) => {
   const id = params.noticeId as string;
 
-  const [notice, acknowledgements] = await Promise.all([
+  const [notice, acknowledgments] = await Promise.all([
     getNotice(id),
-    getAcknowledgements(id),
+    getAcknowledgments(id),
   ]);
 
   if (!notice) {
@@ -27,7 +23,7 @@ export const loader: LoaderFunction = async ({ params }) => {
 
   return json({
     notice,
-    acknowledgements,
+    acknowledgments,
   });
 };
 
@@ -52,11 +48,11 @@ export const action: ActionFunction = async ({ request }) => {
 
 type LoaderData = {
   notice: Notice;
-  acknowledgements: Acknowledgement[];
+  acknowledgments: Acknowledgment[];
 };
 
 export default function NoticePage() {
-  const { notice, acknowledgements } = useLoaderData<LoaderData>();
+  const { notice, acknowledgments } = useLoaderData<LoaderData>();
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -116,7 +112,7 @@ export default function NoticePage() {
         </div>
       </form>
       <hr className="my-6" />
-      <h2 className="text-xl font-bold mb-4">Notice Acknowledgements</h2>
+      <h2 className="text-xl font-bold mb-4">Notice Acknowledgments</h2>
       <table className="w-full table-auto border border-spacing-0.5">
         <thead>
           <tr className="text-left [&>th]:p-4 bg-slate-100">
@@ -129,21 +125,21 @@ export default function NoticePage() {
           </tr>
         </thead>
         <tbody>
-          {acknowledgements.map(acknowledgement => (
+          {acknowledgments.map(acknowledgment => (
             <tr
-              key={acknowledgement.id}
+              key={acknowledgment.id}
               className="border-t [&>td]:p-3 [&>.code]:font-mono"
             >
-              <td>{acknowledgement.id}</td>
-              <td>{acknowledgement.ackEvent}</td>
-              <td>{acknowledgement.userId}</td>
-              <td>{acknowledgement.createdAt._seconds}</td>
+              <td>{acknowledgment.id}</td>
+              <td>{acknowledgment.ackEvent}</td>
+              <td>{acknowledgment.userId}</td>
+              <td>{acknowledgment.createdAt._seconds}</td>
               <td>
-                {acknowledgement.ackEvent === 'acknowledged'
-                  ? acknowledgement.type
+                {acknowledgment.ackEvent === 'acknowledged'
+                  ? acknowledgment.type
                   : 'N/A'}
               </td>
-              <td>{JSON.stringify(acknowledgement.metadata || {})}</td>
+              <td>{JSON.stringify(acknowledgment.metadata || {})}</td>
             </tr>
           ))}
         </tbody>

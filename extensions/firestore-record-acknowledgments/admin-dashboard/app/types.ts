@@ -1,4 +1,4 @@
-import { firestore } from 'firebase-admin';
+import type { firestore } from 'firebase-admin';
 
 export interface Notice {
   // The document ID.
@@ -18,8 +18,7 @@ export interface Notice {
   // A list of user IDs that are allowed to see the notice.
   allowList: string[];
 }
-
-type BaseAcknowledgement = {
+type BaseAcknowledgment = {
   // The document ID.
   id: string;
   // The UID of the user who acknowledged the notice.
@@ -28,18 +27,18 @@ type BaseAcknowledgement = {
   noticeId: string;
   // The timestamp when the notice was acknowledged.
   createdAt: firestore.Timestamp;
-  // The optional metadata of the acknowledgement.
+  // The optional metadata of the acknowledgment.
   metadata: any;
 };
 
-export type Acknowledgement =
-  | (BaseAcknowledgement & {
-      // The type of the acknowledgement.
+export type Acknowledgment =
+  | (BaseAcknowledgment & {
+      // The type of the acknowledgment.
       ackEvent: 'acknowledged';
-      // The type of the acknowledgement. Defaults to `seen`.
+      // The type of the acknowledgment. Defaults to `seen`.
       type: string;
     })
-  | (BaseAcknowledgement & {
-      // The type of the acknowledgement.
+  | (BaseAcknowledgment & {
+      // The type of the acknowledgment.
       ackEvent: 'unacknowledged';
     });

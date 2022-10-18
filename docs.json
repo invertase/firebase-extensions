@@ -16,10 +16,10 @@
       ]
     ],
     [
-      "Record User Acknowledgements",
+      "Firestore Record Acknowledgments",
       [
-        ["Overview", "/record-user-acknowledgements"],
-        ["Reference API", "/record-user-acknowledgements/reference"]
+        ["Overview", "/firestore-record-acknowledgments"],
+        ["Reference API", "/firestore-record-acknowledgments/reference"]
       ]
     ],
     [

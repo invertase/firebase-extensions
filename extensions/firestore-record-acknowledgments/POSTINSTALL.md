@@ -4,12 +4,12 @@ The first thing you’ll want to do is create a notice in Firestore. To do this,
 
 ```bash
 git clone git@github.com:invertase/firebase-extensions.git
-cd firebase-extensions/firestore-record-user-acknowledgements/admin-dashboard
+cd firebase-extensions/firestore-firestore-record-acknowledgments/admin-dashboard
 npm install
 npm run dev
 ```
 
-Head over to the locally running application and create a new notice. View the dashboard [README](https://github.cominvertase/firebase-extensions/blob/main/firestore-record-user-acknowledgements/admin-dashboard/README.md) for more information.
+Head over to the locally running application and create a new notice. View the dashboard [README](https://github.cominvertase/firebase-extensions/blob/main/firestore-firestore-record-acknowledgments/admin-dashboard/README.md) for more information.
 
 This extension requires a number of [Firestore indexes](https://firebase.google.com/docs/firestore/query-data/indexing) - to create these click each of the links and then press create on the opened Firebase Console window.
 
@@ -17,12 +17,12 @@ This extension requires a number of [Firestore indexes](https://firebase.google.
   - [Open Firebase Console](https://${param:LOCATION}-${param:PROJECT_ID}.cloudfunctions.net/ext-${param:EXT_INSTANCE_ID}-createIndex?collection=${param:NOTICES_COLLECTION}&queryScope=collection&fields=type,asc,version,asc,createdAt,desc)
 - Collection '${param:NOTICES_COLLECTION}': `type` Ascending, `createdAt` Descending
   - [Open Firebase Console](https://${param:LOCATION}-${param:PROJECT_ID}.cloudfunctions.net/ext-${param:EXT_INSTANCE_ID}-createIndex?collection=${param:NOTICES_COLLECTION}&queryScope=collection&fields=type,asc,createdAt,desc)
-- Collection '${param:ACKNOWLEDGEMENTS_COLLECTION}': `userId` Ascending, `createdAt` Descending
-  - [Open Firebase Console](https://${param:LOCATION}-${param:PROJECT_ID}.cloudfunctions.net/ext-${param:EXT_INSTANCE_ID}-createIndex?collection=${param:ACKNOWLEDGEMENTS_COLLECTION}&queryScope=collection&fields=userId,asc,createdAt,desc)
-- Collection group '${param:ACKNOWLEDGEMENTS_COLLECTION}': `userId` Ascending, `createdAt` Descending
-  - [Open Firebase Console](https://${param:LOCATION}-${param:PROJECT_ID}.cloudfunctions.net/ext-${param:EXT_INSTANCE_ID}-createIndex?collection=${param:ACKNOWLEDGEMENTS_COLLECTION}&queryScope=collectionGroup&fields=userId,asc,createdAt,desc)
-- Collection group '${param:ACKNOWLEDGEMENTS_COLLECTION}': `ackEvent` Ascending, `userId` Ascending, `createdAt` Descending
-  - [Open Firebase Console](https://${param:LOCATION}-${param:PROJECT_ID}.cloudfunctions.net/ext-${param:EXT_INSTANCE_ID}-createIndex?collection=${param:ACKNOWLEDGEMENTS_COLLECTION}&queryScope=collectionGroup&fields=ackEvent,asc,userId,asc,createdAt,desc)
+- Collection '${param:ACKNOWLEDGMENTS_COLLECTION}': `userId` Ascending, `createdAt` Descending
+  - [Open Firebase Console](https://${param:LOCATION}-${param:PROJECT_ID}.cloudfunctions.net/ext-${param:EXT_INSTANCE_ID}-createIndex?collection=${param:ACKNOWLEDGMENTS_COLLECTION}&queryScope=collection&fields=userId,asc,createdAt,desc)
+- Collection group '${param:ACKNOWLEDGMENTS_COLLECTION}': `userId` Ascending, `createdAt` Descending
+  - [Open Firebase Console](https://${param:LOCATION}-${param:PROJECT_ID}.cloudfunctions.net/ext-${param:EXT_INSTANCE_ID}-createIndex?collection=${param:ACKNOWLEDGMENTS_COLLECTION}&queryScope=collectionGroup&fields=userId,asc,createdAt,desc)
+- Collection group '${param:ACKNOWLEDGMENTS_COLLECTION}': `ackEvent` Ascending, `userId` Ascending, `createdAt` Descending
+  - [Open Firebase Console](https://${param:LOCATION}-${param:PROJECT_ID}.cloudfunctions.net/ext-${param:EXT_INSTANCE_ID}-createIndex?collection=${param:ACKNOWLEDGMENTS_COLLECTION}&queryScope=collectionGroup&fields=ackEvent,asc,userId,asc,createdAt,desc)
 
 ### Retrieving a notice
 
@@ -54,18 +54,18 @@ const notice = await httpsCallable(functions, 'ext-${param:EXT_INSTANCE_ID}-getN
 });
 ```
 
-A user acknowledgment contains the following data:
+An acknowledgment contains the following data:
 
 - `userId`: The authenticated users UID.
-- `noticeId` The notice ID of this acknowledgement.
-- `createdAt`: A Timestamp indicating the time of acknowledgement.
+- `noticeId` The notice ID of this acknowledgment.
+- `createdAt`: A Timestamp indicating the time of acknowledgment.
 - `ackEvent`: Whether this document is `acknowledged` or `unacknowledged`.
-- `type`: If the `ackEvent` is `acknowledged`, the customizable type of acknowledgement. Defaults to `seen`.
-- `metadata`: An optional object containing custom values relevant to the acknowledgement.
+- `type`: If the `ackEvent` is `acknowledged`, the customizable type of acknowledgment. Defaults to `seen`.
+- `metadata`: An optional object containing custom values relevant to the acknowledgment.
 
 ### Acknowledging a notice
 
-To acknowledge a notice, the extension provides two callable functions which accept the notice ID: `acknowledgeNotice` & `unacknowledgeNotice`. The extension will keep historical records of each acknowledgement the callable functions are called multiple times for the same user and notice.
+To acknowledge a notice, the extension provides two callable functions which accept the notice ID: `acknowledgeNotice` & `unacknowledgeNotice`. The extension will keep historical records of each acknowledgment the callable functions are called multiple times for the same user and notice.
 
 For example, to acknowledge a notice:
 
@@ -78,7 +78,7 @@ await httpsCallable(functions, 'ext-${param:EXT_INSTANCE_ID}-acknowledgeNotice)(
 });
 ```
 
-In-case you need to capture custom preferences relating to a acknowledgement, you can provide custom metadata to the function, for example:
+In-case you need to capture custom preferences relating to a acknowledgment, you can provide custom metadata to the function, for example:
 
 ```js
 await httpsCallable(functions, 'ext-${param:EXT_INSTANCE_ID}-acknowledgeNotice)({
@@ -87,7 +87,7 @@ await httpsCallable(functions, 'ext-${param:EXT_INSTANCE_ID}-acknowledgeNotice)(
 });
 ```
 
-You can also provide a custom “type” of acknowledgement (the default type is “seen”), for example:
+You can also provide a custom “type” of acknowledgment (the default type is “seen”), for example:
 
 ```js
 await httpsCallable(functions, 'ext-${param:EXT_INSTANCE_ID}-acknowledgeNotice)({
@@ -105,24 +105,24 @@ await httpsCallable(functions, 'ext-${param:EXT_INSTANCE_ID}-unacknowledgeNotice
 });
 ```
 
-### Retrieving acknowledgements
+### Retrieving acknowledgments
 
-To retrieve all previous user notice acknowledgements, call the `getAcknowledgements` callable function. This function will return an ordered array of all acknowledgements along with the notice data:
+To retrieve all previous user notice acknowledgments, call the `getAcknowledgments` callable function. This function will return an ordered array of all acknowledgments along with the notice data:
 
 ```js
 import { getFunctions, httpsCallable } from "firebase/functions";
 
 const functions = getFunctions();
-const acknowledgements = await httpsCallable(functions, 'ext-${param:EXT_INSTANCE_ID}-getAcknowledgements)();
+const acknowledgments = await httpsCallable(functions, 'ext-${param:EXT_INSTANCE_ID}-getAcknowledgments)();
 ```
 
 ```js
-const acknowledgements = await httpsCallable(functions, 'ext-${param:EXT_INSTANCE_ID}-getAcknowledgements)({
-  includeUnacknowledgements: true,
+const acknowledgments = await httpsCallable(functions, 'ext-${param:EXT_INSTANCE_ID}-getAcknowledgments)({
+  includeUnacknowledgments: true,
 });
 ```
 
-### User specific acknowledgements
+### User specific acknowledgments
 
 In-case a notice is only specific to certain users, specify an `allowList` array of UIDs to the notice document. If the user requesting a notice by type is not within the list of UIDs and `not-found` error will be returned.
 
@@ -130,7 +130,7 @@ In-case a notice is only specific to certain users, specify an `allowList` array
 
 When it’s time to update a notice, for example when additional user preferences are required, create a new notice document with the same `type` of the existing notice you wish to update.
 
-When the notice is retrieved, a new notice document will be returned with no user acknowledgement, allowing users to acknowledge the newer notice.
+When the notice is retrieved, a new notice document will be returned with no acknowledgment, allowing users to acknowledge the newer notice.
 
 ### Monitoring
 

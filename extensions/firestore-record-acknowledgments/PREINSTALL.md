@@ -1,22 +1,22 @@
 This extension makes it easy to add notices to your application that your users can acknowledge. The extension helps with:
 
 - Storing/retrieving notices with versioning built in
-- Marking notices with an acknowledgement type (including notice ID/version/timestamp recorded)
+- Marking notices with an acknowledgment type (including notice ID/version/timestamp recorded)
 - Retrieving a historical log of which users have acknowledged which notices
-- Collecting custom acknowledgement metadata (such as additional user preferences) for a notice
+- Collecting custom acknowledgment metadata (such as additional user preferences) for a notice
 - Allowing notices to be only acknowledged by a select group of users
 
-You can see this extension in use on the [Kara’s Coffee demo application](https://karas-coffee.web.app/), or [view the source code](https://github.com/FirebaseExtended/karas-coffee).
+You can [view the source code](https://github.com/FirebaseExtended/karas-coffee).
 
 #### Additional setup
 
 Before installing this extension, make sure that you've [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
 
-Also, make sure that you've set up [Firebase Authentication](https://firebase.google.com/docs/auth) to manage your users. All acknowledgement records in Firestore created by this extension are associated with a Firebase Auth UID.
+Also, make sure that you've set up [Firebase Authentication](https://firebase.google.com/docs/auth) to manage your users. All acknowledgment records in Firestore created by this extension are associated with a Firebase Auth UID.
 
 #### Getting Started
 
-See the [Getting Started](https://extensions.invertase.dev/record-user-acknowledgements) page for detailed documentation on creating notices, and how to retrieve them and track acknowledgments from your app. An [API reference](https://extensions.invertase.dev/record-user-acknowledgements/reference) is available providing detailed information on the available interfaces and configuration this extension offers.
+See the [Getting Started](https://extensions.invertase.dev/firestore-record-acknowledgments) page for detailed documentation on creating notices, and how to retrieve them and track acknowledgments from your app. An [API reference](https://extensions.invertase.dev/firestore-record-acknowledgments/reference) is available providing detailed information on the available interfaces and configuration this extension offers.
 
 #### Billing
 

@@ -2,10 +2,10 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as logs from './logs';
 import config from './config';
-import { noticeConverter, acknowledgementConverter } from './converter';
+import { noticeConverter, acknowledgmentConverter } from './converter';
 
 import { getEventarc } from 'firebase-admin/eventarc';
-import { Acknowledgement, Notice } from './interface';
+import { Acknowledgment, Notice } from './interface';
 import { firestore } from 'firebase-admin';
 import { createIndexUrlOnRequestHandler } from './indexer';
 
@@ -47,7 +47,7 @@ function assertAllowed(
 
 type GetNoticeResponse = Omit<Notice, 'allowList'> & {
   unacknowledgedAt?: firestore.Timestamp;
-  acknowledgements: Acknowledgement[];
+  acknowledgments: Acknowledgment[];
 };
 
 export const getNotice = functions.https.onCall(async (data, context) => {
@@ -90,37 +90,37 @@ export const getNotice = functions.https.onCall(async (data, context) => {
     `No notices with the type ${data.type} could be found.`,
   );
 
-  const acknowledgementsSnapshot = await db
+  const acknowledgmentsSnapshot = await db
     .collection(config.noticesCollection)
     .doc(notice.id)
-    .collection(config.acknowledgementsCollection)
+    .collection(config.acknowledgmentsCollection)
     .where('userId', '==', context.auth!.uid)
     .orderBy('createdAt', 'desc')
-    .withConverter(acknowledgementConverter)
+    .withConverter(acknowledgmentConverter)
     .get();
 
-  // Get an array of plain acknowledgement objects.
-  const acknowledgements = acknowledgementsSnapshot.docs.map(doc => doc.data());
+  // Get an array of plain acknowledgment objects.
+  const acknowledgments = acknowledgmentsSnapshot.docs.map(doc => doc.data());
 
   // Check if the user has acknowledged the notice.
   const unacknowledgedAt =
-    acknowledgements.length === 0
+    acknowledgments.length === 0
       ? undefined
-      : acknowledgements[0].ackEvent === 'unacknowledged'
-      ? acknowledgements[0].createdAt
+      : acknowledgments[0].ackEvent === 'unacknowledged'
+      ? acknowledgments[0].createdAt
       : undefined;
 
   // Create a variable to assert a typed response
   const response: GetNoticeResponse = {
     ...notice,
     unacknowledgedAt,
-    acknowledgements,
+    acknowledgments,
   };
 
   return response;
 });
 
-async function handleAcknowledgement(
+async function handleAcknowledgment(
   data: any,
   context: functions.https.CallableContext,
 ): Promise<firestore.DocumentSnapshot<Notice>> {
@@ -157,7 +157,7 @@ async function handleAcknowledgement(
 
 export const acknowledgeNotice = functions.https.onCall(
   async (data, context) => {
-    const snapshot = await handleAcknowledgement(data, context);
+    const snapshot = await handleAcknowledgment(data, context);
 
     const documentData = {
       ackEvent: 'acknowledged',
@@ -170,13 +170,13 @@ export const acknowledgeNotice = functions.https.onCall(
     const result = await db
       .collection(config.noticesCollection)
       .doc(data.noticeId)
-      .collection(config.acknowledgementsCollection)
-      .withConverter(acknowledgementConverter)
+      .collection(config.acknowledgmentsCollection)
+      .withConverter(acknowledgmentConverter)
       // @ts-expect-error - cant partially type set arguments in the converter
       .add(documentData);
 
     await eventChannel?.publish({
-      type: `firebase.extensions.firestore-record-user-acknowledgements.v1.acknowledgement`,
+      type: `firebase.extensions.firestore-record-acknowledgments.v1.acknowledgment`,
       data: JSON.stringify({
         ...documentData,
         id: result.id,
@@ -189,7 +189,7 @@ export const acknowledgeNotice = functions.https.onCall(
 
 export const unacknowledgeNotice = functions.https.onCall(
   async (data, context) => {
-    const snapshot = await handleAcknowledgement(data, context);
+    const snapshot = await handleAcknowledgment(data, context);
 
     const documentData = {
       ackEvent: 'unacknowledged',
@@ -201,13 +201,13 @@ export const unacknowledgeNotice = functions.https.onCall(
     const result = await db
       .collection(config.noticesCollection)
       .doc(data.noticeId)
-      .collection(config.acknowledgementsCollection)
-      .withConverter(acknowledgementConverter)
+      .collection(config.acknowledgmentsCollection)
+      .withConverter(acknowledgmentConverter)
       // @ts-expect-error - cant partially type set arguments in the converter
       .add(documentData);
 
     await eventChannel?.publish({
-      type: `firebase.extensions.firestore-record-user-acknowledgements.v1.unacknowledgement`,
+      type: `firebase.extensions.firestore-record-acknowledgments.v1.unacknowledgment`,
       data: JSON.stringify({
         ...documentData,
         id: result.id,
@@ -218,33 +218,33 @@ export const unacknowledgeNotice = functions.https.onCall(
   },
 );
 
-type GetAcknowledgementsResponse = (Acknowledgement & {
+type GetAcknowledgmentsResponse = (Acknowledgment & {
   notice: Omit<Notice, 'allowList'>;
 })[];
 
-export const getAcknowledgements = functions.https.onCall(
+export const getAcknowledgments = functions.https.onCall(
   async (data, context) => {
     assertAuthenticated(context);
 
     const uid = context.auth!.uid;
 
     let query = db
-      .collectionGroup(config.acknowledgementsCollection)
+      .collectionGroup(config.acknowledgmentsCollection)
       .where('userId', '==', uid);
 
-    // If `includeUnacknowledgements` is true, we want to include all acknowledgements.
+    // If `includeUnacknowledgments` is true, we want to include all acknowledgments.
     // By default, this will include on acknowledged.
-    if (data.includeUnacknowledgements !== true) {
+    if (data.includeUnacknowledgments !== true) {
       query = query.where('ackEvent', '==', 'acknowledged');
     }
 
-    // Get a list of all the acknowledgements for a single user.
+    // Get a list of all the acknowledgments for a single user.
     const snapshot = await query
       .orderBy('createdAt', 'desc')
-      .withConverter(acknowledgementConverter)
+      .withConverter(acknowledgmentConverter)
       .get();
 
-    // Return early if no acknowledgements exist.
+    // Return early if no acknowledgments exist.
     if (snapshot.empty) {
       return [];
     }
@@ -261,7 +261,7 @@ export const getAcknowledgements = functions.https.onCall(
 
     const cache = new Map<string, Notice>();
 
-    const response: GetAcknowledgementsResponse = acknowledements.map(doc => {
+    const response: GetAcknowledgmentsResponse = acknowledements.map(doc => {
       const noticeData =
         cache.get(doc.noticeId) ||
         noticeSnapshots.find(notice => notice.id === doc.noticeId)!.data();

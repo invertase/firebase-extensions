@@ -1,6 +1,6 @@
 # API Reference
 
-Below contains an overview of the specifications for the Record User Acknowledgements extension, including TypeScript definitions & detailed descriptions.
+Below contains an overview of the specifications for the Firestore Record Acknowledgments extension, including TypeScript definitions & detailed descriptions.
 
 ## `NoticeDocument` Interface
 
@@ -27,12 +27,12 @@ export interface NoticeDocument {
 }
 ```
 
-## `AcknowledgementDocument` Interface
+## `AcknowledgmentDocument` Interface
 
 The specification for a single document within a notice sub-collection:
 
 ```ts
-type BaseAcknowledgement = {
+type BaseAcknowledgment = {
   // The document ID.
   id: string;
   // The UID of the user who acknowledged the notice.
@@ -41,19 +41,19 @@ type BaseAcknowledgement = {
   noticeId: string;
   // The timestamp when the notice was acknowledged.
   createdAt: Timestamp;
-  // The optional metadata of the acknowledgement.
+  // The optional metadata of the acknowledgment.
   metadata: any;
 };
 
-export type AcknowledgementDocument =
-  | (BaseAcknowledgement & {
-      // The type of the acknowledgement.
+export type AcknowledgmentDocument =
+  | (BaseAcknowledgment & {
+      // The type of the acknowledgment.
       ackEvent: 'acknowledged';
-      // The type of the acknowledgement. Defaults to `seen`.
+      // The type of the acknowledgment. Defaults to `seen`.
       type: string;
     })
-  | (BaseAcknowledgement & {
-      // The type of the acknowledgement.
+  | (BaseAcknowledgment & {
+      // The type of the acknowledgment.
       ackEvent: 'unacknowledged';
     });
 ```
@@ -80,8 +80,8 @@ export type GetNoticeResponse = Omit<NoticeDocument, ‘allowList’> & {
  // The timestamp when the notice was unacknowledged by the user (undefined if the user has not unacknowledged this notice).
  unacknowledgedAt?: Timestamp;
 
- // An ordered array of user acknowledgements.
- acknowledgements: AcknowledgementDocument[];
+ // An ordered array of acknowledgments.
+ acknowledgments: AcknowledgmentDocument[];
 }
 ```
 
@@ -93,9 +93,9 @@ The response interface provided to a `acknowledgeNotice` callable function:
 export interface AcknowledgeNoticeRequest {
   // The notice ID to acknowledge.
   noticeId: string;
-  // A custom type to provide as the acknowledgement. Defaults to `seen`.
+  // A custom type to provide as the acknowledgment. Defaults to `seen`.
   type?: string;
-  // Optional preference metadata to store with this acknowledgement.
+  // Optional preference metadata to store with this acknowledgment.
   metadata?: any;
 }
 ```
@@ -108,29 +108,29 @@ The response interface provided to a `unacknowledgeNotice` callable function:
 export interface UnacknowledgeNoticeRequest {
   // The notice ID to unacknowledge.
   noticeId: string;
-  // Optional preference metadata to store with this unacknowledgement.
+  // Optional preference metadata to store with this unacknowledgment.
   metadata?: any;
 }
 ```
 
-## `GetAcknowledgementsRequest` Interface
+## `GetAcknowledgmentsRequest` Interface
 
-The response interface provided to a `getAcknowledgements` callable function:
+The response interface provided to a `getAcknowledgments` callable function:
 
 ```ts
-export interface GetAcknowledgementsRequest {
-  // If true, include unacknowledgement documents.
-  includeUnacknowledgements?: boolean;
+export interface GetAcknowledgmentsRequest {
+  // If true, include unacknowledgment documents.
+  includeUnacknowledgments?: boolean;
 }
 ```
 
-## `GetAcknowledgementsResponse` Interface
+## `GetAcknowledgmentsResponse` Interface
 
-The response interface provided to a `getAcknowledgements` callable function:
+The response interface provided to a `getAcknowledgments` callable function:
 
 ```ts
-export type GetAcknowledgementsResponse  = (AcknowledgementDocument & {
-  // The notice of this acknowledgement, excluding the allowList.
+export type GetAcknowledgmentsResponse  = (AcknowledgmentDocument & {
+  // The notice of this acknowledgment, excluding the allowList.
   notice: Omit<NoticeDocument, ‘allowList’>;
 })[];
 ```
