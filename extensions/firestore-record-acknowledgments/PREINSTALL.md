@@ -6,7 +6,7 @@ This extension makes it easy to add notices to your application that your users 
 - Collecting custom acknowledgment metadata (such as additional user preferences) for a notice
 - Allowing notices to be only acknowledged by a select group of users
 
-You can see this extension in use on the [Kara’s Coffee demo application](https://karas-coffee.web.app/), or [view the source code](https://github.com/FirebaseExtended/karas-coffee).
+You can [view the source code](https://github.com/FirebaseExtended/karas-coffee).
 
 #### Additional setup
 
