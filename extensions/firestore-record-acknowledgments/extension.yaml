@@ -7,8 +7,8 @@ description: Provides an out of the box acknowledgment management extension for 
 
 license: Apache-2.0
 
-sourceUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-record-user-acknowledgments
-releaseNotesUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-record-user-acknowledgments/CHANGELOG.md
+sourceUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-firestore-record-acknowledgments
+releaseNotesUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-firestore-record-acknowledgments/CHANGELOG.md
 
 author:
   authorName: Invertase
@@ -133,7 +133,7 @@ params:
     immutable: false
 
 events:
-  - type: firebase.extensions.firestore-record-user-acknowledgments.v1.acknowledgment
+  - type: firebase.extensions.firestore-firestore-record-acknowledgments.v1.acknowledgment
     description: Event indicating that the Notice has been acknowledged.
-  - type: firebase.extensions.firestore-record-user-acknowledgments.v1.unacknowledgment
+  - type: firebase.extensions.firestore-firestore-record-acknowledgments.v1.unacknowledgment
     description: Event indicating that the Notice has been unacknowledged.

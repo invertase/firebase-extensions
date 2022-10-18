@@ -2,9 +2,9 @@
 
 The extension stores notices and acknowledgments as documents in a collection inside Firestore. You configure the collection during the installation process, when you set up the extension instance's configuration parameters.
 
-The extensions' source code contains a [web app providing admin utilities](https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-record-user-acknowledgments/admin-dashboard) that you can run locally. This contains a notice builder UI that you can use to easily create and customize notices. Setup instructions are available in the above link provided. Once set up, navigate to [localhost:3000](http://localhost:3000) to see the notice builder tool.
+The extensions' source code contains a [web app providing admin utilities](https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-firestore-record-acknowledgments/admin-dashboard) that you can run locally. This contains a notice builder UI that you can use to easily create and customize notices. Setup instructions are available in the above link provided. Once set up, navigate to [localhost:3000](http://localhost:3000) to see the notice builder tool.
 
-![Admin Dashboard](/record-user-acknowldegements/assets/admin-dashboard-example.png)
+![Admin Dashboard](/firestore-record-acknowldegements/assets/admin-dashboard-example.png)
 
 ## Retrieving a notice
 
@@ -16,13 +16,13 @@ import { getFunctions, httpsCallable } from 'firebase/functions';
 const functions = getFunctions();
 const notice = await httpsCallable(
   functions,
-  'ext-firestore-record-user-acknowledgments-getNotice',
+  'ext-firestore-firestore-record-acknowledgments-getNotice',
 )({
   type: 'banner',
 });
 ```
 
-Note: if multiple instances of this extension are installed the callable function name might contain a unique identifier, e.g. `ext-firestore-record-user-acknowledgments-<id>-getNotice`.
+Note: if multiple instances of this extension are installed the callable function name might contain a unique identifier, e.g. `ext-firestore-firestore-record-acknowledgments-<id>-getNotice`.
 
 The response of the function call will contain the notice document data, along with whether the current authenticated user has acknowledged the notice.
 
@@ -34,14 +34,14 @@ import { getFunctions, httpsCallable } from 'firebase/functions';
 const functions = getFunctions();
 const notice = await httpsCallable(
   functions,
-  'ext-firestore-record-user-acknowledgments-getNotice',
+  'ext-firestore-firestore-record-acknowledgments-getNotice',
 )({
   type: 'banner',
   version: 2,
 });
 ```
 
-View the [reference API](/record-user-acknowldegements/reference) for full details on the response interface.
+View the [reference API](/firestore-record-acknowldegements/reference) for full details on the response interface.
 
 ## Acknowledging a notice
 
@@ -53,7 +53,7 @@ For example, to acknowledge a notice:
 import { getFunctions, httpsCallable } from "firebase/functions";
 
 const functions = getFunctions();
-await httpsCallable(functions, 'ext-firestore-record-user-acknowledgments-acknowledgeNotice)({
+await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-acknowledgeNotice)({
   noticeId: 'EA9QhZKKta9KXcckiasc',
 });
 ```
@@ -61,7 +61,7 @@ await httpsCallable(functions, 'ext-firestore-record-user-acknowledgments-acknow
 In-case you need to capture custom preferences relating to an acknowledgment, you can provide custom metadata to the function, for example:
 
 ```js
-await httpsCallable(functions, 'ext-firestore-record-user-acknowledgments-acknowledgeNotice)({
+await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-acknowledgeNotice)({
   noticeId: 'EA9QhZKKta9KXcckiasc',
   metadata: { preference1: true, preference2: false },
 });
@@ -70,7 +70,7 @@ await httpsCallable(functions, 'ext-firestore-record-user-acknowledgments-acknow
 You can also provide a custom “type” of acknowledgment (the default type is “seen”), for example:
 
 ```js
-await httpsCallable(functions, 'ext-firestore-record-user-acknowledgments-acknowledgeNotice)({
+await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-acknowledgeNotice)({
   noticeId: 'EA9QhZKKta9KXcckiasc',
   type: 'seen',
 });
@@ -79,7 +79,7 @@ await httpsCallable(functions, 'ext-firestore-record-user-acknowledgments-acknow
 If you wish to unacknowledge a notice, call the `unacknowledgeNotice` function:
 
 ```js
-await httpsCallable(functions, 'ext-firestore-record-user-acknowledgments-unacknowledgeNotice)({
+await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-unacknowledgeNotice)({
   noticeId: 'EA9QhZKKta9KXcckiasc',
   metadata: { reason: '...' },
 });
@@ -93,7 +93,7 @@ To retrieve all previous user notice acknowledgments, call the `getAcknowledgmen
 import { getFunctions, httpsCallable } from "firebase/functions";
 
 const functions = getFunctions();
-const acknowledgments  = await httpsCallable(functions, 'ext-firestore-record-user-acknowledgments-getAcknowledgments)();
+const acknowledgments  = await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-getAcknowledgments)();
 ```
 
 By default this won’t include unacknowledgment documents, however if those are required you can provide a `includeUnacknowledgments` property to the call:
@@ -102,7 +102,7 @@ By default this won’t include unacknowledgment documents, however if those are
 import { getFunctions, httpsCallable } from "firebase/functions";
 
 const functions = getFunctions();
-const acknowledgments  = await httpsCallable(functions, 'ext-firestore-record-user-acknowledgments-getAcknowledgments)({
+const acknowledgments  = await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-getAcknowledgments)({
   includeUnacknowledgments: true,
 });
 ```

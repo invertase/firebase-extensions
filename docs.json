@@ -18,8 +18,8 @@
     [
       "Firestore Record Acknowledgments",
       [
-        ["Overview", "/record-user-acknowledgments"],
-        ["Reference API", "/record-user-acknowledgments/reference"]
+        ["Overview", "/firestore-record-acknowledgments"],
+        ["Reference API", "/firestore-record-acknowledgments/reference"]
       ]
     ],
     [

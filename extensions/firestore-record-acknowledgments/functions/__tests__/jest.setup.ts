@@ -4,9 +4,9 @@ import path from 'path';
   require('dotenv').config({
     path: path.resolve(
       __dirname,
-      '../../../_emulator/extensions/firestore-record-user-acknowledgments.env.local',
+      '../../../_emulator/extensions/firestore-firestore-record-acknowledgments.env.local',
     ),
   });
 
-  process.env.EXT_INSTANCE_ID = 'firestore-record-user-acknowledgments';
+  process.env.EXT_INSTANCE_ID = 'firestore-firestore-record-acknowledgments';
 })();
