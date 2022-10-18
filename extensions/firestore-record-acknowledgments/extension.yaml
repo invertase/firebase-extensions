@@ -1,5 +1,5 @@
 name: firestore-record-acknowledgments
-version: 0.1.0
+version: 0.1.2
 specVersion: v1beta
 
 displayName: Firestore Record Acknowledgments
