@@ -1,6 +1,6 @@
 # Image Processing API
 
-The Image Processing API extension (`image-processing-api`) lets you optimize and transform images in the [Cloud Storage](https://firebase.google.com/docs/storage) bucket via a powerful HTTP API. The API provides more than 30 different operations to enhance and manipulate your images, including image composition, cropping, flipping, color reduction, sharpening, filtering, and much more. See the full list of available operations in the [Operations](/operations) documentation.
+The Image Processing API extension (`image-processing-api`) lets you optimize and transform images in the [Cloud Storage](https://firebase.google.com/docs/storage) bucket via a powerful HTTP API. The API provides more than 30 different operations to enhance and manipulate your images, including image composition, cropping, flipping, color reduction, sharpening, filtering, and much more. See the full list of available operations in the [Operations](/image-processing-api/operations) documentation.
 
 <video width="100%" controls muted autoPlay loop>
   <source
@@ -63,8 +63,8 @@ curl -X GET \
 The `operations` query parameter is a JSON array of operations to perform. Each operation is a JSON object with an `operation` property specifying the operation to perform and other properties depending on the operation.
 The parameter follows a couple of rules:
 
-1. The first operation in the array must be an `input` operation. This operation specifies the image to be processed. Read the [input](/input) operation documentation for more information.
-1. The last operation in the array must be an `output` operation. This operation specifies the `format` of the image to be created. Read the [output](/output) operation documentation for more information.
+1. The first operation in the array must be an `input` operation. This operation specifies the image to be processed. Read the [input](/image-processing-api/input) operation documentation for more information.
+1. The last operation in the array must be an `output` operation. This operation specifies the `format` of the image to be created. Read the [output](/image-processing-api/output) operation documentation for more information.
 
 The following example details a remote `input` operation and the `output` type:
 
