@@ -1,21 +1,21 @@
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom/client'
-import { auth, firestore, functions, storage } from './firebase'
-import { signInAnonymously } from 'firebase/auth'
-import { httpsCallable } from 'firebase/functions'
-import { doc, onSnapshot } from 'firebase/firestore'
-import { listAll, ref, getDownloadURL, getBlob } from 'firebase/storage'
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom/client';
+import { auth, firestore, functions, storage } from './firebase';
+import { signInAnonymously } from 'firebase/auth';
+import { httpsCallable } from 'firebase/functions';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { listAll, ref, getDownloadURL } from 'firebase/storage';
 
-import styles from './styles.module.css'
+import styles from './styles.module.css';
 
 // Ensure the user is signed in before showing the app.
 signInAnonymously(auth).then(() => {
-  ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
       <App />
-    </React.StrictMode>
+    </React.StrictMode>,
   );
-})
+});
 
 function App() {
   const [exporting, setExporting] = useState(false);
@@ -26,7 +26,10 @@ function App() {
     setExporting(true);
 
     // Trigger the export.
-    const result = await httpsCallable<void, { exportId: string }>(functions, `ext-export-user-data-${zip ? '' : 'rapy-'}exportUserData`)();
+    const result = await httpsCallable<void, { exportId: string }>(
+      functions,
+      `ext-export-user-data-${zip ? '' : 'rapy-'}exportUserData`,
+    )();
     // Get the returned export id.
     const exportId = result.data.exportId;
 
@@ -34,19 +37,19 @@ function App() {
     const documentRef = doc(firestore, 'exports', exportId);
 
     // Listen for changes to the export - when complete returned the storage path of the export items.
-    const { storagePath, zipPath } = await new Promise<{
+    const { storagePath } = await new Promise<{
       storagePath: string;
       zipPath?: string;
     }>((resolve, reject) => {
-      const unsubscribe = onSnapshot(documentRef, (snapshot) => {
+      const unsubscribe = onSnapshot(documentRef, snapshot => {
         if (!snapshot.exists) {
           unsubscribe();
-          return reject(new Error("Export document not found"));
+          return reject(new Error('Export document not found'));
         }
 
-        const data = snapshot.data()!;
+        const data = snapshot.data();
 
-        if (data.status === "complete") {
+        if (data?.status === 'complete') {
           unsubscribe();
           return resolve({
             storagePath: data.storagePath,
@@ -78,8 +81,20 @@ function App() {
     return (
       <Container>
         <div className={styles.buttonContainer}>
-          <button type={'button'} className={styles.btn} onClick={() => onExport({ zip: true })}>Start Export (zip enabled)</button>
-          <button type={'button'} className={styles.btn} onClick={() => onExport({ zip: false })}>Start Export (zip disabled)</button>
+          <button
+            type={'button'}
+            className={styles.btn}
+            onClick={() => onExport({ zip: true })}
+          >
+            Start Export (zip enabled)
+          </button>
+          <button
+            type={'button'}
+            className={styles.btn}
+            onClick={() => onExport({ zip: false })}
+          >
+            Start Export (zip disabled)
+          </button>
         </div>
       </Container>
     );
@@ -96,13 +111,14 @@ function App() {
   return (
     <Container>
       <ol>
-        {files!.map((file) => (
-          <li key={file}>
-            <span>{file}</span>
-            <span>&nbsp; &nbsp;</span>
-            <button onClick={() => onDownload(file)}>Download File</button>
-          </li>
-        ))}
+        {files &&
+          files.map(file => (
+            <li key={file}>
+              <span>{file}</span>
+              <span>&nbsp; &nbsp;</span>
+              <button onClick={() => onDownload(file)}>Download File</button>
+            </li>
+          ))}
       </ol>
     </Container>
   );

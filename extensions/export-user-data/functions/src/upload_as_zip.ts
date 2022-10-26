@@ -64,7 +64,9 @@ export async function uploadDataAsZip({
 
     archive.pipe(stream);
     // TODO: log that we're done zipping
-    stream.on('finish', async () => {});
+    stream.on('finish', async () => {
+      return;
+    });
 
     const count: ZipUploadCount = await appendToArchive({
       archive,
@@ -99,7 +101,7 @@ async function appendToArchive({
     storageCount: 0,
   };
 
-  for (let path of exportPaths.firestorePaths) {
+  for (const path of exportPaths.firestorePaths) {
     if (typeof path === 'string') {
       const pathWithUID = replaceUID(path, uid);
       // If it's a path to a collection
@@ -130,7 +132,7 @@ async function appendToArchive({
     }
   }
 
-  for (let path of exportPaths.databasePaths) {
+  for (const path of exportPaths.databasePaths) {
     if (typeof path === 'string') {
       const pathWithUID = replaceUID(path, uid);
       promises.push(
@@ -146,7 +148,7 @@ async function appendToArchive({
       log.rtdbPathNotString();
     }
   }
-  for (let file of filesToZip) {
+  for (const file of filesToZip) {
     promises.push(
       pushFileToArchive(file, archive).then(didAppend => {
         if (didAppend) {

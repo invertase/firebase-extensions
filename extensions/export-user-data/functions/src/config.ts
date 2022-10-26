@@ -14,6 +14,20 @@
  * limitations under the License.
  */
 
+export type ExportUserDataConfig = {
+  cloudStorageBucketDefault: string;
+  cloudStorageExportDirectory: string;
+  cloudStorageExportBucket: string;
+  firestoreExportsCollection: string;
+  firestorePaths: string;
+  databasePaths: string;
+  storagePaths: string;
+  selectedDatabaseLocations: string;
+  selectedDatabaseInstance: string;
+  customHookEndpoint: string;
+  zip: boolean;
+};
+
 export default {
   cloudStorageBucketDefault: process.env.STORAGE_BUCKET,
   cloudStorageExportDirectory: process.env.CLOUD_STORAGE_EXPORT_DIRECTORY,

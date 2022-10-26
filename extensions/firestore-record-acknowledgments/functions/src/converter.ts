@@ -7,7 +7,7 @@ import {
 import { Notice, Acknowledgment } from './interface';
 
 export const noticeConverter: FirestoreDataConverter<Notice> = {
-  toFirestore(notice: any): FirebaseFirestore.DocumentData {
+  toFirestore(): FirebaseFirestore.DocumentData {
     throw new Error('Creating a notice is not supported.');
   },
   fromFirestore(snapshot: FirebaseFirestore.QueryDocumentSnapshot) {

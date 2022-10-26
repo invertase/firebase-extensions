@@ -17,39 +17,39 @@
 import { logger } from 'firebase-functions';
 import config from './config';
 
-export const completeExport = (uid: string) => {
+export const completeExport = (uid: string): void => {
   logger.log(`Successfully exported data for user: ${uid}`);
 };
 
-export const firestoreExported = () => {
+export const firestoreExported = (): void => {
   logger.log('Finished Exporting user data from Cloud Firestore');
 };
 
-export const firestoreExporting = () => {
+export const firestoreExporting = (): void => {
   logger.log('Exporting user data from Cloud Firestore');
 };
 
-export const firestoreConfigPathsNotConfigured = () => {
+export const firestoreConfigPathsNotConfigured = (): void => {
   logger.log('Cloud Firestore paths are not configured, skipping');
 };
 
-export const customHookNotConfigured = () => {
+export const customHookNotConfigured = (): void => {
   logger.log('paths from a custom hook are not configured, skipping');
 };
 
-export const firestorePathExported = (path: string) => {
+export const firestorePathExported = (path: string): void => {
   logger.log(`Exported: '${path}' from Cloud Firestore`);
 };
 
-export const storagePathExported = (path: string) => {
+export const storagePathExported = (path: string): void => {
   logger.log(`Exported: '${path}' from Cloud Storage`);
 };
 
-export const firestorePathExporting = (path: string) => {
+export const firestorePathExporting = (path: string): void => {
   logger.log(`Exporting: '${path}' from Cloud Firestore`);
 };
 
-export const exportError = (err: Error, path?: string) => {
+export const exportError = (err: Error, path?: string): void => {
   if (path) {
     logger.error(`Error exporting: '${path}'`, err);
   } else {
@@ -57,92 +57,92 @@ export const exportError = (err: Error, path?: string) => {
   }
 };
 
-export const firestorePathNotString = () => {
+export const firestorePathNotString = (): void => {
   logger.error(
     'Firestore paths must be strings, skipping. Check your custom hook response.',
   );
 };
 
-export const rtdbPathNotString = () => {
+export const rtdbPathNotString = (): void => {
   logger.error(
     'Database paths must be strings, skipping. Check your custom hook response.',
   );
 };
 
-export const storagePathNotString = () => {
+export const storagePathNotString = (): void => {
   logger.error(
     'Storage paths must be strings, skipping. Check your custom hook response.',
   );
 };
 
-export const init = () => {
+export const init = (): void => {
   logger.log('Initializing extension with configuration', config);
 };
 
-export const rtdbPathExported = (path: string) => {
+export const rtdbPathExported = (path: string): void => {
   logger.log(`Exported: '${path}' from the Realtime Database`);
 };
 
-export const rtdbConfigPathsNotConfigured = () => {
+export const rtdbConfigPathsNotConfigured = (): void => {
   logger.log('Realtime Database paths are not configured, skipping');
 };
 
-export const rtdbPathExporting = (path: string) => {
+export const rtdbPathExporting = (path: string): void => {
   logger.log(`Exporting: '${path}' from the Realtime Database`);
 };
 
-export const rtdbPathError = (path: string, err: Error) => {
+export const rtdbPathError = (path: string, err: Error): void => {
   logger.error(
     `Error when Exporting: '${path}' from the Realtime Database`,
     err,
   );
 };
 
-export const startExport = (uid: string) => {
+export const startExport = (uid: string): void => {
   logger.log(
     `Started extension execution with configuration for ${uid}`,
     config,
   );
 };
 
-export const storagePath404 = (path: string) => {
+export const storagePath404 = (path: string): void => {
   logger.log(`File: '${path}' does not exist in Cloud Storage, skipping`);
 };
 
-export const storagePathError = (path: string, err: Error) => {
+export const storagePathError = (path: string, err: Error): void => {
   logger.error(`Error Exporting: '${path}' from Cloud Storage`, err);
 };
 
-export const StoragePathExporting = (path: string) => {
+export const StoragePathExporting = (path: string): void => {
   logger.log(`Exporting: '${path}' from Cloud Storage`);
 };
 
-export const StoragePathExported = (path: string) => {
+export const StoragePathExported = (path: string): void => {
   logger.log(`Exported: '${path}' from Cloud Storage`);
 };
 
-export const customHookBadResponse = (endpoint: string) => {
+export const customHookBadResponse = (endpoint: string): void => {
   logger.error(
     `Custom hook endpoint ${endpoint} did not return a 200 response`,
   );
 };
 
-export const customHookInvalidData = (endpoint: string) => {
+export const customHookInvalidData = (endpoint: string): void => {
   logger.error(
     `Custom hook endpoint ${endpoint} did not return JSON in the valid format`,
   );
 };
 
-export const rtdbLocationNotConfigured = () => {
+export const rtdbLocationNotConfigured = (): void => {
   logger.log(
     'Realtime Database paths are provided but no database location is configured, skipping Realtime Database exports',
   );
 };
 
-export const storageConfigPathsNotConfigured = () => {
+export const storageConfigPathsNotConfigured = (): void => {
   logger.log('Cloud Storage paths are not configured, skipping');
 };
 
-export const genericLog = (message: string) => {
+export const genericLog = (message: string): void => {
   logger.log(message);
 };

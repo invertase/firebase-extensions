@@ -19,10 +19,10 @@ import { eventChannel } from '.';
 import config from './config';
 import { ExportPaths } from './get_export_paths';
 import fetch, { Response } from 'node-fetch';
-
+import { GetFilesResponse } from '@google-cloud/storage';
 import * as log from './logs';
 
-export const replaceUID = (path: string, uid: string) =>
+export const replaceUID = (path: string, uid: string): string =>
   path.replace(/{UID}/g, uid);
 
 export function getDatabaseUrl(
@@ -38,7 +38,9 @@ export function getDatabaseUrl(
   return `https://${selectedDatabaseInstance}.${selectedDatabaseLocation}.firebasedatabase.app`;
 }
 
-export const getFilesFromStoragePath = async (path: string) => {
+export const getFilesFromStoragePath = async (
+  path: string,
+): Promise<GetFilesResponse> => {
   const parts = path.split('/');
   const bucketName = parts[0];
   const bucket =
@@ -101,7 +103,7 @@ export const finalizeExport = async (
     storageCopied: number;
     storageZipped: number;
   },
-) => {
+): Promise<void> => {
   await admin
     .firestore()
     .doc(`exports/${exportId}`)

@@ -15,12 +15,9 @@
  */
 
 import * as admin from 'firebase-admin';
-import unzip from 'unzipper';
 import waitForExpect from 'wait-for-expect';
 import { UserRecord } from 'firebase-functions/v1/auth';
 import {
-  clearFirestore,
-  clearStorage,
   createFirebaseUser,
   generateDatabaseNode,
   resetFirebaseData,

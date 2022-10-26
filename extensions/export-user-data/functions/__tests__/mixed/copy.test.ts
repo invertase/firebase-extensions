@@ -18,15 +18,9 @@ import * as admin from 'firebase-admin';
 import waitForExpect from 'wait-for-expect';
 import { UserRecord } from 'firebase-functions/v1/auth';
 import {
-  clearFirestore,
-  clearStorage,
   createFirebaseUser,
-  generateFileInUserStorage,
-  generateUserCollection,
-  generateUserDocument,
   resetFirebaseData,
   validateCompleteRecord,
-  validateCSVFile,
   validatePendingRecord,
 } from '../helpers';
 import setupEnvironment from '../helpers/setupEnvironment';
@@ -79,7 +73,7 @@ describe('extension', () => {
 
     test('can handle copying all services across (csv for firestore and db)', async () => {
       /** Create a top level collection with a single document */
-      const firestoreRef1 = await admin
+      await admin
         .firestore()
         .collection('users')
         .doc(user.uid)

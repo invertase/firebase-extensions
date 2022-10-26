@@ -74,7 +74,7 @@ describe('extension', () => {
 
     test('can handle zipping all services across (csv for firestore and db)', async () => {
       /** Create a top level collection with a single document */
-      const firestoreRef1 = await admin
+      await admin
         .firestore()
         .collection('users')
         .doc(user.uid)
@@ -88,25 +88,16 @@ describe('extension', () => {
         .collection(config.firestoreExportsCollection)
         .onSnapshot(observer);
 
-      const idFirestoreRef1 = firestoreRef1.id;
-
-      const firestoreRef2 = await admin
+      await admin
         .firestore()
         .collection('myCollection')
         .add({ content: 'test' });
 
-      const databaseRef1 = await admin
-        .database()
-        .ref('foo')
-        .set({ text: 'hello world' });
+      await admin.database().ref('foo').set({ text: 'hello world' });
 
-      const databaseRef2 = await admin
-        .database()
-        .ref('users')
-        .child(user.uid)
-        .set('BOOP');
+      await admin.database().ref('users').child(user.uid).set('BOOP');
 
-      const storageRef1 = await admin
+      await admin
         .storage()
         .bucket()
         .file(`test/${user.uid}.txt`)

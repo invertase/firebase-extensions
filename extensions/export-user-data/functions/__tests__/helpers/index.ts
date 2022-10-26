@@ -4,6 +4,7 @@ import setupEnvironment from './setupEnvironment';
 import fetch from 'node-fetch';
 import { File } from '@google-cloud/storage';
 import unzip from 'unzipper';
+import { ExportUserDataConfig } from '../../src/config';
 
 if (!admin.apps.length) {
   admin.initializeApp({
@@ -18,7 +19,7 @@ const firestore = admin.firestore();
 const storage = admin.storage();
 const database = admin.database();
 
-export const generateRandomId = () => {
+export const generateRandomId: () => string = () => {
   return (
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15)
@@ -30,41 +31,55 @@ export const createFirebaseUser = async (): Promise<UserRecord> => {
   return admin.auth().createUser({ email });
 };
 
-export const generateTopLevelUserCollection = async (db, userId) => {
+export const generateTopLevelUserCollection = async (
+  db: admin.firestore.Firestore,
+  userId: string,
+): Promise<
+  admin.firestore.CollectionReference<admin.firestore.DocumentData>
+> => {
   const collection = db.collection(userId);
   await collection.add({});
   return collection;
 };
 
-export const generateUserCollection = async (userId, data) => {
+export async function generateUserCollection<TData>(
+  userId: string,
+  data: Record<string, TData>,
+): Promise<string> {
   const doc = await firestore.collection(`${userId}`).add(data);
   return doc.id;
-};
+}
 
-export const generateDatabaseNode = async (data, userId: string) => {
+export async function generateDatabaseNode<TData>(
+  data: Record<string, TData>,
+  userId: string,
+): Promise<admin.database.ThenableReference> {
   const node = database.ref(`${userId}`).push(data);
   return node;
-};
+}
 
-export const generateUserDocument = async (
+export async function generateUserDocument<TData>(
   collectionId: string,
   userId: string,
-  data,
-) => {
+  data: Record<string, TData>,
+): Promise<void> {
   await firestore
     .collection(collectionId)
     .doc(`${userId}`)
     .set(data)
-    .catch(err => console.warn('Error appears here, ignoring for now'));
-};
+    .catch(() => console.warn('Error appears here, ignoring for now'));
+}
 
-export const generateFileInUserStorage = async (userId, value) => {
+export const generateFileInUserStorage = async (
+  userId: string,
+  value: string,
+): Promise<File> => {
   const file = storage.bucket().file(`test/${userId}.txt`);
   await file.save(value);
   return file;
 };
 
-export const resetFirebaseData = async (user?: UserRecord) => {
+export const resetFirebaseData = async (user?: UserRecord): Promise<void> => {
   await clearDatabase();
   await clearStorage();
   await clearFirestore();
@@ -73,26 +88,26 @@ export const resetFirebaseData = async (user?: UserRecord) => {
   }
 };
 
-export const clearFirestore = async () => {
+export const clearFirestore = async (): Promise<void> => {
   await fetch(
     'http://localhost:8080/emulator/v1/projects/demo-experimental/databases/(default)/documents',
     { method: 'DELETE' },
   );
 };
 
-export const clearStorage = async () => {
+export const clearStorage = async (): Promise<void> => {
   const files = await storage.bucket().getFiles();
   for await (const file of files[0]) {
     await file.delete();
   }
 };
 
-export const clearDatabase = async () => {
+export const clearDatabase = async (): Promise<void> => {
   database.ref('/').set({});
 };
 
 type validateDocumentZippedExportOptions = {
-  config: Record<string, any>;
+  config: Partial<ExportUserDataConfig>;
   exportId: string;
   expectedUnzippedPath?: string;
   contentType: 'csv' | 'text';
@@ -108,7 +123,7 @@ export const validateZippedExport = async (
     contentType,
     expectedData,
   }: validateDocumentZippedExportOptions,
-) => {
+): Promise<void> => {
   const fileName = file.name;
   const parts = fileName.split('/');
   // should be in the exports directory
@@ -149,7 +164,7 @@ export const validateZippedExport = async (
 };
 
 type validateDocumentCSVFileOptions = {
-  config: Record<string, any>;
+  config: Record<string, string>;
   exportId: string;
   expectedFileName: string;
   expectedCSVData: string[][];
@@ -163,7 +178,7 @@ export const validateCSVFile = async (
     expectedFileName,
     expectedCSVData,
   }: validateDocumentCSVFileOptions,
-) => {
+): Promise<void> => {
   const fileName = file.name;
   const parts = fileName.split('/');
   // should be in the exports directory
@@ -202,9 +217,9 @@ const validateCSVData = (csvData: string[][], expected) => {
 };
 
 export const validatePendingRecord = (
-  pendingRecordData: Record<string, any>,
+  pendingRecordData: Record<string, string>,
   { user }: { user: UserRecord },
-) => {
+): void => {
   expect(pendingRecordData.status).toBe('pending');
   expect(pendingRecordData.uid).toBe(user.uid);
   // // should be a server timestamp
@@ -214,14 +229,14 @@ export const validatePendingRecord = (
 
 type validateCompleteRecordOptions = {
   user: UserRecord;
-  config: Record<string, any>;
+  config: Partial<ExportUserDataConfig>;
   exportId: string;
   shouldZip: boolean;
   fileNumber?: number;
 };
 
 export const validateCompleteRecord = (
-  completeRecordData: Record<string, any>,
+  completeRecordData: Record<string, string>,
   {
     user,
     config,
@@ -229,7 +244,7 @@ export const validateCompleteRecord = (
     shouldZip,
     fileNumber,
   }: validateCompleteRecordOptions,
-) => {
+): void => {
   // // should be success
   expect(completeRecordData.status).toBe('complete');
   expect(completeRecordData.uid).toBe(user.uid);
