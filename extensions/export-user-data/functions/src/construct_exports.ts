@@ -21,6 +21,7 @@ import { File } from '@google-cloud/storage';
 import { replaceUID } from './utils';
 import * as log from './logs';
 import { eventChannel } from '.';
+import { DataSnapshot } from 'firebase-admin/lib/database';
 
 const HEADERS = ['TYPE', 'path', 'data'];
 const dataSources = {
@@ -32,7 +33,7 @@ const dataSources = {
 export const constructFirestoreCollectionCSV = (
   snap: FirebaseFirestore.QuerySnapshot,
   collectionPath: string,
-) => {
+): string => {
   const csvData = snap.docs.map(doc => {
     const path = `${collectionPath}/${doc.id}`;
 
@@ -47,12 +48,12 @@ export const constructFirestoreCollectionCSV = (
 export const constructFirestoreDocumentCSV = (
   snap: FirebaseFirestore.DocumentSnapshot,
   documentPath: string,
-) => {
+): string => {
   const csvData = [HEADERS];
 
   const data = snap.data();
 
-  for (let key in data) {
+  for (const key in data) {
     const path = `${documentPath}/${key}`;
     csvData.push([dataSources.firestore, path, JSON.stringify(data[key])]);
   }
@@ -60,12 +61,15 @@ export const constructFirestoreDocumentCSV = (
   return sync.stringify(csvData);
 };
 
-export const constructDatabaseCSV = async (snap: any, databasePath: string) => {
+export const constructDatabaseCSV = (
+  snap: DataSnapshot,
+  databasePath: string,
+): string => {
   const csvData = [HEADERS];
 
   const data = snap.val();
 
-  for (let key in data) {
+  for (const key in data) {
     const path = `${databasePath}/${key}`;
     csvData.push([dataSources.database, path, JSON.stringify(data[key])]);
   }
@@ -77,12 +81,12 @@ export const copyStorageFilesToExportDirectory = async (
   storagePaths: unknown[],
   uid: string,
   storagePrefix: string,
-) => {
+): Promise<File[]> => {
   let filePromises: Promise<File>[] = [];
 
   // if there are storage paths, we copy files across to the new bucket
   if (storagePaths.length > 0) {
-    for (let path of storagePaths) {
+    for (const path of storagePaths) {
       if (typeof path === 'string') {
         const pathWithUID = replaceUID(path, uid);
         if (eventChannel) {

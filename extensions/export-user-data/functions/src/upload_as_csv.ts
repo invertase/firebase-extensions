@@ -41,7 +41,7 @@ export async function uploadAsCSVs(
   let firestoreDocumentsUploaded = 0;
   let databaseNodesUploaded = 0;
 
-  for (let path of exportPaths.firestorePaths) {
+  for (const path of exportPaths.firestorePaths) {
     if (typeof path === 'string') {
       const pathWithUID = replaceUID(path, uid);
       if (pathWithUID.split('/').length % 2 === 1) {
@@ -102,7 +102,7 @@ export async function uploadAsCSVs(
     }
   }
 
-  for (let path of exportPaths.databasePaths) {
+  for (const path of exportPaths.databasePaths) {
     if (typeof path === 'string') {
       const pathWithUID = replaceUID(path, uid);
       const snap = await admin.database().ref(pathWithUID).get();
@@ -147,7 +147,7 @@ const uploadCSVToStorage = async (
   csv: string,
   storagePrefix: string,
   path: string,
-  extension: string = '.csv',
+  extension = '.csv',
 ) => {
   const formattedPath = path.replace(/\//g, '_');
   const storagePath = `${storagePrefix}/${formattedPath}${extension}`;

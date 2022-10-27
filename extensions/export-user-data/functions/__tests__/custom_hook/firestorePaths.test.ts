@@ -26,9 +26,6 @@ import {
 } from '../helpers';
 import setupEnvironment from '../helpers/setupEnvironment';
 import config from '../../src/config';
-import fetch from 'node-fetch';
-import { fetchFromCustomHook } from '../../src/utils';
-import { Response, Headers } from 'node-fetch';
 
 const fft = require('firebase-functions-test')();
 

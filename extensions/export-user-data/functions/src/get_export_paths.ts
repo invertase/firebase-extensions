@@ -50,7 +50,7 @@ export async function getExportPaths(uid: string): Promise<ExportPaths> {
   }
 
   if (config.firestorePaths || config.databasePaths || config.storagePaths) {
-    const pathsFromConfig = getPathsFromConfig(uid);
+    const pathsFromConfig = getPathsFromConfig();
     firestorePaths = [...firestorePaths, ...pathsFromConfig.firestorePaths];
     databasePaths = [...databasePaths, ...pathsFromConfig.databasePaths];
     storagePaths = [...storagePaths, ...pathsFromConfig.storagePaths];
@@ -67,7 +67,7 @@ export async function getExportPaths(uid: string): Promise<ExportPaths> {
  * @param uid userId
  * @returns ExportPaths
  */
-function getPathsFromConfig(uid: string): ExportPaths {
+function getPathsFromConfig(): ExportPaths {
   let firestorePathsList: string[] = [];
   let databasePathsList: string[] = [];
   let storagePathsList: string[] = [];

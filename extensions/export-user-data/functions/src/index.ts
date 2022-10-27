@@ -77,14 +77,13 @@ export const exportUserData = functions.https.onCall(async (_data, context) => {
 
   if (config.zip) {
     try {
-      const { firestoreCount, databaseCount, storageCount } =
-        await uploadDataAsZip({
-          exportPaths,
-          storagePrefix,
-          uid,
-          exportId,
-          filesToZip,
-        });
+      const { firestoreCount, databaseCount } = await uploadDataAsZip({
+        exportPaths,
+        storagePrefix,
+        uid,
+        exportId,
+        filesToZip,
+      });
       exportCounts.firestore = firestoreCount;
       exportCounts.database = databaseCount;
     } catch (e) {
