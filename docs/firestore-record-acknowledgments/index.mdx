@@ -53,7 +53,7 @@ For example, to acknowledge a notice:
 import { getFunctions, httpsCallable } from "firebase/functions";
 
 const functions = getFunctions();
-await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-acknowledgeNotice)({
+await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-acknowledgeNotice')({
   noticeId: 'EA9QhZKKta9KXcckiasc',
 });
 ```
@@ -61,7 +61,7 @@ await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-a
 In-case you need to capture custom preferences relating to an acknowledgment, you can provide custom metadata to the function, for example:
 
 ```js
-await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-acknowledgeNotice)({
+await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-acknowledgeNotice')({
   noticeId: 'EA9QhZKKta9KXcckiasc',
   metadata: { preference1: true, preference2: false },
 });
@@ -70,7 +70,7 @@ await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-a
 You can also provide a custom “type” of acknowledgment (the default type is “seen”), for example:
 
 ```js
-await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-acknowledgeNotice)({
+await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-acknowledgeNotice')({
   noticeId: 'EA9QhZKKta9KXcckiasc',
   type: 'seen',
 });
@@ -79,7 +79,7 @@ await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-a
 If you wish to unacknowledge a notice, call the `unacknowledgeNotice` function:
 
 ```js
-await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-unacknowledgeNotice)({
+await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-unacknowledgeNotice')({
   noticeId: 'EA9QhZKKta9KXcckiasc',
   metadata: { reason: '...' },
 });
@@ -93,7 +93,7 @@ To retrieve all previous user notice acknowledgments, call the `getAcknowledgmen
 import { getFunctions, httpsCallable } from "firebase/functions";
 
 const functions = getFunctions();
-const acknowledgments  = await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-getAcknowledgments)();
+const acknowledgments  = await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-getAcknowledgments')();
 ```
 
 By default this won’t include unacknowledgment documents, however if those are required you can provide a `includeUnacknowledgments` property to the call:
@@ -102,7 +102,7 @@ By default this won’t include unacknowledgment documents, however if those are
 import { getFunctions, httpsCallable } from "firebase/functions";
 
 const functions = getFunctions();
-const acknowledgments  = await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-getAcknowledgments)({
+const acknowledgments  = await httpsCallable(functions, 'ext-firestore-firestore-record-acknowledgments-getAcknowledgments')({
   includeUnacknowledgments: true,
 });
 ```
