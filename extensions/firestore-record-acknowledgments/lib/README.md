@@ -1,7 +1,5 @@
 # Firestore Record Acknowledgements Utilities
 
-# Utilty Library
-
 To assist with the usage of this Extension, a [utility library](https://www.npmjs.com/package/@invertase/firestore-record-acknowledgements) exists
 to help provide a typed API interface for easily constructing operations to send to the API.
 

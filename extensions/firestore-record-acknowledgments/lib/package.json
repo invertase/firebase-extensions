@@ -1,6 +1,6 @@
 {
   "name": "@invertase/firestore-record-acknowledgements",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "A JavaScript utility library for the Firebase Record Acknowledgements Extension.",
   "type": "module",
   "main": "dist/bundle.cjs.js",
