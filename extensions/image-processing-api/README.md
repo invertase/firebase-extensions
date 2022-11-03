@@ -46,7 +46,7 @@ Input types are:
     {
       operation: 'input',
       type: 'gcs',
-      source: 'https://firebasestorage.googleapis.com/v0/b/my-bucket.appspot.com/o/image.jpg',
+      source: 'image.jpg',
     }
     ```
 
