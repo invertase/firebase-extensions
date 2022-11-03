@@ -1,0 +1,36 @@
+{
+  "name": "@invertase/firestore-record-acknowledgements",
+  "version": "0.1.2",
+  "description": "A JavaScript utility library for the Firebase Record Acknowledgements Extension.",
+  "type": "module",
+  "main": "dist/bundle.cjs.js",
+  "module": "dist/bundle.es.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/invertase/firebase-extensions.git"
+  },
+  "scripts": {
+    "build": "npm run clean && rollup -c",
+    "prepublishOnly": "npm run build",
+    "clean": "rimraf dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Invertase <oss@invertase.io>",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "firebase": "^9.13.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^3.2.5",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "typescript": "^4.8.3"
+  },
+  "peerDependencies": {
+    "firebase": "9.x"
+  }
+}

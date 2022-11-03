@@ -19,7 +19,8 @@
       "Firestore Record Acknowledgments",
       [
         ["Overview", "/firestore-record-acknowledgments"],
-        ["Reference API", "/firestore-record-acknowledgments/reference"]
+        ["Reference API", "/firestore-record-acknowledgments/reference"],
+        ["Utility Library", "/firestore-record-acknowledgments/utility-library"]
       ]
     ],
     [
