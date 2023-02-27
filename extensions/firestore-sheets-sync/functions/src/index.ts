@@ -6,6 +6,7 @@ import config from './config';
 
 const sheets = google.sheets('v4');
 const authClient = google.auth.getClient({
+  keyFilename: 'extensions-testing-cae073db7903.json',
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
@@ -71,7 +72,7 @@ async function createHeaderRow() {
 
   // Check if the header row is already set up.
   if (
-    headerRow.data.values &&
+    headerRow.data.values?.length > 0 &&
     arrayEqual(headerRow.data.values[0].sort(), [...fields].sort())
   )
     return;
@@ -81,7 +82,7 @@ async function createHeaderRow() {
     spreadsheetId: config.spreadsheetId,
     requestBody: {
       requests: [
-        {
+        headerRow.data.values?.length > 0 && {
           insertDimension: {
             range: {
               dimension: 'ROWS',
@@ -113,7 +114,7 @@ async function createHeaderRow() {
             },
           },
         },
-      ],
+      ].filter(Boolean),
     },
   });
 }
