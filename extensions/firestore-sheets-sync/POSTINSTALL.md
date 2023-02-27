@@ -6,7 +6,7 @@ You need to allow the extension service account to edit the Google Sheet you wan
 2.  In the top right, click **Share**.
 3.  Add the extension service account as an editor.
 
-    The extension's service account is:
+    The extension service account is:
 
     ```
     ext-${param:EXT_INSTANCE_ID}@extensions-testing.iam.gserviceaccount.com
