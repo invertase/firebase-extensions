@@ -9,8 +9,6 @@ const authClient = google.auth.getClient({
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
-const fields = config.fields.split(',');
-
 export const googleSheetSync = functions.firestore
   .document(`${config.collection}`)
   .onWrite(async change => {
@@ -23,8 +21,7 @@ export const googleSheetSync = functions.firestore
 
     const rows: any[] = [];
 
-
-    for (const field of fields) {
+    for (const field of config.fields) {
       const value = data[field];
       if (value) rows.push(value);
       else rows.push('');
@@ -33,7 +30,6 @@ export const googleSheetSync = functions.firestore
     try {
       // Append the data to the Google Sheet.
       await appendNewRow(rows);
-
     } catch (error) {
       // Log an error if the data was not written to the Google Sheet.
       functions.logger.error((error as GaxiosError).message, error);
@@ -51,7 +47,7 @@ async function appendNewRow(data: any[]) {
 }
 
 async function createHeaderRow() {
-  const values = fields.map<sheets_v4.Schema$CellData>(e => ({
+  const values = config.fields.map<sheets_v4.Schema$CellData>(e => ({
     userEnteredValue: { stringValue: e as string },
     userEnteredFormat: {
       textFormat: {
@@ -73,7 +69,7 @@ async function createHeaderRow() {
   if (
     headerValues &&
     headerValues?.length > 0 &&
-    arrayEqual(headerValues[0].sort(), [...fields].sort())
+    arrayEqual(headerValues[0].sort(), [...config.fields].sort())
   )
     return;
 
@@ -122,10 +118,11 @@ async function createHeaderRow() {
   });
 }
 
-function arrayEqual(arr1: any[], arr2: any[]) {
-  const set1 = new Set(arr1);
-  const set2 = new Set(arr2);
+function arrayEqual(a: any[], b: any[]) {
+  if (a.length !== b.length) return false;
+
   return (
-    arr1.every(item => set2.has(item)) && arr2.every(item => set1.has(item))
+    a.every(item => new Set(b).has(item)) &&
+    b.every(item => new Set(a).has(item))
   );
 }
