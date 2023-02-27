@@ -34,7 +34,6 @@ export const googleSheetSync = functions.firestore
       // Append the data to the Google Sheet.
       await appendNewRow(rows);
 
-      return;
     } catch (error) {
       // Log an error if the data was not written to the Google Sheet.
       functions.logger.error((error as GaxiosError).message, error);
