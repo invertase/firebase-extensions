@@ -6,7 +6,6 @@ import config from './config';
 
 const sheets = google.sheets('v4');
 const authClient = google.auth.getClient({
-  // keyFilename: 'extensions-testing-cae073db7903.json',
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
