@@ -44,6 +44,28 @@ params:
       What is the ID of the Google Sheet you want to export to?
     type: string
     required: true
+
+  - param: COLLECTION_PATH
+    label: Firestore collection to record export metadata
+    description: >
+      What is the path to the collection that will be synced to your Google Sheet?
+    type: string
+    default: sheets
+    example: sheets
+    required: false
+    validationRegex: '^[^/]+(/[^/]+/[^/]+)*$'
+    validationErrorMessage: Must be a valid Cloud Firestore collection
+
+  - param: FIELDS_TO_SYNC
+    label: Fields to sync
+    description: >
+      A list of comma-separated fields to sync to the Google Sheet. If left blank, no fields will be synced.
+    type: string
+    example: name,email
+    required: true
+    validationRegex: '^(([a-zA-Z](,)?)*)+$'
+    validationErrorMessage: Must be a comma-separated list of strings
+
   - param: LOCATION
     label: Cloud Functions location
     description: >-
@@ -95,24 +117,3 @@ params:
     default: us-central1
     required: true
     immutable: true
-
-  - param: COLLECTION_PATH
-    label: Firestore collection to record export metadata
-    description: >
-      What is the path to the collection that will be synced to your Google Sheet?
-    type: string
-    default: sheets
-    example: sheets
-    required: false
-    validationRegex: '^[^/]+(/[^/]+/[^/]+)*$'
-    validationErrorMessage: Must be a valid Cloud Firestore collection
-
-  - param: FIELDS_TO_SYNC
-    label: Fields to sync
-    description: >
-      A list of comma-separated fields to sync to the Google Sheet. If left blank, no fields will be synced.
-    type: string
-    example: name,email
-    required: true
-    validationRegex: '^(([a-zA-Z](,)?)*)+$'
-    validationErrorMessage: Must be a comma-separated list of strings

@@ -6,7 +6,7 @@ import config from './config';
 
 const sheets = google.sheets('v4');
 const authClient = google.auth.getClient({
-  keyFilename: 'extensions-testing-cae073db7903.json',
+  // keyFilename: 'extensions-testing-cae073db7903.json',
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
@@ -48,8 +48,8 @@ async function appendNewRow(data: any[]) {
     auth: await authClient,
     spreadsheetId: config.spreadsheetId,
     valueInputOption: 'RAW',
-    requestBody: { values: [data], range: 'A:Z' },
-    range: 'A:Z',
+    requestBody: { values: [data], range: 'A2:Z2' },
+    range: 'A2:Z2',
   });
 }
 
@@ -70,19 +70,24 @@ async function createHeaderRow() {
     majorDimension: 'ROWS',
   });
 
+  const headerValues = headerRow.data.values;
+
   // Check if the header row is already set up.
   if (
-    headerRow.data.values?.length > 0 &&
-    arrayEqual(headerRow.data.values[0].sort(), [...fields].sort())
+    headerValues &&
+    headerValues?.length > 0 &&
+    arrayEqual(headerValues[0].sort(), [...fields].sort())
   )
     return;
+
+  const headerHasData = headerValues && headerValues.length > 0;
 
   sheets.spreadsheets.batchUpdate({
     auth: await authClient,
     spreadsheetId: config.spreadsheetId,
     requestBody: {
       requests: [
-        headerRow.data.values?.length > 0 && {
+        (headerHasData && {
           insertDimension: {
             range: {
               dimension: 'ROWS',
@@ -91,7 +96,8 @@ async function createHeaderRow() {
             },
             inheritFromBefore: false,
           },
-        },
+        }) ||
+          {},
         {
           updateSheetProperties: {
             properties: {
