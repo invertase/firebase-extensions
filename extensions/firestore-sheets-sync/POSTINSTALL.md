@@ -1,6 +1,6 @@
 ### Before you can use this extension
 
-You need to allow the extensions's service account to edit the Google Sheet you want to sync with Firestore.
+You need to allow the extension service account to edit the Google Sheet you want to sync with Firestore.
 
 1.  Open the Google Sheet you want to sync with Firestore.
 2.  In the top right, click **Share**.
