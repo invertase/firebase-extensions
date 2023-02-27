@@ -23,7 +23,6 @@ export const googleSheetSync = functions.firestore
 
     const rows: any[] = [];
 
-    console.log(fields);
 
     for (const field of fields) {
       const value = data[field];
