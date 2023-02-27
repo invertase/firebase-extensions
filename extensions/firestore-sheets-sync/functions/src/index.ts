@@ -41,8 +41,8 @@ async function appendNewRow(data: any[]) {
     auth: await authClient,
     spreadsheetId: config.spreadsheetId,
     valueInputOption: 'RAW',
-    requestBody: { values: [data], range: 'A2:Z2' },
-    range: 'A2:Z2',
+    requestBody: { values: [data] },
+    range: '2:2',
   });
 }
 
@@ -59,7 +59,7 @@ async function createHeaderRow() {
   const headerRow = await sheets.spreadsheets.values.get({
     auth: await authClient,
     spreadsheetId: config.spreadsheetId,
-    range: 'A1:Z1',
+    range: '1:1',
     majorDimension: 'ROWS',
   });
 
