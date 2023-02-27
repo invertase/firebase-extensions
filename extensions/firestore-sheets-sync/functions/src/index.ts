@@ -82,7 +82,7 @@ async function createHeaderRow() {
 
   const headerHasData = headerValues && headerValues.length > 0;
 
-  sheets.spreadsheets.batchUpdate({
+  await sheets.spreadsheets.batchUpdate({
     auth: await authClient,
     spreadsheetId: config.spreadsheetId,
     requestBody: {
