@@ -4,8 +4,6 @@
 
 **Description**: Export defined collection to a Google Sheet.
 
-
-
 **Details**: Use this extension to sync Firestore documents to Google Sheets automatically.
 
 This extension creates a Cloud Function named `googleSheetSync`, which will be triggered when a Firestore document is created in the specified collection.
@@ -34,40 +32,26 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
   - Cloud Storage
   - Cloud Functions (Node.js 10+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
 
-
-
-
 **Configuration Parameters:**
 
-* Google Sheet ID: What is the ID of the Google Sheet you want to export to?
+- Google Sheet ID: What is the ID of the Google Sheet you want to export to?
 
+- Firestore collection to record export metadata: What is the path to the collection that will be synced to your Google Sheet?
 
-* Firestore collection to record export metadata: What is the path to the collection that will be synced to your Google Sheet?
+- Fields to sync: A list of comma-separated fields to sync to the Google Sheet. If left blank, no fields will be synced.
 
-
-* Fields to sync: A list of comma-separated fields to sync to the Google Sheet. If left blank, no fields will be synced.
-
-
-* Cloud Functions location: Where do you want to deploy the functions created for this extension? For help selecting a location, refer to the [location selection guide](https://firebase.google.com/docs/functions/locations).
-
-
+- Cloud Functions location: Where do you want to deploy the functions created for this extension? For help selecting a location, refer to the [location selection guide](https://firebase.google.com/docs/functions/locations).
 
 **Cloud Functions:**
 
-* **googleSheetSync:** Listens for document changes in your specified Cloud Firestore collection, then exports the changes into a Google Sheet.
-
-
+- **googleSheetSync:** Listens for document changes in your specified Cloud Firestore collection, then exports the changes into a Google Sheet.
 
 **APIs Used**:
 
-* sheets.googleapis.com (Reason: Powers all Sheets tasks performed by the extension.)
-
-
+- sheets.googleapis.com (Reason: Powers all Sheets tasks performed by the extension.)
 
 **Access Required**:
 
-
-
 This extension will operate with the following project IAM roles:
 
-* datastore.owner (Reason: Allows the extension to export (user) data from Cloud Firestore.)
+- datastore.owner (Reason: Allows the extension to export (user) data from Cloud Firestore.)

@@ -13,4 +13,3 @@ You need to allow the extension service account to edit the Google Sheet you wan
     ```
 
 You're good to go!
-
