@@ -1,0 +1,28 @@
+{
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "pubsub": {
+      "port": 8085
+    },
+    "storage": {
+      "port": 9199
+    },
+    "eventarc": {
+      "port": 9299
+    },
+    "ui": {
+      "enabled": true
+    },
+    "singleProjectMode": true
+  },
+  "extensions": {
+    "export-user-data": "../extensions/export-user-data",
+    "firestore-record-acknowledgments": "../extensions/firestore-record-acknowledgments",
+    "image-processing-api": "../extensions/image-processing-api"
+  }
+}
