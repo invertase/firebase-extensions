@@ -1,4 +1,4 @@
-name: sync-firestore-to-sheets
+name: sync-firestore-sheets
 version: 0.1.0
 specVersion: v1beta
 
@@ -8,23 +8,28 @@ description: >-
   Export defined collection to a Google Sheet.
 
 license: Apache-2.0
+sourceUrl: TBD
+
+author:
+  authorName: Invertase
+  url: https://invertase.io
 
 billingRequired: true
+
+apis:
+  - apiName: sheets.googleapis.com
+    reason: Powers all Sheets tasks performed by the extension.
 
 roles:
   - role: datastore.owner
     reason: Allows the extension to export (user) data from Cloud Firestore.
-  - role: firebasedatabase.admin
-    reason: Allows the extension to export (user) data from Realtime Database.
-  - role: storage.admin
-    reason: Allows the extension to export (user) data from Cloud Storage.
 
 resources:
   - name: googleSheetSync
     type: firebaseextensions.v1beta.function
     description:
       Listens for document changes in your specified Cloud Firestore collection,
-      then exports the changes into BigQuery.
+      then exports the changes into a Google Sheet.
     properties:
       location: ${param:LOCATION}
       runtime: nodejs14
@@ -33,6 +38,12 @@ resources:
         resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}/{documentId}
 
 params:
+  - param: SHEET_ID
+    label: Google Sheet ID
+    description: >
+      What is the ID of the Google Sheet you want to export to?
+    type: string
+    required: true
   - param: LOCATION
     label: Cloud Functions location
     description: >-
@@ -85,7 +96,7 @@ params:
     required: true
     immutable: true
 
-  - param: FIRESTORE_COLLECTION
+  - param: COLLECTION_PATH
     label: Firestore collection to record export metadata
     description: >
       What is the path to the collection that will be synced to your Google Sheet?
@@ -96,6 +107,12 @@ params:
     validationRegex: '^[^/]+(/[^/]+/[^/]+)*$'
     validationErrorMessage: Must be a valid Cloud Firestore collection
 
-events:
-  - type: firebase.extensions.export-user-data.v1.firestore
-    description: Occurs when a collections/document sync has been triggered.
+  - param: FIELDS_TO_SYNC
+    label: Fields to sync
+    description: >
+      A list of comma-separated fields to sync to the Google Sheet. If left blank, no fields will be synced.
+    type: string
+    example: name,email
+    required: true
+    validationRegex: '^(([a-zA-Z](,)?)*)+$'
+    validationErrorMessage: Must be a comma-separated list of strings
