@@ -6,12 +6,96 @@ import config from './config';
 
 const sheets = google.sheets('v4');
 const authClient = google.auth.getClient({
+  keyFile: './service-account.json',
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
-export const googleSheetSync = functions.firestore
+export const googleSheetDeleteSync = functions.firestore
   .document(`${config.collection}`)
-  .onWrite(async change => {
+  .onDelete(async snapshot => {
+    const data = snapshot.data();
+    if (!data) return;
+
+    const existingMetadata = await sheets.spreadsheets.developerMetadata.search(
+      {
+        auth: await authClient,
+        spreadsheetId: config.spreadsheetId,
+        requestBody: {
+          dataFilters: [
+            {
+              developerMetadataLookup: {
+                metadataKey: 'docId',
+                metadataValue: snapshot.id,
+                locationType: 'ROW',
+              },
+            },
+          ],
+        },
+      },
+    );
+
+    console.log(JSON.stringify(existingMetadata.data));
+
+    try {
+      await sheets.spreadsheets.batchUpdate({
+        auth: await authClient,
+        spreadsheetId: config.spreadsheetId,
+        requestBody: {
+          requests: [
+            {
+              deleteDimension: {
+                range: {
+                  dimension: 'ROWS',
+                  sheetId:
+                    existingMetadata.data.matchedDeveloperMetadata![0]
+                      .developerMetadata!.location!.dimensionRange!.sheetId,
+                  startIndex:
+                    existingMetadata.data.matchedDeveloperMetadata![0]
+                      .developerMetadata?.location?.dimensionRange
+                      ?.startIndex ?? 0,
+                  endIndex:
+                    existingMetadata.data.matchedDeveloperMetadata![0]
+                      .developerMetadata?.location?.dimensionRange?.endIndex ??
+                    0,
+                },
+              },
+            },
+          ],
+        },
+      });
+    } catch (error) {
+      functions.logger.error((error as GaxiosError).message, error);
+    }
+  });
+
+export const googleSheetCreateSync = functions.firestore
+  .document(`${config.collection}`)
+  .onCreate(async snapshot => {
+    const data = snapshot.data();
+
+    if (!data) return;
+
+    await createHeaderRow();
+
+    const rows: sheets_v4.Schema$CellData[] = [];
+
+    for (const field of config.fields) {
+      const value = data[field];
+      if (value) rows.push({ userEnteredValue: { stringValue: value } });
+      else rows.push({ userEnteredValue: { stringValue: '' } });
+    }
+
+    try {
+      // Append the new data to the Google Sheet.
+      await appendNewRow({ values: rows, docId: snapshot.id });
+    } catch (error) {
+      functions.logger.error((error as GaxiosError).message, error);
+    }
+  });
+
+export const googleSheetUpdateSync = functions.firestore
+  .document(`${config.collection}`)
+  .onUpdate(async change => {
     // Get the document that was written to Firestore, and structure it.
     const data = change.after.data();
 
@@ -19,31 +103,137 @@ export const googleSheetSync = functions.firestore
 
     await createHeaderRow();
 
-    const rows: any[] = [];
+    const existingMetadata = await sheets.spreadsheets.developerMetadata.search(
+      {
+        auth: await authClient,
+        spreadsheetId: config.spreadsheetId,
+        requestBody: {
+          dataFilters: [
+            {
+              developerMetadataLookup: {
+                metadataKey: 'docId',
+                metadataValue: change.after.id,
+                locationType: 'ROW',
+              },
+            },
+          ],
+        },
+      },
+    );
+
+    console.log(JSON.stringify(existingMetadata.data));
+
+    const rows: sheets_v4.Schema$CellData[] = [];
 
     for (const field of config.fields) {
       const value = data[field];
-      if (value) rows.push(value);
-      else rows.push('');
+      if (value) rows.push({ userEnteredValue: { stringValue: value } });
+      else rows.push({ userEnteredValue: { stringValue: '' } });
     }
 
     try {
       // Append the data to the Google Sheet.
-      await appendNewRow(rows);
+      await appendNewRow({
+        values: rows,
+        metadataId:
+          existingMetadata.data.matchedDeveloperMetadata![0].developerMetadata!
+            .metadataId ?? undefined,
+      });
     } catch (error) {
       // Log an error if the data was not written to the Google Sheet.
       functions.logger.error((error as GaxiosError).message, error);
     }
   });
 
-async function appendNewRow(data: any[]) {
-  return sheets.spreadsheets.values.append({
-    auth: await authClient,
-    spreadsheetId: config.spreadsheetId,
-    valueInputOption: 'RAW',
-    requestBody: { values: [data] },
-    range: '2:2',
-  });
+async function appendNewRow({
+  values,
+  metadataId,
+  docId,
+}: {
+  values: sheets_v4.Schema$CellData[];
+  metadataId?: number;
+  docId?: string;
+}) {
+  if (metadataId) {
+    return sheets.spreadsheets.values.batchUpdateByDataFilter({
+      auth: await authClient,
+      spreadsheetId: config.spreadsheetId,
+      requestBody: {
+        valueInputOption: 'USER_ENTERED',
+        data: [
+          {
+            majorDimension: 'ROWS',
+            dataFilter: {
+              developerMetadataLookup: {
+                metadataKey: 'docId',
+                metadataId: metadataId,
+              },
+            },
+            values: [
+              [...values.map(e => e.userEnteredValue?.stringValue ?? '')],
+            ],
+          },
+        ],
+      },
+    });
+  } else {
+    const res = await sheets.spreadsheets.batchUpdate({
+      auth: await authClient,
+      spreadsheetId: config.spreadsheetId,
+      requestBody: {
+        includeSpreadsheetInResponse: true,
+        responseIncludeGridData: true,
+        requests: [
+          {
+            appendCells: {
+              rows: [{ values }],
+              fields: '*',
+            },
+          },
+        ],
+      },
+    });
+
+    let startIndex = 0;
+    let endIndex = 0;
+
+    res.data.updatedSpreadsheet?.sheets?.forEach(sheet => {
+      sheet.data?.forEach(data => {
+        console.log(JSON.stringify(data.rowMetadata));
+        endIndex = data.rowData?.length ?? 0;
+        startIndex = endIndex - 1;
+      });
+    });
+    console.log(startIndex);
+    console.log(endIndex);
+    return sheets.spreadsheets.batchUpdate({
+      auth: await authClient,
+      spreadsheetId: config.spreadsheetId,
+      requestBody: {
+        requests: [
+          {
+            createDeveloperMetadata: {
+              developerMetadata: {
+                metadataKey: 'docId',
+                metadataValue: docId,
+                visibility: 'DOCUMENT',
+                location: {
+                  dimensionRange: {
+                    sheetId:
+                      res.data.updatedSpreadsheet?.sheets?.[0].properties
+                        ?.sheetId,
+                    dimension: 'ROWS',
+                    startIndex: startIndex,
+                    endIndex: endIndex,
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    });
+  }
 }
 
 async function createHeaderRow() {
@@ -75,22 +265,27 @@ async function createHeaderRow() {
 
   const headerHasData = headerValues && headerValues.length > 0;
 
-  await sheets.spreadsheets.batchUpdate({
+  const res = await sheets.spreadsheets.batchUpdate({
     auth: await authClient,
     spreadsheetId: config.spreadsheetId,
     requestBody: {
+      includeSpreadsheetInResponse: true,
+      responseIncludeGridData: true,
       requests: [
-        (headerHasData && {
-          insertDimension: {
-            range: {
-              dimension: 'ROWS',
-              startIndex: 0,
-              endIndex: 1,
-            },
-            inheritFromBefore: false,
-          },
-        }) ||
-          {},
+        ...(headerHasData
+          ? [
+              {
+                insertDimension: {
+                  range: {
+                    dimension: 'ROWS',
+                    startIndex: 0,
+                    endIndex: 1,
+                  },
+                  inheritFromBefore: false,
+                },
+              },
+            ]
+          : []),
         {
           updateSheetProperties: {
             properties: {
@@ -113,8 +308,12 @@ async function createHeaderRow() {
             },
           },
         },
-      ].filter(Boolean),
+      ],
     },
+  });
+
+  res.data.replies?.forEach(reply => {
+    reply.addNamedRange;
   });
 }
 

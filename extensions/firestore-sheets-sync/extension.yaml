@@ -25,7 +25,7 @@ roles:
     reason: Allows the extension to export (user) data from Cloud Firestore.
 
 resources:
-  - name: googleSheetSync
+  - name: googleSheetCreateSync
     type: firebaseextensions.v1beta.function
     description:
       Listens for document changes in your specified Cloud Firestore collection,
@@ -34,7 +34,31 @@ resources:
       location: ${param:LOCATION}
       runtime: nodejs14
       eventTrigger:
-        eventType: providers/cloud.firestore/eventTypes/document.write
+        eventType: providers/cloud.firestore/eventTypes/document.create
+        resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}/{documentId}
+
+  - name: googleSheetUpdateSync
+    type: firebaseextensions.v1beta.function
+    description:
+      Listens for document changes in your specified Cloud Firestore collection,
+      then exports the changes into a Google Sheet.
+    properties:
+      location: ${param:LOCATION}
+      runtime: nodejs14
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.update
+        resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}/{documentId}
+
+  - name: googleSheetDeleteSync
+    type: firebaseextensions.v1beta.function
+    description:
+      Listens for document changes in your specified Cloud Firestore collection,
+      then exports the changes into a Google Sheet.
+    properties:
+      location: ${param:LOCATION}
+      runtime: nodejs14
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.delete
         resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}/{documentId}
 
 params:
