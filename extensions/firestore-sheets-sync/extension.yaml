@@ -1,0 +1,143 @@
+name: sync-firestore-sheets
+version: 0.1.0
+specVersion: v1beta
+
+displayName: Sync Firestore to Google Sheets
+
+description: >-
+  Export defined collection to a Google Sheet.
+
+license: Apache-2.0
+sourceUrl: TBD
+
+author:
+  authorName: Invertase
+  url: https://invertase.io
+
+billingRequired: true
+
+apis:
+  - apiName: sheets.googleapis.com
+    reason: Powers all Sheets tasks performed by the extension.
+
+roles:
+  - role: datastore.owner
+    reason: Allows the extension to export (user) data from Cloud Firestore.
+
+resources:
+  - name: googleSheetCreateSync
+    type: firebaseextensions.v1beta.function
+    description:
+      Listens for document changes in your specified Cloud Firestore collection,
+      then exports the changes into a Google Sheet.
+    properties:
+      location: ${param:LOCATION}
+      runtime: nodejs14
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.create
+        resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}/{documentId}
+
+  - name: googleSheetUpdateSync
+    type: firebaseextensions.v1beta.function
+    description:
+      Listens for document changes in your specified Cloud Firestore collection,
+      then exports the changes into a Google Sheet.
+    properties:
+      location: ${param:LOCATION}
+      runtime: nodejs14
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.update
+        resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}/{documentId}
+
+  - name: googleSheetDeleteSync
+    type: firebaseextensions.v1beta.function
+    description:
+      Listens for document changes in your specified Cloud Firestore collection,
+      then exports the changes into a Google Sheet.
+    properties:
+      location: ${param:LOCATION}
+      runtime: nodejs14
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.delete
+        resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}/{documentId}
+
+params:
+  - param: SHEET_ID
+    label: Google Sheet ID
+    description: >
+      What is the ID of the Google Sheet you want to export to?
+    type: string
+    required: true
+
+  - param: COLLECTION_PATH
+    label: Firestore collection to record export metadata
+    description: >
+      What is the path to the collection that will be synced to your Google Sheet?
+    type: string
+    default: sheets
+    example: sheets
+    required: false
+    validationRegex: '^[^/]+(/[^/]+/[^/]+)*$'
+    validationErrorMessage: Must be a valid Cloud Firestore collection
+
+  - param: FIELDS_TO_SYNC
+    label: Fields to sync
+    description: >
+      A list of comma-separated fields to sync to the Google Sheet. If left blank, no fields will be synced.
+    type: string
+    example: name,email
+    required: true
+    validationRegex: '^(([a-zA-Z](,)?)*)+$'
+    validationErrorMessage: Must be a comma-separated list of strings
+
+  - param: LOCATION
+    label: Cloud Functions location
+    description: >-
+      Where do you want to deploy the functions created for this extension?
+      For help selecting a location, refer to the [location selection
+      guide](https://firebase.google.com/docs/functions/locations).
+    type: select
+    options:
+      - label: Iowa (us-central1)
+        value: us-central1
+      - label: South Carolina (us-east1)
+        value: us-east1
+      - label: Northern Virginia (us-east4)
+        value: us-east4
+      - label: Los Angeles (us-west2)
+        value: us-west2
+      - label: Salt Lake City (us-west3)
+        value: us-west3
+      - label: Las Vegas (us-west4)
+        value: us-west4
+      - label: Warsaw (europe-central2)
+        value: europe-central2
+      - label: Belgium (europe-west1)
+        value: europe-west1
+      - label: London (europe-west2)
+        value: europe-west2
+      - label: Frankfurt (europe-west3)
+        value: europe-west3
+      - label: Zurich (europe-west6)
+        value: europe-west6
+      - label: Hong Kong (asia-east2)
+        value: asia-east2
+      - label: Tokyo (asia-northeast1)
+        value: asia-northeast1
+      - label: Osaka (asia-northeast2)
+        value: asia-northeast2
+      - label: Seoul (asia-northeast3)
+        value: asia-northeast3
+      - label: Mumbai (asia-south1)
+        value: asia-south1
+      - label: Jakarta (asia-southeast2)
+        value: asia-southeast2
+      - label: Montreal (northamerica-northeast1)
+        value: northamerica-northeast1
+      - label: Sao Paulo (southamerica-east1)
+        value: southamerica-east1
+      - label: Sydney (australia-southeast1)
+        value: australia-southeast1
+    default: us-central1
+    required: true
+    immutable: true

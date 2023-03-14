@@ -23,6 +23,7 @@
   "extensions": {
     "export-user-data": "../extensions/export-user-data",
     "firestore-record-acknowledgments": "../extensions/firestore-record-acknowledgments",
-    "image-processing-api": "../extensions/image-processing-api"
+    "image-processing-api": "../extensions/image-processing-api",
+    "sync-firestore-sheets": "../extensions/firestore-sheets-sync"
   }
 }
