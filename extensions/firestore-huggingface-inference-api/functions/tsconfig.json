@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "target": "es2020",
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "sourceMap": false
+  },
+  "compileOnSave": true,
+  "include": ["src"]
+}

@@ -1,0 +1,91 @@
+name: firestore-huggingface-inference-api
+version: 0.0.1
+specVersion: v1beta
+
+displayName: Trigger Hugging Face inference API from Firestore
+
+description: >-
+  This extension triggers the Hugging Face inference API when 
+  a new document is created in a Firestore collection.
+
+license: Apache-2.0
+
+sourceUrl: https://github.com/firebase/firebase-tools/tree/master/templates/extensions
+
+billingRequired: false
+
+externalServices:
+  - name: Hugging Face Hosted Inference API
+    pricingUri: https://huggingface.co/docs/api-inference/index
+
+roles:
+  - role: datastore.user
+    reason: This role is required to read/write from the Cloud Firestore database.
+
+resources:
+  - name: runInference
+    type: firebaseextensions.v1beta.function
+    description: >-
+      HTTP call-triggered function that run an inference on ${params:MODEL_ID}
+    properties:
+      location: ${LOCATION}
+      runtime: 'nodejs16'
+      httpsTrigger: {}
+
+  - name: triggerInference
+    type: firebaseextensions.v1beta.function
+    description: >-
+      Firestore onCreate-triggered function that run an inference on ${params:MODEL_ID} when a new 
+      document is created in the collection ${params:COLLECTION_NAME}
+    properties:
+      location: ${LOCATION}
+      runtime: 'nodejs16'
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.write
+        resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_NAME}/{id}
+
+params:
+  - param: HF_API_TOKEN
+    label: Hugging Face API Token
+    description: >-
+      You can find your API token on your [Hugging Face account page](https://huggingface.co/settings/token).
+
+      From Hugging Face docs:
+
+      You should see a token hf_xxxxx (old tokens are api_XXXXXXXX or api_org_XXXXXXX).
+
+      If you do not submit your API token when sending requests to the API, you will not be able to run inference on your private models.
+    type: secret
+    required: true
+
+  - param: MODEL_ID
+    label: Model ID
+    description: >-
+      The Model ID from [Hugging Face Model Hub](https://huggingface.co/models).
+
+      Check the [recommended models for each ML task available](https://api-inference.huggingface.co/docs/python/html/detailed_parameters.html#detailed-parameters), 
+      or the [Tasks](https://huggingface.co/tasks) overview.
+    type: string
+    required: true
+
+  - param: COLLECTION_NAME
+    label: Inference Collection Name
+    description: >-
+      New inferences using the HuggingFace Inference API can be made 
+      by easily adding a new document to this collection.
+    type: string
+    required: true
+    immutable: false
+
+  - param: TASK
+    label: The task to run the inference on
+    description: >-
+      The task to run the inference on.
+      [Check more in the Hugging Face docs](https://huggingface.co/docs/api-inference/detailed_parameters), 
+      or the [Tasks](https://huggingface.co/tasks) overview.
+    type: select
+    options:
+      - label: Fill Mask Task
+        value: fill-mask
+    required: true
+    immutable: true

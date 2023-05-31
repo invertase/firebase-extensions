@@ -1,0 +1,21 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /posts/{postid} {
+    	allow write: if true;
+    }
+    
+    match /{document=**} {
+      allow read, write, update;
+    }
+    
+    match /discussions/{docId}/messsages {
+      allow read, write;
+    }
+    
+    match /firestore-bigquery-scheduler {
+      allow read, write;
+    }
+}
+}
