@@ -1,10 +1,16 @@
-export enum TaskId {
+export enum Task {
   fillMask = 'fill-mask',
   summarization = 'summarization',
   questionAnswering = 'question-answering',
   tableQuestionAnswering = 'table-question-answering',
   sentenceSimilarity = 'sentence-similarity',
   textClassification = 'text-classification',
-  zeroShotClassification = 'zero-shot-classification',
   textGeneration = 'text-generation',
+  text2textGeneration = 'text2text-generation',
+  tokenClassification = 'token-classification',
+  namedEntityRecognition = 'named-entity-recognition',
+  translation = 'translation',
+  zeroShotClassification = 'zeroshot-classification',
+  conversational = 'conversational',
+  featureExtraction = 'feature-extraction',
 }

@@ -10,10 +10,20 @@ import {
   TableQuestionAnsweringOutput,
   sentenceSimilarity,
   SentenceSimilarityOutput,
+  textClassification,
+  TextClassificationOutput,
+  textGeneration,
+  TextGenerationOutput,
+  tokenClassification,
+  TokenClassificationOutput,
+  translation,
+  TranslationOutput,
+  ZeroShotClassificationOutput,
+  zeroShotClassification,
 } from '@huggingface/inference';
 
 import config from './config';
-import { TaskId } from './tasks';
+import { Task } from './tasks';
 
 /**
  * Validate inputs and create a task.
@@ -23,16 +33,21 @@ import { TaskId } from './tasks';
  */
 export async function runHostedInference(
   snapshot: functions.firestore.DocumentSnapshot,
-  task?: TaskId,
+  task?: Task,
 ): Promise<
   | FillMaskOutput
   | SummarizationOutput
   | QuestionAnsweringOutput
   | TableQuestionAnsweringOutput
   | SentenceSimilarityOutput
+  | TextClassificationOutput
+  | TextGenerationOutput
+  | TokenClassificationOutput
+  | TranslationOutput
+  | ZeroShotClassificationOutput
 > {
   switch (task) {
-    case TaskId.fillMask: {
+    case Task.fillMask: {
       const { inputs } = snapshot.data();
 
       if (!inputs || typeof inputs !== 'string')
@@ -43,11 +58,9 @@ export async function runHostedInference(
         inputs: inputs,
       });
     }
-    case TaskId.summarization: {
+    case Task.summarization: {
       const { inputs } = snapshot.data();
-
-      if (!inputs || typeof inputs !== 'string')
-        throw new Error('Field `inputs` must be provided and must be a string');
+      checkInputs(inputs);
 
       return await summarization({
         model: config.modelId,
@@ -55,7 +68,7 @@ export async function runHostedInference(
       });
     }
 
-    case TaskId.questionAnswering: {
+    case Task.questionAnswering: {
       const { question, context } = snapshot.data();
 
       if (
@@ -77,15 +90,13 @@ export async function runHostedInference(
       });
     }
 
-    case TaskId.tableQuestionAnswering: {
-      const { query, table } = snapshot.data();
+    case Task.tableQuestionAnswering: {
+      const { query, table } = snapshot.data() as {
+        query?: string;
+        table?: Record<string, string[]>;
+      };
 
-      if (
-        !query ||
-        !table ||
-        typeof query !== 'string' ||
-        table instanceof Array
-      )
+      if (!query || !table || typeof query !== 'string')
         throw new Error(
           'Field `query` and `table` are required and must be a string and an array of strings respectively',
         );
@@ -99,14 +110,14 @@ export async function runHostedInference(
       });
     }
 
-    case TaskId.sentenceSimilarity: {
+    case Task.sentenceSimilarity: {
       const { source_sentence, sentences } = snapshot.data();
 
       if (
         !source_sentence ||
         !sentences ||
         typeof source_sentence !== 'string' ||
-        sentences instanceof Array
+        !(sentences instanceof Array)
       )
         throw new Error(
           'Field `source_sentence` and `sentences` are required and must be a string and an array of strings respectively',
@@ -121,13 +132,90 @@ export async function runHostedInference(
       });
     }
 
-    case TaskId.textClassification: {
-      throw new Error('Text Classification is not yet supported');
+    case Task.textClassification: {
+      const { inputs } = snapshot.data();
+      checkInputs(inputs);
+
+      return await textClassification({
+        model: config.modelId,
+        inputs: inputs,
+      });
+    }
+
+    case Task.textGeneration:
+    case Task.text2textGeneration: {
+      const { inputs } = snapshot.data();
+      checkInputs(inputs);
+
+      return await textGeneration({
+        model: config.modelId,
+        inputs: inputs,
+      });
+    }
+
+    case Task.tokenClassification:
+    case Task.namedEntityRecognition: {
+      const { inputs } = snapshot.data();
+      checkInputs(inputs);
+
+      return await tokenClassification({
+        model: config.modelId,
+        inputs: inputs,
+      });
+    }
+
+    case Task.translation: {
+      const { inputs } = snapshot.data();
+      checkInputs(inputs);
+
+      return await translation({
+        model: config.modelId,
+        inputs: inputs,
+      });
+    }
+    case Task.zeroShotClassification: {
+      const { inputs, candidate_labels, multi_label } = snapshot.data();
+      checkListInputs(inputs);
+
+      return await zeroShotClassification({
+        model: config.modelId,
+        inputs,
+        parameters: {
+          candidate_labels,
+          multi_label,
+        },
+      });
+    }
+    case Task.conversational: {
+      throw new Error('Conversational task is not supported yet');
+    }
+    case Task.featureExtraction: {
+      throw new Error('Feature extraction task is not supported yet');
     }
 
     default: {
       snapshot.ref.update({ error: 'Invalid task' });
       throw new Error('Invalid task');
     }
+  }
+}
+
+function checkInputs(inputs: any) {
+  if (!inputs || typeof inputs !== 'string') {
+    throw new Error('Field `inputs` must be provided and must be a string');
+  }
+}
+
+function checkListInputs(inputs: any) {
+  if (
+    !inputs ||
+    !(typeof inputs !== 'string') ||
+    !(inputs instanceof Array) ||
+    inputs.length === 0 ||
+    typeof inputs[0] !== 'string'
+  ) {
+    throw new Error(
+      'Field `inputs` must be provided and must be a string or a list of strings',
+    );
   }
 }
