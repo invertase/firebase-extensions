@@ -1,8 +1,28 @@
-Use this extension to send a friendly greeting.
+Use this extension to run inferences in a Firestore collection using the [Hugging Face inference API](https://huggingface.co/docs/api-inference).
 
-When triggered by an HTTP request, this extension responds with your specified friendly greeting.
+When triggered by a write operation in a Firestore document, this extension calls Hugging Face and updates the document with the result.
 
-<!-- We recommend keeping the following section to explain how billing for Firebase Extensions works -->
+## Supported tasks
+
+This extension **currently** supports the following tasks:
+
+- Natural Language Processing
+  - [Fill Mask](https://huggingface.co/docs/api-inference#fill-mask)
+  - [Summarization](https://huggingface.co/docs/api-inference#summarization)
+  - [Question Answering](https://huggingface.co/docs/api-inference/detailed_parameters#question-answering-task)
+  
+The following tasks will be supported in the future:
+
+- Natural Language Processing
+  - [Table Question Answering task](https://huggingface.co/docs/api-inference/detailed_parameters#table-question-answering-task)
+  - [Sentence Similarity task](https://huggingface.co/docs/api-inference/detailed_parameters#sentence-similarity-task)
+  - [Text Classification task](https://huggingface.co/docs/api-inference/detailed_parameters#text-classification-task)
+- Audio
+  - 
+- Computer Vision
+  - 
+
+For more information about the Hugging Face inference API, see the [documentation](https://huggingface.co/docs/api-inference).
 
 # Billing
 

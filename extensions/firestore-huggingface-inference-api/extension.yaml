@@ -87,5 +87,7 @@ params:
     options:
       - label: Fill Mask Task
         value: fill-mask
+      - label: Text Summarization Task
+        value: summarization
     required: true
     immutable: true
