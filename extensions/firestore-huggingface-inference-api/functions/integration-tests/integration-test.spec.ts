@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { expect } from 'chai';
 
 describe('greet-the-world', () => {
   it('should respond with the configured greeting', async () => {

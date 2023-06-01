@@ -1,3 +1,5 @@
+import { InvalidArgumentError } from './errors';
+
 type Enumerate<
   N extends number,
   Acc extends number[] = [],
@@ -25,6 +27,7 @@ export enum TaskId {
  */
 export class Task {
   id: TaskId;
+  inputs?: string;
   parameters?: Record<string, unknown>;
   options?: Record<string, unknown>;
 
@@ -41,7 +44,11 @@ export class Task {
    * @return {string}
    */
   json(): string {
-    return JSON.stringify(this);
+    return JSON.stringify({
+      inputs: this.inputs,
+      options: this.options,
+      parameters: this.parameters,
+    });
   }
 }
 
@@ -101,17 +108,53 @@ export class SummarizationTask extends Task {
       min_length?: number;
       max_length?: number;
       top_k?: number;
-      top_p: number;
-      temperature: Range100;
-      repetition_penalty: Range100;
-      max_time: Range120;
+      top_p?: number;
+      temperature?: number;
+      repetition_penalty?: number;
+      max_time?: number;
     },
     options?: { use_cache?: boolean; wait_for_model?: boolean },
   ) {
     super(TaskId.summarization);
 
+    if (parameters?.temperature) {
+      this.validateTemperature(parameters.temperature);
+    }
+
+    if (parameters?.repetition_penalty) {
+      this.validateRepetitionPenalty(parameters.repetition_penalty);
+    }
+
     this.inputs = inputs;
     this.parameters = parameters;
     this.options = options;
   }
+
+  private validateTemperature(temperature: number): void {
+    if (!isFloat(temperature) || temperature < 0.0 || temperature > 100.0) {
+      throw new InvalidArgumentError(
+        '`temperature` must be a number float 0.0 and 100.0',
+      );
+    }
+  }
+
+  private validateRepetitionPenalty(repetition_penalty: number): void {
+    if (
+      !isFloat(repetition_penalty) ||
+      repetition_penalty < 0.0 ||
+      repetition_penalty > 100.0
+    ) {
+      throw new InvalidArgumentError(
+        '`repetition_penalty` must be a float between 0.0 and 100.0',
+      );
+    }
+  }
+}
+
+function isInt(n: number) {
+  return Number(n) === n && n % 1 === 0;
+}
+
+function isFloat(n: number) {
+  return Number(n) === n && n % 1 !== 0;
 }
