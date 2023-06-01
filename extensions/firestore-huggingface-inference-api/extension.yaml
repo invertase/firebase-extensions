@@ -23,14 +23,14 @@ roles:
     reason: This role is required to read/write from the Cloud Firestore database.
 
 resources:
-  - name: runInference
-    type: firebaseextensions.v1beta.function
-    description: >-
-      HTTP call-triggered function that run an inference on ${params:MODEL_ID}
-    properties:
-      location: ${LOCATION}
-      runtime: 'nodejs16'
-      httpsTrigger: {}
+  # - name: runInference
+  #   type: firebaseextensions.v1beta.function
+  #   description: >-
+  #     HTTP call-triggered function that run an inference on ${params:MODEL_ID}
+  #   properties:
+  #     location: ${LOCATION}
+  #     runtime: 'nodejs16'
+  #     httpsTrigger: {}
 
   - name: triggerInference
     type: firebaseextensions.v1beta.function
@@ -39,13 +39,13 @@ resources:
       document is created in the collection ${params:COLLECTION_NAME}
     properties:
       location: ${LOCATION}
-      runtime: 'nodejs16'
+      runtime: 'nodejs18'
       eventTrigger:
         eventType: providers/cloud.firestore/eventTypes/document.write
         resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_NAME}/{id}
 
 params:
-  - param: HF_API_TOKEN
+  - param: HF_ACCESS_TOKEN
     label: Hugging Face API Token
     description: >-
       You can find your API token on your [Hugging Face account page](https://huggingface.co/settings/token).
@@ -55,7 +55,7 @@ params:
       You should see a token hf_xxxxx (old tokens are api_XXXXXXXX or api_org_XXXXXXX).
 
       If you do not submit your API token when sending requests to the API, you will not be able to run inference on your private models.
-    type: secret
+    type: string
     required: true
 
   - param: MODEL_ID

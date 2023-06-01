@@ -1,20 +1,5 @@
 import { InvalidArgumentError } from './errors';
 
-type Enumerate<
-  N extends number,
-  Acc extends number[] = [],
-> = Acc['length'] extends N
-  ? Acc[number]
-  : Enumerate<N, [...Acc, Acc['length']]>;
-
-type Range<F extends number, T extends number> = Exclude<
-  Enumerate<T>,
-  Enumerate<F>
->;
-
-type Range100 = Range<0, 101>;
-type Range120 = Range<0, 121>;
-
 export enum TaskId {
   fill_mask = 'fill-mask',
   summarization = 'summarization',
@@ -70,23 +55,9 @@ export class FillMaskTask extends Task {
     options?: { use_cache?: boolean; wait_for_model?: boolean },
   ) {
     super(TaskId.fill_mask);
-    if (!this.checkInputsHasMask(inputs))
-      throw new Error('Inputs must contain a [MASK]');
+
     this.inputs = inputs;
     this.options = options;
-  }
-
-  /**
-   *
-   * @param {string} inputs
-   * @return {boolean}
-   */
-  private checkInputsHasMask(inputs: string): boolean {
-    if (inputs.includes('[MASK]')) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }
 
@@ -149,10 +120,6 @@ export class SummarizationTask extends Task {
       );
     }
   }
-}
-
-function isInt(n: number) {
-  return Number(n) === n && n % 1 === 0;
 }
 
 function isFloat(n: number) {

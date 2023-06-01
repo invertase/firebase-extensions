@@ -1,10 +1,14 @@
 import * as functions from 'firebase-functions';
-import fetch from 'node-fetch';
+import {
+  FillMaskOutput,
+  SummarizationOutput,
+  fillMask,
+  summarization,
+} from '@huggingface/inference';
 
 import config from './config';
 import { FillMaskTask, SummarizationTask, Task, TaskId } from './tasks';
-
-const host = 'api-inference.huggingface.co';
+import { InferenceOutputError } from '@huggingface/inference';
 
 /**
  * Validate inputs and create a task.
@@ -12,9 +16,9 @@ const host = 'api-inference.huggingface.co';
  * @param {functions.firestore.DocumentSnapshot} snapshot
  * @return {Task}
  */
-function validateInputs(
+async function run(
   snapshot: functions.firestore.DocumentSnapshot,
-): Task | undefined {
+): Promise<FillMaskOutput | SummarizationOutput> {
   let task: Task;
   const { inputs } = snapshot.data();
 
@@ -25,6 +29,10 @@ function validateInputs(
     case TaskId.fill_mask:
       try {
         task = new FillMaskTask(inputs);
+        return await fillMask({
+          model: config.modelId,
+          inputs: task.inputs,
+        });
       } catch (error: any) {
         functions.logger.error(error.message, error);
         snapshot.ref.update({
@@ -32,13 +40,18 @@ function validateInputs(
             error.message ??
             'Unknown error happened, check function logs for more details',
         });
-        return undefined;
+        throw error;
       }
 
-      break;
     case TaskId.summarization:
       try {
         task = new SummarizationTask(inputs);
+
+        return await summarization({
+          model: config.modelId,
+          inputs: task.inputs,
+          parameters: task.parameters,
+        });
       } catch (error: any) {
         functions.logger.error(error.message, error);
         snapshot.ref.update({
@@ -46,29 +59,14 @@ function validateInputs(
             error.message ??
             'Unknown error happened, check function logs for more details',
         });
-        return undefined;
+
+        throw error;
       }
-      break;
 
     default:
       snapshot.ref.update({ error: 'Invalid task' });
-      return undefined;
+      throw new Error('Invalid task');
   }
-
-  return task;
-}
-/**
- * Call Hugging Face inference API.
- *
- * @param {Task} task
- * @return {Promise<Response>}
- */
-function callHFInferenceAPI(task: Task) {
-  return fetch(`https://${host}/models/${config.modelId}`, {
-    headers: { Authorization: `Bearer ${config.apiToken}` },
-    method: 'POST',
-    body: task.json(),
-  });
 }
 
 /**
@@ -77,19 +75,28 @@ function callHFInferenceAPI(task: Task) {
 export const triggerInference = functions.firestore
   .document(`${config.collectionName}/{documentId}`)
   .onCreate(async snapshot => {
-    const task = validateInputs(snapshot);
+    try {
+      const response = await run(snapshot);
 
-    if (!task) return;
+      console.log(response);
 
-    const response = await callHFInferenceAPI(task);
-    const output = await response.json();
-
-    if (!response.ok) {
-      functions.logger.error(output.error, output);
-      await snapshot.ref.update({ error: output.error ?? 'Unknown error' });
+      await snapshot.ref.update({ response });
+    } catch (error: any) {
+      functions.logger.error(error);
+      if (error instanceof InferenceOutputError) {
+        await snapshot.ref.update({
+          error: {
+            message: error.message,
+          },
+        });
+      } else {
+        await snapshot.ref.update({
+          error:
+            error.message ??
+            'Unknown error happened, check function logs for more details',
+        });
+      }
 
       return;
     }
-
-    await snapshot.ref.update({ output });
   });
