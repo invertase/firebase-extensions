@@ -1,107 +1,55 @@
 import { describe, expect, test } from '@jest/globals';
-import { FillMaskTask, SummarizationTask } from './tasks';
-import { InvalidArgumentError } from './errors';
+import { runHostedInference } from './hosted_inference';
+import { TaskId } from './tasks';
 
-describe('Fill Mask Task', () => {
-  test('Reject inputs with no [MASK]', () => {
-    expect(() => new FillMaskTask('Hello World')).toThrow(
-      'Inputs must contain a [MASK]',
+describe(TaskId.fillMask, () => {
+  test('should throw an error if inputs are not provided', async () => {
+    const snapshot = {
+      data: () => ({
+        inputs: undefined,
+      }),
+    } as any;
+
+    await expect(runHostedInference(snapshot, TaskId.fillMask)).rejects.toThrow(
+      Error,
     );
   });
 
-  test('Accept inputs with correct [MASK]', () => {
-    expect(() => new FillMaskTask('Hello World [MASK]')).toBeTruthy();
-  });
-
-  test('Options are set correctly', () => {
-    const task = new FillMaskTask('Hello World [MASK]', {
-      use_cache: true,
-      wait_for_model: false,
-    });
-
-    expect(task.options).toEqual({ use_cache: true, wait_for_model: false });
-  });
-
-  test('Options are included in json', () => {
-    const task = new FillMaskTask('Hello World [MASK]', {
-      use_cache: true,
-      wait_for_model: false,
-    });
-
-    expect(task.json()).toEqual(
-      JSON.stringify({
-        inputs: 'Hello World [MASK]',
-        options: { use_cache: true, wait_for_model: false },
+  test('should throw an error if inputs are not a string', async () => {
+    const snapshot = {
+      data: () => ({
+        inputs: 123,
       }),
+    } as any;
+
+    await expect(runHostedInference(snapshot, TaskId.fillMask)).rejects.toThrow(
+      Error,
     );
   });
 });
 
-describe('Test Summarization Task', () => {
-  test('Options are set correctly', () => {
-    const task = new FillMaskTask('Hello World [MASK]', {
-      use_cache: true,
-      wait_for_model: false,
-    });
-
-    expect(task.options).toEqual({ use_cache: true, wait_for_model: false });
-  });
-
-  test('Options are included in json', () => {
-    const task = new FillMaskTask('Hello World [MASK]', {
-      use_cache: true,
-      wait_for_model: false,
-    });
-
-    expect(task.json()).toEqual(
-      JSON.stringify({
-        inputs: 'Hello World [MASK]',
-        options: { use_cache: true, wait_for_model: false },
+describe(TaskId.summarization, () => {
+  test('should throw an error if inputs are not provided', async () => {
+    const snapshot = {
+      data: () => ({
+        inputs: undefined,
       }),
-    );
+    } as any;
+
+    await expect(
+      runHostedInference(snapshot, TaskId.summarization),
+    ).rejects.toThrow(Error);
   });
 
-  test('Parameters are set correctly', () => {
-    const task = new SummarizationTask('Hello World', {
-      min_length: 10,
-      max_length: 20,
-    });
-
-    expect(task.parameters).toEqual({
-      min_length: 10,
-      max_length: 20,
-    });
-  });
-
-  test('Parameters are included in json', () => {
-    const task = new SummarizationTask('Hello World', {
-      min_length: 10,
-      max_length: 20,
-    });
-
-    expect(task.json()).toEqual(
-      JSON.stringify({
-        inputs: 'Hello World',
-        parameters: { min_length: 10, max_length: 20 },
+  test('should throw an error if inputs are not a string', async () => {
+    const snapshot = {
+      data: () => ({
+        inputs: 123,
       }),
-    );
-  });
+    } as any;
 
-  test('`temperature` argument only accepts floats between 0.0 and 100.0', () => {
-    expect(
-      () => new SummarizationTask('Hello World', { temperature: -1 }),
-    ).toThrow(InvalidArgumentError);
-
-    expect(
-      () => new SummarizationTask('Hello World', { temperature: 101 }),
-    ).toThrow(InvalidArgumentError);
-
-    expect(
-      () => new SummarizationTask('Hello World', { temperature: 50 }),
-    ).toThrow(InvalidArgumentError);
-
-    expect(
-      () => new SummarizationTask('Hello World', { temperature: 50.1 }),
-    ).toBeTruthy();
+    await expect(
+      runHostedInference(snapshot, TaskId.summarization),
+    ).rejects.toThrow(Error);
   });
 });
