@@ -7,6 +7,7 @@ import { FillMaskTask, SummarizationTask, Task, TaskId } from './tasks';
 const host = 'api-inference.huggingface.co';
 
 /**
+ * Validate inputs and create a task.
  *
  * @param {functions.firestore.DocumentSnapshot} snapshot
  * @return {Task}
@@ -57,6 +58,7 @@ function validateInputs(
   return task;
 }
 /**
+ * Call Hugging Face inference API.
  *
  * @param {Task} task
  * @return {Promise<Response>}
@@ -69,6 +71,9 @@ function callHFInferenceAPI(task: Task) {
   });
 }
 
+/**
+ * Trigger inference on Firestore document creation.
+ */
 export const triggerInference = functions.firestore
   .document(`${config.collectionName}/{documentId}`)
   .onCreate(async snapshot => {
