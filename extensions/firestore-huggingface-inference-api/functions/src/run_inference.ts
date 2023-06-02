@@ -2,24 +2,16 @@ import * as functions from 'firebase-functions';
 import {
   FillMaskOutput,
   SummarizationOutput,
-  fillMask,
-  summarization,
-  questionAnswering,
   QuestionAnsweringOutput,
-  tableQuestionAnswering,
   TableQuestionAnsweringOutput,
-  sentenceSimilarity,
   SentenceSimilarityOutput,
-  textClassification,
   TextClassificationOutput,
-  textGeneration,
   TextGenerationOutput,
-  tokenClassification,
   TokenClassificationOutput,
-  translation,
   TranslationOutput,
   ZeroShotClassificationOutput,
-  zeroShotClassification,
+  HfInferenceEndpoint,
+  HfInference,
 } from '@huggingface/inference';
 
 import config from './config';
@@ -33,7 +25,8 @@ import { Task } from './tasks';
  */
 export async function runHostedInference(
   snapshot: functions.firestore.DocumentSnapshot,
-  task?: Task,
+  task: Task,
+  inference: HfInference | HfInferenceEndpoint,
 ): Promise<
   | FillMaskOutput
   | SummarizationOutput
@@ -53,19 +46,27 @@ export async function runHostedInference(
       if (!inputs || typeof inputs !== 'string')
         throw new Error('Field `inputs` must be provided and must be a string');
 
-      return await fillMask({
-        model: config.modelId,
+      const options = {
+        ...(inference instanceof HfInference && {
+          model: config.modelId,
+        }),
         inputs: inputs,
-      });
+      };
+
+      return await inference.fillMask(options);
     }
     case Task.summarization: {
       const { inputs } = snapshot.data();
       checkInputs(inputs);
 
-      return await summarization({
-        model: config.modelId,
+      const options = {
+        ...(inference instanceof HfInference && {
+          model: config.modelId,
+        }),
         inputs: inputs,
-      });
+      };
+
+      return await inference.summarization(options);
     }
 
     case Task.questionAnswering: {
@@ -81,13 +82,17 @@ export async function runHostedInference(
           'Field `question` must be provided and must be a string',
         );
 
-      return await questionAnswering({
-        model: config.modelId,
+      const options = {
+        ...(inference instanceof HfInference && {
+          model: config.modelId,
+        }),
         inputs: {
           context,
           question,
         },
-      });
+      };
+
+      return await inference.questionAnswering(options);
     }
 
     case Task.tableQuestionAnswering: {
@@ -101,8 +106,10 @@ export async function runHostedInference(
           'Field `query` and `table` are required and must be a string and an array of strings respectively',
         );
 
-      return await tableQuestionAnswering({
-        model: config.modelId,
+      return await inference.tableQuestionAnswering({
+        ...(inference instanceof HfInference && {
+          model: config.modelId,
+        }),
         inputs: {
           query,
           table,
@@ -123,23 +130,31 @@ export async function runHostedInference(
           'Field `source_sentence` and `sentences` are required and must be a string and an array of strings respectively',
         );
 
-      return await sentenceSimilarity({
-        model: config.modelId,
+      const options = {
+        ...(inference instanceof HfInference && {
+          model: config.modelId,
+        }),
         inputs: {
           source_sentence,
           sentences,
         },
-      });
+      };
+
+      return await inference.sentenceSimilarity(options);
     }
 
     case Task.textClassification: {
       const { inputs } = snapshot.data();
       checkInputs(inputs);
 
-      return await textClassification({
-        model: config.modelId,
+      const options = {
+        ...(inference instanceof HfInference && {
+          model: config.modelId,
+        }),
         inputs: inputs,
-      });
+      };
+
+      return await inference.textClassification(options);
     }
 
     case Task.textGeneration:
@@ -147,10 +162,14 @@ export async function runHostedInference(
       const { inputs } = snapshot.data();
       checkInputs(inputs);
 
-      return await textGeneration({
-        model: config.modelId,
+      const options = {
+        ...(inference instanceof HfInference && {
+          model: config.modelId,
+        }),
         inputs: inputs,
-      });
+      };
+
+      return await inference.textGeneration(options);
     }
 
     case Task.tokenClassification:
@@ -158,33 +177,45 @@ export async function runHostedInference(
       const { inputs } = snapshot.data();
       checkInputs(inputs);
 
-      return await tokenClassification({
-        model: config.modelId,
+      const options = {
+        ...(inference instanceof HfInference && {
+          model: config.modelId,
+        }),
         inputs: inputs,
-      });
+      };
+
+      return await inference.tokenClassification(options);
     }
 
     case Task.translation: {
       const { inputs } = snapshot.data();
       checkInputs(inputs);
 
-      return await translation({
-        model: config.modelId,
+      const options = {
+        ...(inference instanceof HfInference && {
+          model: config.modelId,
+        }),
         inputs: inputs,
-      });
+      };
+
+      return await inference.translation(options);
     }
     case Task.zeroShotClassification: {
       const { inputs, candidate_labels, multi_label } = snapshot.data();
       checkListInputs(inputs);
 
-      return await zeroShotClassification({
-        model: config.modelId,
-        inputs,
+      const options = {
+        ...(inference instanceof HfInference && {
+          model: config.modelId,
+        }),
+        inputs: inputs,
         parameters: {
           candidate_labels,
           multi_label,
         },
-      });
+      };
+
+      return await inference.zeroShotClassification(options);
     }
     case Task.conversational: {
       throw new Error('Conversational task is not supported yet');

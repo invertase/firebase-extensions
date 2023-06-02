@@ -2,7 +2,11 @@ name: firestore-huggingface-inference-api
 version: 0.0.1
 specVersion: v1beta
 
+icon: icon.png
+
 displayName: Trigger Hugging Face inference API from Firestore
+
+tags: [firestore, machinelearning, huggingface, nlp, inference]
 
 description: >-
   This extension triggers the Hugging Face inference API when 
@@ -35,18 +39,18 @@ resources:
   - name: triggerInference
     type: firebaseextensions.v1beta.function
     description: >-
-      Firestore onCreate-triggered function that run an inference on ${params:MODEL_ID} when a new 
-      document is created in the collection ${params:COLLECTION_NAME}
+      Firestore onCreate-triggered function that run an inference on ${param:MODEL_ID} when a new 
+      document is created in the collection ${param:COLLECTION_PATH}
     properties:
       location: ${LOCATION}
       runtime: 'nodejs18'
       eventTrigger:
         eventType: providers/cloud.firestore/eventTypes/document.write
-        resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_NAME}/{id}
+        resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${COLLECTION_PATH}/{id}
 
 params:
   - param: HF_ACCESS_TOKEN
-    label: Hugging Face API Token
+    label: Hugging Face Access Token
     description: >-
       You can find your API token on your [Hugging Face account page](https://huggingface.co/settings/token).
 
@@ -55,7 +59,7 @@ params:
       You should see a token hf_xxxxx (old tokens are api_XXXXXXXX or api_org_XXXXXXX).
 
       If you do not submit your API token when sending requests to the API, you will not be able to run inference on your private models.
-    type: string
+    type: secret
     required: true
 
   - param: MODEL_ID
@@ -68,14 +72,17 @@ params:
     type: string
     required: true
 
-  - param: COLLECTION_NAME
-    label: Inference Collection Name
+  - param: COLLECTION_PATH
+    label: Inference Collection Path
     description: >-
       New inferences using the HuggingFace Inference API can be made 
-      by easily adding a new document to this collection.
+      by easily adding a new document to this collection path.
     type: string
     required: true
     immutable: false
+    validationRegex: '^[^/]+(/[^/]+/[^/]+)*$'
+    validationErrorMessage: Must be a valid Cloud Firestore Collection
+    example: users/{uid}/discussions/{discussionId}/messages
 
   - param: TASK
     label: The task to run the inference on
@@ -89,5 +96,87 @@ params:
         value: fill-mask
       - label: Text Summarization Task
         value: summarization
+      - label: Question Answering Task
+        value: question-answering
+      - label: Table Question Answering Task
+        value: table-question-answering
+      - label: Sentence Similarity Task
+        value: sentence-similarity
+      - label: Text Classification Task
+        value: text-classification
+      - label: Text Generation Task
+        value: text-generation
+      - label: Text2Text Generation Task
+        value: text2text-generation
+      - label: Token Classification Task
+        value: token-classification
+      - label: Named Entity Recognition Task
+        value: named-entity-recognition
+      - label: Translation Task
+        value: translation
+      - label: Zero Shot Classification Task
+        value: zeroshot-classification
+      - label: Conversational Task
+        value: conversational
+      - label: Feature Extraction Task
+        value: feature-extraction
+    required: true
+    immutable: true
+
+  - param: HF_INFERENCE_ENDPOINT
+    label: Custom Inference Endpoint
+    description: >-
+      If you want to use a custom model hosted on your own server,
+      you can specify the endpoint here.
+    type: string
+
+  - param: LOCATION
+    label: Cloud Functions location
+    description: >-
+      Where do you want to deploy the functions created for this extension? For
+      help selecting a location, refer to the [location selection
+      guide](https://firebase.google.com/docs/functions/locations).
+    type: select
+    options:
+      - label: Iowa (us-central1)
+        value: us-central1
+      - label: South Carolina (us-east1)
+        value: us-east1
+      - label: Northern Virginia (us-east4)
+        value: us-east4
+      - label: Los Angeles (us-west2)
+        value: us-west2
+      - label: Salt Lake City (us-west3)
+        value: us-west3
+      - label: Las Vegas (us-west4)
+        value: us-west4
+      - label: Warsaw (europe-central2)
+        value: europe-central2
+      - label: Belgium (europe-west1)
+        value: europe-west1
+      - label: London (europe-west2)
+        value: europe-west2
+      - label: Frankfurt (europe-west3)
+        value: europe-west3
+      - label: Zurich (europe-west6)
+        value: europe-west6
+      - label: Hong Kong (asia-east2)
+        value: asia-east2
+      - label: Tokyo (asia-northeast1)
+        value: asia-northeast1
+      - label: Osaka (asia-northeast2)
+        value: asia-northeast2
+      - label: Seoul (asia-northeast3)
+        value: asia-northeast3
+      - label: Mumbai (asia-south1)
+        value: asia-south1
+      - label: Jakarta (asia-southeast2)
+        value: asia-southeast2
+      - label: Montreal (northamerica-northeast1)
+        value: northamerica-northeast1
+      - label: Sao Paulo (southamerica-east1)
+        value: southamerica-east1
+      - label: Sydney (australia-southeast1)
+        value: australia-southeast1
     required: true
     immutable: true

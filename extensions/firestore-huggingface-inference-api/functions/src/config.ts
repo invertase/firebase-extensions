@@ -2,9 +2,10 @@ import { Task } from './tasks';
 
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 export default {
-  collectionName: process.env.COLLECTION_NAME!,
+  collectionPath: process.env.COLLECTION_PATH!,
   location: process.env.LOCATION!,
   accessToken: process.env.HF_ACCESS_TOKEN!,
   modelId: process.env.MODEL_ID!,
   task: process.env.TASK! as Task,
+  inferenceEndpoint: process.env.HF_INFERENCE_ENDPOINT!,
 };
