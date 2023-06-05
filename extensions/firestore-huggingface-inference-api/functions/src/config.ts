@@ -7,5 +7,5 @@ export default {
   accessToken: process.env.HF_ACCESS_TOKEN!,
   modelId: process.env.MODEL_ID!,
   task: process.env.TASK! as TaskId,
-  inferenceEndpoint: process.env.HF_INFERENCE_ENDPOINT!,
+  inferenceEndpoint: process.env.HF_INFERENCE_ENDPOINT,
 };
