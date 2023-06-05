@@ -96,10 +96,5 @@ export async function runInference(
     case TaskId.featureExtraction: {
       return await tasks.featureExtraction(snapshot, inference);
     }
-
-    default: {
-      snapshot.ref.update({ error: 'Invalid task' });
-      throw new Error('Invalid task');
-    }
   }
 }
