@@ -32,7 +32,7 @@ The response will get written back to the same document.
 
 ## Error handling
 
-If the extension encounters an error, it will write the error message to the document in `${param:collectionPath}`.
+If the extension encounters an error, it will write the error message to the document in `${param:COLLECTION_PATH}`.
 
 ```
 {
