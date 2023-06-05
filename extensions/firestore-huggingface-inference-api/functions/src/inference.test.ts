@@ -1,8 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
-import { runInference } from './run_inference';
+import { runInference } from './inference';
 import { Task } from './tasks';
 import { HfInference, HfInferenceEndpoint } from '@huggingface/inference';
-import { DocumentSnapshot } from 'firebase-admin/firestore';
 
 const inference = new HfInference('test');
 

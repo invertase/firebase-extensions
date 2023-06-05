@@ -16,7 +16,7 @@ import {
 
 import config from './config';
 import { Task } from './tasks';
-import { FirestoreInput } from './types/table';
+import { FirestoreTableInput } from './types/table';
 
 /**
  * Validate inputs and create a task.
@@ -254,7 +254,7 @@ function checkListInputs(inputs: any) {
   }
 }
 
-function validateFirestoreInput(data: any): data is FirestoreInput {
+function validateFirestoreInput(data: any): data is FirestoreTableInput {
   if (!data || typeof data !== 'object' || !data.inputs) {
     return false;
   }

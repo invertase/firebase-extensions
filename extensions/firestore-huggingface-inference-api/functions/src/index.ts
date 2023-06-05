@@ -7,7 +7,7 @@ import {
   HfInferenceEndpoint,
   HfInference,
 } from '@huggingface/inference';
-import { runInference } from './run_inference';
+import { runInference } from './inference';
 
 /**
  * Trigger inference on Firestore document creation.

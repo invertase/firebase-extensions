@@ -7,6 +7,6 @@ interface InferenceInput {
   table: TableData;
 }
 
-export interface FirestoreInput {
+export interface FirestoreTableInput {
   inputs: InferenceInput;
 }
