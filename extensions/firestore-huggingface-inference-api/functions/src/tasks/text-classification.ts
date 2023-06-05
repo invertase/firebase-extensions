@@ -26,7 +26,9 @@ export function textClassification(
   return inference.request<TextClassificationOutput>(options);
 }
 
-function validateInput(inputs: any) {
+function validateInput(data: any) {
+  const { inputs } = data;
+
   if (!inputs || typeof inputs !== 'string') {
     throw new Error('Field `inputs` must be provided and must be a string');
   }
