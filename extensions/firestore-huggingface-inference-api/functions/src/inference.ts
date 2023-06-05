@@ -12,11 +12,15 @@ import {
   ZeroShotClassificationOutput,
   HfInferenceEndpoint,
   HfInference,
+  FeatureExtractionOutput,
+  ConversationalOutput,
 } from '@huggingface/inference';
 
 import config from './config';
 import { Task } from './tasks';
 import { FirestoreTableInput } from './types/table';
+import { conversational } from './tasks/conversational';
+import { featureExtraction } from './tasks/feature-extraction';
 
 /**
  * Validate inputs and create a task.
@@ -39,6 +43,8 @@ export async function runInference(
   | TokenClassificationOutput
   | TranslationOutput
   | ZeroShotClassificationOutput
+  | FeatureExtractionOutput
+  | ConversationalOutput
 > {
   switch (task) {
     case Task.fillMask: {
@@ -221,10 +227,10 @@ export async function runInference(
       return await inference.zeroShotClassification(options);
     }
     case Task.conversational: {
-      throw new Error('Conversational task is not supported yet');
+      return await conversational(snapshot, inference);
     }
     case Task.featureExtraction: {
-      throw new Error('Feature extraction task is not supported yet');
+      return await featureExtraction(snapshot, inference);
     }
 
     default: {
