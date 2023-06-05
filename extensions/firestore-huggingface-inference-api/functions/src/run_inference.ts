@@ -16,6 +16,7 @@ import {
 
 import config from './config';
 import { Task } from './tasks';
+import { FirestoreInput } from './types/table';
 
 /**
  * Validate inputs and create a task.
@@ -23,7 +24,7 @@ import { Task } from './tasks';
  * @param {functions.firestore.DocumentSnapshot} snapshot
  * @return {Task}
  */
-export async function runHostedInference(
+export async function runInference(
   snapshot: functions.firestore.DocumentSnapshot,
   task: Task,
   inference: HfInference | HfInferenceEndpoint,
@@ -55,6 +56,7 @@ export async function runHostedInference(
 
       return await inference.fillMask(options);
     }
+
     case Task.summarization: {
       const { inputs } = snapshot.data();
       checkInputs(inputs);
@@ -96,24 +98,21 @@ export async function runHostedInference(
     }
 
     case Task.tableQuestionAnswering: {
-      const { query, table } = snapshot.data() as {
-        query?: string;
-        table?: Record<string, string[]>;
-      };
-
-      if (!query || !table || typeof query !== 'string')
+      const { inputs } = snapshot.data();
+      if (
+        !inputs.query ||
+        typeof inputs.query !== 'string' ||
+        !validateFirestoreInput({ inputs: inputs })
+      )
         throw new Error(
-          'Field `query` and `table` are required and must be a string and an array of strings respectively',
+          'Field `query` and `table` are required and must be a string and a dictionary respectively',
         );
 
       return await inference.tableQuestionAnswering({
         ...(inference instanceof HfInference && {
           model: config.modelId,
         }),
-        inputs: {
-          query,
-          table,
-        },
+        inputs: inputs,
       });
     }
 
@@ -253,4 +252,34 @@ function checkListInputs(inputs: any) {
       'Field `inputs` must be provided and must be a string or a list of strings',
     );
   }
+}
+
+function validateFirestoreInput(data: any): data is FirestoreInput {
+  if (!data || typeof data !== 'object' || !data.inputs) {
+    return false;
+  }
+
+  const inputs = data.inputs;
+
+  if (typeof inputs.query !== 'string') {
+    return false;
+  }
+
+  const table = inputs.table;
+
+  if (!table || typeof table !== 'object') {
+    return false;
+  }
+
+  // Check all properties of table are string arrays
+  for (const key in table) {
+    if (
+      !Array.isArray(table[key]) ||
+      !table[key].every((item: any) => typeof item === 'string')
+    ) {
+      return false;
+    }
+  }
+
+  return true;
 }
