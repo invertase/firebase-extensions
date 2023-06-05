@@ -14,7 +14,7 @@ description: >-
 
 license: Apache-2.0
 
-sourceUrl: https://github.com/firebase/firebase-tools/tree/master/templates/extensions
+sourceUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-huggingface-inference-api
 
 billingRequired: false
 
