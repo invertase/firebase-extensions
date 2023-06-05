@@ -1,38 +1,25 @@
-import * as functions from 'firebase-functions';
 import {
+  ConversationalOutput,
+  FeatureExtractionOutput,
   FillMaskOutput,
-  SummarizationOutput,
+  HfInference,
+  HfInferenceEndpoint,
   QuestionAnsweringOutput,
-  TableQuestionAnsweringOutput,
   SentenceSimilarityOutput,
+  SummarizationOutput,
+  TableQuestionAnsweringOutput,
   TextClassificationOutput,
   TextGenerationOutput,
   TokenClassificationOutput,
   TranslationOutput,
   ZeroShotClassificationOutput,
-  HfInferenceEndpoint,
-  HfInference,
-  FeatureExtractionOutput,
-  ConversationalOutput,
 } from '@huggingface/inference';
+import * as functions from 'firebase-functions';
 
-import config from './config';
-import { Task } from './tasks';
-import { FirestoreTableInput } from './types/table';
-import { conversational } from './tasks/conversational';
-import { featureExtraction } from './tasks/feature-extraction';
+import * as tasks from './tasks';
+import { TaskId } from './tasks';
 
-/**
- * Validate inputs and create a task.
- *
- * @param {functions.firestore.DocumentSnapshot} snapshot
- * @return {Task}
- */
-export async function runInference(
-  snapshot: functions.firestore.DocumentSnapshot,
-  task: Task,
-  inference: HfInference | HfInferenceEndpoint,
-): Promise<
+type InferenceOutput =
   | FillMaskOutput
   | SummarizationOutput
   | QuestionAnsweringOutput
@@ -44,193 +31,70 @@ export async function runInference(
   | TranslationOutput
   | ZeroShotClassificationOutput
   | FeatureExtractionOutput
-  | ConversationalOutput
-> {
+  | ConversationalOutput;
+
+/**
+ * Validate the input and run inference.
+ *
+ * @param {functions.firestore.DocumentSnapshot} snapshot The Firestore snapshot.
+ * @return {InferenceOutput} The inference output based on the specified task.
+ */
+export async function runInference(
+  snapshot: functions.firestore.DocumentSnapshot,
+  task: TaskId,
+  inference: HfInference | HfInferenceEndpoint,
+): Promise<InferenceOutput> {
   switch (task) {
-    case Task.fillMask: {
-      const { inputs } = snapshot.data();
-
-      if (!inputs || typeof inputs !== 'string')
-        throw new Error('Field `inputs` must be provided and must be a string');
-
-      const options = {
-        ...(inference instanceof HfInference && {
-          model: config.modelId,
-        }),
-        inputs: inputs,
-      };
-
-      return await inference.fillMask(options);
+    case TaskId.fillMask: {
+      return await tasks.fillMask(snapshot, inference);
     }
 
-    case Task.summarization: {
-      const { inputs } = snapshot.data();
-      checkInputs(inputs);
-
-      const options = {
-        ...(inference instanceof HfInference && {
-          model: config.modelId,
-        }),
-        inputs: inputs,
-      };
-
-      return await inference.summarization(options);
+    case TaskId.summarization: {
+      return await tasks.summarization(snapshot, inference);
     }
 
-    case Task.questionAnswering: {
-      const { question, context } = snapshot.data();
-
-      if (
-        !question ||
-        !context ||
-        typeof question !== 'string' ||
-        typeof context !== 'string'
-      )
-        throw new Error(
-          'Field `question` must be provided and must be a string',
-        );
-
-      const options = {
-        ...(inference instanceof HfInference && {
-          model: config.modelId,
-        }),
-        inputs: {
-          context,
-          question,
-        },
-      };
-
-      return await inference.questionAnswering(options);
+    case TaskId.questionAnswering: {
+      return await tasks.questionAnswering(snapshot, inference);
     }
 
-    case Task.tableQuestionAnswering: {
-      const { inputs } = snapshot.data();
-      if (
-        !inputs.query ||
-        typeof inputs.query !== 'string' ||
-        !validateFirestoreInput({ inputs: inputs })
-      )
-        throw new Error(
-          'Field `query` and `table` are required and must be a string and a dictionary respectively',
-        );
-
-      return await inference.tableQuestionAnswering({
-        ...(inference instanceof HfInference && {
-          model: config.modelId,
-        }),
-        inputs: inputs,
-      });
+    case TaskId.tableQuestionAnswering: {
+      return await tasks.tableQuestionAnswering(snapshot, inference);
     }
 
-    case Task.sentenceSimilarity: {
-      const { source_sentence, sentences } = snapshot.data();
-
-      if (
-        !source_sentence ||
-        !sentences ||
-        typeof source_sentence !== 'string' ||
-        !(sentences instanceof Array)
-      )
-        throw new Error(
-          'Field `source_sentence` and `sentences` are required and must be a string and an array of strings respectively',
-        );
-
-      const options = {
-        ...(inference instanceof HfInference && {
-          model: config.modelId,
-        }),
-        inputs: {
-          source_sentence,
-          sentences,
-        },
-      };
-
-      return await inference.sentenceSimilarity(options);
+    case TaskId.sentenceSimilarity: {
+      return await tasks.sentenceSimilarity(snapshot, inference);
     }
 
-    case Task.textClassification: {
-      const { inputs } = snapshot.data();
-      checkInputs(inputs);
-
-      const options = {
-        ...(inference instanceof HfInference && {
-          model: config.modelId,
-        }),
-        inputs: inputs,
-        parameters: {
-          return_all_scores: true,
-          top_k: null,
-        },
-      };
-
-      return await inference.request<TextClassificationOutput>(options);
+    case TaskId.textClassification: {
+      return await tasks.textClassification(snapshot, inference);
     }
 
-    case Task.textGeneration:
-    case Task.text2textGeneration: {
-      const { inputs } = snapshot.data();
-      checkInputs(inputs);
-
-      const options = {
-        ...(inference instanceof HfInference && {
-          model: config.modelId,
-        }),
-        inputs: inputs,
-      };
-
-      return await inference.textGeneration(options);
+    // Text generation and text2text are currently the same.
+    // See https://huggingface.co/docs/api-inference/detailed_parameters#text2text-generation-task
+    case TaskId.textGeneration:
+    case TaskId.text2textGeneration: {
+      return await tasks.textGeneration(snapshot, inference);
     }
 
-    case Task.tokenClassification:
-    case Task.namedEntityRecognition: {
-      const { inputs } = snapshot.data();
-      checkInputs(inputs);
-
-      const options = {
-        ...(inference instanceof HfInference && {
-          model: config.modelId,
-        }),
-        inputs: inputs,
-      };
-
-      return await inference.tokenClassification(options);
+    // Token Classification and Named Entity Recognition are currently the same.
+    // See https://huggingface.co/docs/api-inference/detailed_parameters#named-entity-recognition-ner-task
+    case TaskId.tokenClassification:
+    case TaskId.namedEntityRecognition: {
+      return await tasks.tokenClassification(snapshot, inference);
     }
 
-    case Task.translation: {
-      const { inputs } = snapshot.data();
-      checkInputs(inputs);
-
-      const options = {
-        ...(inference instanceof HfInference && {
-          model: config.modelId,
-        }),
-        inputs: inputs,
-      };
-
-      return await inference.translation(options);
+    case TaskId.translation: {
+      return await tasks.translation(snapshot, inference);
     }
-    case Task.zeroShotClassification: {
-      const { inputs, candidate_labels, multi_label } = snapshot.data();
-      checkListInputs(inputs);
 
-      const options = {
-        ...(inference instanceof HfInference && {
-          model: config.modelId,
-        }),
-        inputs: inputs,
-        parameters: {
-          candidate_labels,
-          multi_label,
-        },
-      };
-
-      return await inference.zeroShotClassification(options);
+    case TaskId.zeroShotClassification: {
+      return await tasks.zeroShotClassification(snapshot, inference);
     }
-    case Task.conversational: {
-      return await conversational(snapshot, inference);
+    case TaskId.conversational: {
+      return await tasks.conversational(snapshot, inference);
     }
-    case Task.featureExtraction: {
-      return await featureExtraction(snapshot, inference);
+    case TaskId.featureExtraction: {
+      return await tasks.featureExtraction(snapshot, inference);
     }
 
     default: {
@@ -238,54 +102,4 @@ export async function runInference(
       throw new Error('Invalid task');
     }
   }
-}
-
-function checkInputs(inputs: any) {
-  if (!inputs || typeof inputs !== 'string') {
-    throw new Error('Field `inputs` must be provided and must be a string');
-  }
-}
-
-function checkListInputs(inputs: any) {
-  if (
-    !inputs ||
-    !(typeof inputs !== 'string') ||
-    !(inputs instanceof Array) ||
-    inputs.length === 0 ||
-    typeof inputs[0] !== 'string'
-  ) {
-    throw new Error(
-      'Field `inputs` must be provided and must be a string or a list of strings',
-    );
-  }
-}
-
-function validateFirestoreInput(data: any): data is FirestoreTableInput {
-  if (!data || typeof data !== 'object' || !data.inputs) {
-    return false;
-  }
-
-  const inputs = data.inputs;
-
-  if (typeof inputs.query !== 'string') {
-    return false;
-  }
-
-  const table = inputs.table;
-
-  if (!table || typeof table !== 'object') {
-    return false;
-  }
-
-  // Check all properties of table are string arrays
-  for (const key in table) {
-    if (
-      !Array.isArray(table[key]) ||
-      !table[key].every((item: any) => typeof item === 'string')
-    ) {
-      return false;
-    }
-  }
-
-  return true;
 }

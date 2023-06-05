@@ -6,7 +6,7 @@ import {
 import { DocumentSnapshot } from 'firebase-admin/firestore';
 
 export function conversational(
-  data: DocumentSnapshot,
+  snapshot: DocumentSnapshot,
   inference: HfInference | HfInferenceEndpoint,
 ): Promise<ConversationalOutput> {
   throw new Error('Conversational task is not supported yet');

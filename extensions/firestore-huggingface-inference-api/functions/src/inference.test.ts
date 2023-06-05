@@ -1,7 +1,7 @@
+import { HfInference, HfInferenceEndpoint } from '@huggingface/inference';
 import { describe, expect, test } from '@jest/globals';
 import { runInference } from './inference';
-import { Task } from './tasks';
-import { HfInference, HfInferenceEndpoint } from '@huggingface/inference';
+import { TaskId } from './tasks';
 
 const inference = new HfInference('test');
 
@@ -20,7 +20,7 @@ jest.mock('@huggingface/inference', () => ({
   })),
 }));
 
-describe(Task.fillMask, () => {
+describe(TaskId.fillMask, () => {
   test('should throw an error if inputs are not provided', async () => {
     const snapshot = {
       data: () => ({
@@ -29,7 +29,7 @@ describe(Task.fillMask, () => {
     } as any;
 
     await expect(
-      runInference(snapshot, Task.fillMask, inference),
+      runInference(snapshot, TaskId.fillMask, inference),
     ).rejects.toThrow(Error);
   });
 
@@ -41,12 +41,12 @@ describe(Task.fillMask, () => {
     } as any;
 
     await expect(
-      runInference(snapshot, Task.fillMask, inference),
+      runInference(snapshot, TaskId.fillMask, inference),
     ).rejects.toThrow(Error);
   });
 });
 
-describe(Task.summarization, () => {
+describe(TaskId.summarization, () => {
   test('should throw an error if inputs are not provided', async () => {
     const snapshot = {
       data: () => ({
@@ -55,7 +55,7 @@ describe(Task.summarization, () => {
     } as any;
 
     await expect(
-      runInference(snapshot, Task.summarization, inference),
+      runInference(snapshot, TaskId.summarization, inference),
     ).rejects.toThrow(Error);
   });
 
@@ -67,18 +67,18 @@ describe(Task.summarization, () => {
     } as any;
 
     await expect(
-      runInference(snapshot, Task.summarization, inference),
+      runInference(snapshot, TaskId.summarization, inference),
     ).rejects.toThrow(Error);
   });
 });
 
 // Testing questionAnswering task.
-describe(Task.questionAnswering, () => {
-  let mockTask: Task;
+describe(TaskId.questionAnswering, () => {
+  let mockTask: TaskId;
   let inference: HfInference | HfInferenceEndpoint;
 
   beforeAll(() => {
-    mockTask = Task.questionAnswering;
+    mockTask = TaskId.questionAnswering;
     inference = new HfInference();
   });
 
@@ -140,8 +140,8 @@ describe(Task.questionAnswering, () => {
 });
 
 // Testing tableQuestionAnswering task.
-describe(Task.tableQuestionAnswering, () => {
-  let mockTask: Task;
+describe(TaskId.tableQuestionAnswering, () => {
+  let mockTask: TaskId;
   let inference: HfInference | HfInferenceEndpoint;
   const snapshot = {
     data: () => ({
@@ -156,7 +156,7 @@ describe(Task.tableQuestionAnswering, () => {
   } as any;
 
   beforeAll(() => {
-    mockTask = Task.tableQuestionAnswering;
+    mockTask = TaskId.tableQuestionAnswering;
     inference = new HfInference();
   });
 
