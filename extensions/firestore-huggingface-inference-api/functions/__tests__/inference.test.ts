@@ -1,7 +1,7 @@
 import { HfInference, HfInferenceEndpoint } from '@huggingface/inference';
 import { describe, expect, test } from '@jest/globals';
-import { runInference } from './inference';
-import { TaskId } from './tasks';
+import { runInference } from '../src/inference';
+import { TaskId } from '../src/tasks';
 
 const inference = new HfInference('test');
 
