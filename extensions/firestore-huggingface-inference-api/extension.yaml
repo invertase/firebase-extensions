@@ -27,22 +27,13 @@ roles:
     reason: This role is required to read/write from the Cloud Firestore database.
 
 resources:
-  # - name: runInference
-  #   type: firebaseextensions.v1beta.function
-  #   description: >-
-  #     HTTP call-triggered function that run an inference on ${params:MODEL_ID}
-  #   properties:
-  #     location: ${LOCATION}
-  #     runtime: 'nodejs16'
-  #     httpsTrigger: {}
-
   - name: triggerInference
     type: firebaseextensions.v1beta.function
     description: >-
       Firestore onCreate-triggered function that run an inference on ${param:MODEL_ID} when a new 
       document is created in the collection ${param:COLLECTION_PATH}
     properties:
-      location: ${LOCATION}
+      location: ${param:LOCATION}
       runtime: 'nodejs18'
       eventTrigger:
         eventType: providers/cloud.firestore/eventTypes/document.write

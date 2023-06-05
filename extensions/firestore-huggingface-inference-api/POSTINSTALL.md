@@ -5,6 +5,7 @@ You can test out this extension right away!
 Depending on the task you want to run, add a new Firestore document to `${param:collectionPath}`.
 
 For example, if you want to run a text classification task using the model [`distilbert-base-uncased-finetuned-sst-2-english`](https://huggingface.co/distilbert-base-uncased-finetuned-sst-2-english), add a new document to `${param:collectionPath}` with the following fields:
+
 ```
 {
   "inputs": "You're amazing!"
