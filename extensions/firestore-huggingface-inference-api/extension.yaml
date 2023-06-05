@@ -8,6 +8,14 @@ displayName: Trigger Hugging Face inference API from Firestore
 
 tags: [firestore, machinelearning, huggingface, nlp, inference]
 
+author:
+  authorName: Invertase
+  url: https://invertase.io
+
+contributors:
+  - authorName: Mais Alheraki
+    url: https://github.com/pr-Mais
+
 description: >-
   This extension triggers the Hugging Face inference API when 
   a new document is created in a Firestore collection.
@@ -16,7 +24,7 @@ license: Apache-2.0
 
 sourceUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-huggingface-inference-api
 
-billingRequired: false
+billingRequired: true
 
 externalServices:
   - name: Hugging Face Hosted Inference API
