@@ -2,19 +2,11 @@ Use this extension to run inferences in a Firestore collection using the [Huggin
 
 When triggered by a write operation in a Firestore document, this extension performs a Natural Language Processing task on a specified field and updates the document with the results.
 
-The extension supports both using Hugging Face Hosted Inference API and using a custom model hosted on your own server.
+The extension supports both using Hugging Face [Hosted Inference API](https://huggingface.co/docs/api-inference) and [Inference Endpoints](https://huggingface.co/docs/inference-endpoints/index).
 
 ## Supported tasks
 
-This extension **currently** supports the following Natural Language Processing tasks:
-- [Fill Mask](https://huggingface.co/docs/api-inference#fill-mask)
-- [Summarization](https://huggingface.co/docs/api-inference#summarization)
-- [Question Answering](https://huggingface.co/docs/api-inference/detailed_parameters#question-answering-task)
-- [Table Question Answering task](https://huggingface.co/docs/api-inference/detailed_parameters#table-question-answering-task)
-- [Sentence Similarity task](https://huggingface.co/docs/api-inference/detailed_parameters#sentence-similarity-task)
-- [Text Classification task](https://huggingface.co/docs/api-inference/detailed_parameters#text-classification-task)
-  
-For more information about the Hugging Face inference API, see the [documentation](https://huggingface.co/docs/api-inference).
+This extension **currently** supports all Natural Language Processing tasks that are supported by HuggingFace, [click here to see the full list of NLP tasks](https://huggingface.co/docs/api-inference).
 
 # Billing
 

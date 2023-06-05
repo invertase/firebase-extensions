@@ -1,17 +1,44 @@
-# See it in action
+## See it in action
 
 You can test out this extension right away!
 
-Visit the following URL:
-${function:greetTheWorld.url}
+Depending on the task you want to run, add a new Firestore document to `${param:collectionPath}`.
 
-# Using the extension
+For example, if you want to run a text classification task using the model [`distilbert-base-uncased-finetuned-sst-2-english`](https://huggingface.co/distilbert-base-uncased-finetuned-sst-2-english), add a new document to `${param:collectionPath}` with the following fields:
+```
+{
+  "inputs": "You're amazing!"
+}
+```
 
-When triggered by an HTTP request, this extension responds with the following specified greeting: "${param:GREETING} World from ${param:EXT_INSTANCE_ID}".
+The response will get written back to the same document.
 
-To learn more about HTTP functions, visit the [functions documentation](https://firebase.google.com/docs/functions/http-events).
+```
+{
+  "inputs": "You're amazing!",
+  "response": [
+    {
+      "label": "POSITIVE",
+      "score": 0.9998762602806091
+    },
+    {
+      "label": "NEGATIVE",
+      "score": 0.00012373875781264198
+    }
+  ]
+}
+```
 
-<!-- We recommend keeping the following section to explain how to monitor extensions with Firebase -->
+## Error handling
+
+If the extension encounters an error, it will write the error message to the document in `${param:collectionPath}`.
+
+```
+{
+  "text": "You're amazing!",
+  "error": "Field `inputs` must be provided and must be a string or a list of strings"
+}
+```
 
 # Monitoring
 
