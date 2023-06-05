@@ -3,9 +3,9 @@ import * as functions from 'firebase-functions';
 import config from './config';
 
 import {
-  InferenceOutputError,
-  HfInferenceEndpoint,
   HfInference,
+  HfInferenceEndpoint,
+  InferenceOutputError,
 } from '@huggingface/inference';
 import { runInference } from './inference';
 
@@ -18,6 +18,11 @@ export const triggerInference = functions.firestore
     try {
       if (!snapshot.after.exists) {
         functions.logger.info('Document deleted, skipping inference');
+        return;
+      }
+
+      if (snapshot.after.isEqual(snapshot.before)) {
+        functions.logger.info('Document have not changed, skipping inference');
         return;
       }
 
