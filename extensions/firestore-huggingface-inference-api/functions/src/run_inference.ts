@@ -152,9 +152,13 @@ export async function runHostedInference(
           model: config.modelId,
         }),
         inputs: inputs,
+        parameters: {
+          return_all_scores: true,
+          top_k: null,
+        },
       };
 
-      return await inference.textClassification(options);
+      return await inference.request<TextClassificationOutput>(options);
     }
 
     case Task.textGeneration:
