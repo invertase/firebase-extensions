@@ -46,34 +46,34 @@ export async function runInference(
 ): Promise<InferenceOutput> {
   switch (task) {
     case TaskId.fillMask: {
-      return await tasks.fillMask(snapshot, inference);
+      return tasks.fillMask(snapshot, inference);
     }
 
     case TaskId.summarization: {
-      return await tasks.summarization(snapshot, inference);
+      return tasks.summarization(snapshot, inference);
     }
 
     case TaskId.questionAnswering: {
-      return await tasks.questionAnswering(snapshot, inference);
+      return tasks.questionAnswering(snapshot, inference);
     }
 
     case TaskId.tableQuestionAnswering: {
-      return await tasks.tableQuestionAnswering(snapshot, inference);
+      return tasks.tableQuestionAnswering(snapshot, inference);
     }
 
     case TaskId.sentenceSimilarity: {
-      return await tasks.sentenceSimilarity(snapshot, inference);
+      return tasks.sentenceSimilarity(snapshot, inference);
     }
 
     case TaskId.textClassification: {
-      return await tasks.textClassification(snapshot, inference);
+      return tasks.textClassification(snapshot, inference);
     }
 
     // Text generation and text2text are currently the same.
     // See https://huggingface.co/docs/api-inference/detailed_parameters#text2text-generation-task
     case TaskId.textGeneration:
     case TaskId.text2textGeneration: {
-      return await tasks.textGeneration(snapshot, inference);
+      return tasks.textGeneration(snapshot, inference);
     }
 
     // Token Classification and Named Entity Recognition are currently the same.
@@ -84,17 +84,17 @@ export async function runInference(
     }
 
     case TaskId.translation: {
-      return await tasks.translation(snapshot, inference);
+      return tasks.translation(snapshot, inference);
     }
 
     case TaskId.zeroShotClassification: {
-      return await tasks.zeroShotClassification(snapshot, inference);
+      return tasks.zeroShotClassification(snapshot, inference);
     }
     case TaskId.conversational: {
-      return await tasks.conversational(snapshot, inference);
+      return tasks.conversational(snapshot, inference);
     }
     case TaskId.featureExtraction: {
-      return await tasks.featureExtraction(snapshot, inference);
+      return tasks.featureExtraction(snapshot, inference);
     }
   }
 }
