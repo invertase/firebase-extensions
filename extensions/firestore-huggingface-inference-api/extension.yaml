@@ -1,0 +1,181 @@
+name: firestore-huggingface-inference-api
+version: 0.0.1
+specVersion: v1beta
+
+icon: icon.png
+
+displayName: Trigger Hugging Face inference API from Firestore
+
+tags: [firestore, machinelearning, huggingface, nlp, inference]
+
+author:
+  authorName: Invertase
+  url: https://invertase.io
+
+contributors:
+  - authorName: Mais Alheraki
+    url: https://github.com/pr-Mais
+
+description: >-
+  This extension triggers the Hugging Face inference API when 
+  a new document is created in a Firestore collection.
+
+license: Apache-2.0
+
+sourceUrl: https://github.com/invertase/firebase-extensions/tree/main/extensions/firestore-huggingface-inference-api
+
+billingRequired: true
+
+externalServices:
+  - name: Hugging Face Hosted Inference API
+    pricingUri: https://huggingface.co/docs/api-inference/index
+
+roles:
+  - role: datastore.user
+    reason: This role is required to read/write from the Cloud Firestore database.
+
+resources:
+  - name: triggerInference
+    type: firebaseextensions.v1beta.function
+    description: >-
+      Firestore onCreate-triggered function that run an inference on ${param:MODEL_ID} when a new 
+      document is created in the collection ${param:COLLECTION_PATH}
+    properties:
+      location: ${param:LOCATION}
+      runtime: 'nodejs18'
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.write
+        resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${COLLECTION_PATH}/{id}
+
+params:
+  - param: HF_ACCESS_TOKEN
+    label: Hugging Face Access Token
+    description: >-
+      You can find your API token on your [Hugging Face account page](https://huggingface.co/settings/token).
+
+      From Hugging Face docs:
+
+      You should see a token hf_xxxxx (old tokens are api_XXXXXXXX or api_org_XXXXXXX).
+
+      If you do not submit your API token when sending requests to the API, you will not be able to run inference on your private models.
+    type: secret
+    required: true
+
+  - param: MODEL_ID
+    label: Model ID
+    description: >-
+      The Model ID from [Hugging Face Model Hub](https://huggingface.co/models).
+
+      Check the [recommended models for each ML task available](https://api-inference.huggingface.co/docs/python/html/detailed_parameters.html#detailed-parameters), 
+      or the [Tasks](https://huggingface.co/tasks) overview.
+    type: string
+    required: true
+
+  - param: COLLECTION_PATH
+    label: Inference Collection Path
+    description: >-
+      New inferences using the HuggingFace Inference API can be made 
+      by easily adding a new document to this collection path.
+    type: string
+    required: true
+    immutable: false
+    validationRegex: '^[^/]+(/[^/]+/[^/]+)*$'
+    validationErrorMessage: Must be a valid Cloud Firestore Collection
+    example: users/{uid}/discussions/{discussionId}/messages
+
+  - param: TASK
+    label: The task to run the inference on
+    description: >-
+      The task to run the inference on.
+      [Check more in the Hugging Face docs](https://huggingface.co/docs/api-inference/detailed_parameters), 
+      or the [Tasks](https://huggingface.co/tasks) overview.
+    type: select
+    options:
+      - label: Fill Mask Task
+        value: fill-mask
+      - label: Text Summarization Task
+        value: summarization
+      - label: Question Answering Task
+        value: question-answering
+      - label: Table Question Answering Task
+        value: table-question-answering
+      - label: Sentence Similarity Task
+        value: sentence-similarity
+      - label: Text Classification Task
+        value: text-classification
+      - label: Text Generation Task
+        value: text-generation
+      - label: Text2Text Generation Task
+        value: text2text-generation
+      - label: Token Classification Task
+        value: token-classification
+      - label: Named Entity Recognition Task
+        value: named-entity-recognition
+      - label: Translation Task
+        value: translation
+      - label: Zero Shot Classification Task
+        value: zeroshot-classification
+      - label: Conversational Task
+        value: conversational
+      - label: Feature Extraction Task
+        value: feature-extraction
+    required: true
+    immutable: true
+
+  - param: HF_INFERENCE_ENDPOINT
+    label: Custom Inference Endpoint
+    description: >-
+      If you want to use a custom model hosted on your own server,
+      you can specify the endpoint here.
+    type: string
+
+  - param: LOCATION
+    label: Cloud Functions location
+    description: >-
+      Where do you want to deploy the functions created for this extension? For
+      help selecting a location, refer to the [location selection
+      guide](https://firebase.google.com/docs/functions/locations).
+    type: select
+    options:
+      - label: Iowa (us-central1)
+        value: us-central1
+      - label: South Carolina (us-east1)
+        value: us-east1
+      - label: Northern Virginia (us-east4)
+        value: us-east4
+      - label: Los Angeles (us-west2)
+        value: us-west2
+      - label: Salt Lake City (us-west3)
+        value: us-west3
+      - label: Las Vegas (us-west4)
+        value: us-west4
+      - label: Warsaw (europe-central2)
+        value: europe-central2
+      - label: Belgium (europe-west1)
+        value: europe-west1
+      - label: London (europe-west2)
+        value: europe-west2
+      - label: Frankfurt (europe-west3)
+        value: europe-west3
+      - label: Zurich (europe-west6)
+        value: europe-west6
+      - label: Hong Kong (asia-east2)
+        value: asia-east2
+      - label: Tokyo (asia-northeast1)
+        value: asia-northeast1
+      - label: Osaka (asia-northeast2)
+        value: asia-northeast2
+      - label: Seoul (asia-northeast3)
+        value: asia-northeast3
+      - label: Mumbai (asia-south1)
+        value: asia-south1
+      - label: Jakarta (asia-southeast2)
+        value: asia-southeast2
+      - label: Montreal (northamerica-northeast1)
+        value: northamerica-northeast1
+      - label: Sao Paulo (southamerica-east1)
+        value: southamerica-east1
+      - label: Sydney (australia-southeast1)
+        value: australia-southeast1
+    required: true
+    immutable: true

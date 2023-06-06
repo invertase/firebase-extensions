@@ -23,6 +23,14 @@
   "extensions": {
     "export-user-data": "../extensions/export-user-data",
     "firestore-record-acknowledgments": "../extensions/firestore-record-acknowledgments",
-    "image-processing-api": "../extensions/image-processing-api"
+    "image-processing-api": "../extensions/image-processing-api",
+    "firestore-huggingface-inference-api": "../extensions/firestore-huggingface-inference-api"
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
   }
 }
