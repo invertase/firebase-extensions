@@ -1,7 +1,7 @@
 {
   "name": "functions",
   "scripts": {
-    "prepare": "npm run lerna:bootstrap && npm run lerna:link",
+    "prepare": "npm run build",
     "lint": "eslint \"src/**/*\"",
     "lint:fix": "eslint \"src/**/*\" --fix",
     "build": "tsc",
