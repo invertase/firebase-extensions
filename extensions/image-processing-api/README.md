@@ -28,6 +28,57 @@ const operations = [
 const params = `?operations=${encodeURIComponent(JSON.stringify(operations))}`;
 ```
 
+Input types are:
+
+1. `url` - A public URL to an image.
+
+    ```js
+    {
+      operation: 'input',
+      type: 'url',
+      url: 'https://example.com/image.jpg',
+    }
+    ```
+
+2. `gcs` - A Google Cloud Storage public link to an image.
+
+    ```js
+    {
+      operation: 'input',
+      type: 'gcs',
+      source: 'image.jpg',
+    }
+    ```
+
+3. `create` - Create a new image by specifying options such as width, height, background color, etc.
+
+    ```js
+    {
+      operation: 'input',
+      type: 'create',
+      width: 100,
+      height: 100,
+      background: '#000000',
+    }
+    ```
+
+The extension also comes with a JavaScript utility library for simplifying the creation of operations:
+
+```ts
+import { builder } from '@invertase/image-processing-api';
+
+const output = builder()
+  .input({
+    url: 'https://example.com/image.jpg',
+  })
+  .grayscale()
+  .output({
+    webp: true,
+  });
+
+const params = `?operations=${output.toEncodedJSONString()}`;
+```
+
 View the [official documentation](https://extensions.invertase.dev/image-processing-api) for full usage examples.
 
 #### Additional setup
@@ -40,14 +91,14 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 
 - You will be charged a small amount (typically around $0.01/month) for the Firebase resources required by this extension (even if it is not used).
 - This extension uses other Firebase and Google Cloud Platform services, which have associated charges if you exceed the service’s no-cost tier:
-  - Cloud Storage
   - Cloud Functions (Node.js 10+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
-
+  - Cloud Storage
+  
 **Configuration Parameters:**
 
 - Cloud Functions location: Where do you want to deploy the functions created for this extension? You usually want a location close to your Storage bucket. For help selecting a location, refer to the [location selection guide](https://firebase.google.com/docs/functions/locations).
 
-- Cloud Storage bucket for images: The Cloud Storage bucket where images that are to be processed are located. API requests with input urls or paths that are not inside this bucket will be dropped.
+- Cloud Storage bucket for images: The Cloud Storage bucket for images from a `gcs` input type.
 
 - Allowed CORS origins.: A comma delimited value of allowed CORS origins. Use the default of '\*' to allow all origins. This is useful to lockdown your API and only allow your own website to embed the images directly. Note this will not prevent non-browser requests from accessing your API.
 
