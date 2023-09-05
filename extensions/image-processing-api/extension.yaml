@@ -37,7 +37,7 @@ resources:
       Serves a API accepting incoming HTTP requests.
     properties:
       location: ${param:LOCATION}
-      runtime: nodejs14
+      runtime: nodejs18
       availableMemoryMb: 1024
       httpsTrigger: {}
 
