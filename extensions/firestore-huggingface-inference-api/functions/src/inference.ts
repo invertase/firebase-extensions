@@ -65,8 +65,11 @@ export async function runInference(
       return tasks.sentenceSimilarity(snapshot, inference);
     }
 
+    //Some text classification Models return a 2-dimensional array of JSON objects in textClassification task 
+    //firestore cannot handle 2D arrays (3 INVALID_ARGUMENT: Cannot convert an array value in an array value)
     case TaskId.textClassification: {
-      return tasks.textClassification(snapshot, inference);
+      const data= await tasks.textClassification(snapshot, inference);
+      return data.flat(Infinity);
     }
 
     // Text generation and text2text are currently the same.
