@@ -19,7 +19,7 @@ import a2a from 'a2a';
 import cors from 'cors';
 import express, { Request, Response } from 'express';
 import * as firebase from 'firebase-admin';
-import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions/v1';
 import helmet from 'helmet';
 import { StructError } from 'superstruct';
 
@@ -210,5 +210,5 @@ if (process.env.EXPRESS_SERVER === 'true') {
   );
 } else {
   firebase.initializeApp();
-  exports.handler = functions.handler.https.onRequest(app);
+  exports.handler = functions.https.onRequest(app);
 }

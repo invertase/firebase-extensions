@@ -2,6 +2,7 @@
   "name": "image-processing-api-functions",
   "version": "0.0.1",
   "scripts": {
+    "prepare": "npm run build",
     "build": "tsc",
     "copy-types": "tsc --emitDeclarationOnly --declaration --allowJs --outDir ../lib/src/types",
     "build:watch": "tsc --watch",
