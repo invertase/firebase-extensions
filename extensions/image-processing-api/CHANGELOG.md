@@ -1,3 +1,7 @@
+## Version 0.1.2
+
+chore - bump node runtime to nodejs20
+
 ## Version 0.1.1
 
 Updated POSTINSTALL parameters.
