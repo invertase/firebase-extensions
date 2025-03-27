@@ -29,7 +29,7 @@ const params = `?operations=${encodeURIComponent(JSON.stringify(operations))}`;
 Then, make your GET request to your Cloud Function using the correct endpoint. For example:
 
 ```
-https://us-central1-<your-project-id>.cloudfunctions.net/<extension-instance-id>/process${params}
+https://<your-configured-region>-<your-project-id>.cloudfunctions.net/<extension-instance-id>/process${params}
 ```
 
 The extension also comes with a JavaScript utility library for simplifying the creation of operations:
