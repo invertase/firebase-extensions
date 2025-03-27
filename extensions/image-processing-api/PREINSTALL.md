@@ -25,6 +25,7 @@ const operations = [
 
 const params = `?operations=${encodeURIComponent(JSON.stringify(operations))}`;
 ```
+
 Then, make your GET request to your Cloud Function using the correct endpoint. For example:
 
 ```
