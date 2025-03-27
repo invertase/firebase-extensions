@@ -1,7 +1,11 @@
-Use this extension to optimize and transform images via a powerful HTTP API with over 30 different image operations to enhance and manipulate your images.
+Image Processing Extension
+Use this extension to optimize and transform images via a powerful HTTP API with over 30 image operations for enhancing and manipulating your images.
 
-This extension creates a Cloud Function named `process`, which can be called via a GET request, specifiying
-the operations to perform via the `operations` query parameter, for example:
+How It Works
+When you install this extension, it deploys a Cloud Function that exposes an HTTP API. All requests must be sent to the /process endpoint of the function. You perform image operations by passing an operations query parameter—a URL-encoded JSON string defining the operations to execute.
+
+Example
+Define your operations like so:
 
 ```js
 const operations = [
@@ -20,6 +24,12 @@ const operations = [
 ];
 
 const params = `?operations=${encodeURIComponent(JSON.stringify(operations))}`;
+```
+
+Then, make your GET request to your Cloud Function using the correct endpoint. For example:
+
+```
+https://<your-configured-region>-<your-project-id>.cloudfunctions.net/<extension-instance-id>/process${params}
 ```
 
 The extension also comes with a JavaScript utility library for simplifying the creation of operations:

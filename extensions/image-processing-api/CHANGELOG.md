@@ -1,3 +1,11 @@
+## Version 0.2.0
+
+chore - bump node runtime to nodejs20
+
+docs - fix documentation according to functionality of the extension
+
+fix - npm audit and fix other vulnerabilities
+
 ## Version 0.1.1
 
 Updated POSTINSTALL parameters.

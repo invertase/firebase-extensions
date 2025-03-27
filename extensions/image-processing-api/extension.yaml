@@ -1,5 +1,5 @@
 name: image-processing-api
-version: 0.1.1
+version: 0.2.0
 specVersion: v1beta
 
 displayName: Image Processing API
@@ -37,7 +37,7 @@ resources:
       Serves a API accepting incoming HTTP requests.
     properties:
       location: ${param:LOCATION}
-      runtime: nodejs14
+      runtime: nodejs20
       availableMemoryMb: 1024
       httpsTrigger: {}
 
@@ -109,7 +109,7 @@ params:
     required: true
 
   - param: CORS_ORIGIN_ALLOW_LIST
-    label: Allowed CORS origins.
+    label: Allowed CORS origins
     description: >
       A comma delimited value of allowed CORS origins. Use the default of '*'
       to allow all origins. This is useful to lockdown your API and only allow

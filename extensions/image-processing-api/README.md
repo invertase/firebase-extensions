@@ -4,17 +4,21 @@
 
 **Description**: Use this extension to optimize and transform images via a powerful HTTP API with over 30 different image operations to enhance and manipulate your images.
 
-**Details**: Use this extension to optimize and transform images via a powerful HTTP API with over 30 different image operations to enhance and manipulate your images.
+**Details**: Image Processing Extension
+Use this extension to optimize and transform images via a powerful HTTP API with over 30 image operations for enhancing and manipulating your images.
 
-This extension creates a Cloud Function named `process`, which can be called via a GET request, specifiying
-the operations to perform via the `operations` query parameter, for example:
+How It Works
+When you install this extension, it deploys a Cloud Function that exposes an HTTP API. All requests must be sent to the /process endpoint of the function. You perform image operations by passing an operations query parameter—a URL-encoded JSON string defining the operations to execute.
+
+Example
+Define your operations like so:
 
 ```js
 const operations = [
   {
     operation: 'input',
     type: 'url',
-    url: 'https://images.unsplash.com/photo-1663659552548-25d7771802c9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80',
+    url: 'https://example.com/image.jpg',
   },
   {
     operation: 'grayscale',
@@ -26,6 +30,29 @@ const operations = [
 ];
 
 const params = `?operations=${encodeURIComponent(JSON.stringify(operations))}`;
+```
+
+Then, make your GET request to your Cloud Function using the correct endpoint. For example:
+
+```
+https://<your-configured-region>-<your-project-id>.cloudfunctions.net/<extension-instance-id>/process${params}
+```
+
+The extension also comes with a JavaScript utility library for simplifying the creation of operations:
+
+```ts
+import { builder } from '@invertase/image-processing-api';
+
+const output = builder()
+  .input({
+    url: 'https://example.com/image.jpg',
+  })
+  .grayscale()
+  .output({
+    format: 'webp',
+  });
+
+const params = `?operations=${output.toEncodedJSONString()}`;
 ```
 
 View the [official documentation](https://extensions.invertase.dev/image-processing-api) for full usage examples.
@@ -49,7 +76,7 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 
 - Cloud Storage bucket for images: The Cloud Storage bucket where images that are to be processed are located. API requests with input urls or paths that are not inside this bucket will be dropped.
 
-- Allowed CORS origins.: A comma delimited value of allowed CORS origins. Use the default of '\*' to allow all origins. This is useful to lockdown your API and only allow your own website to embed the images directly. Note this will not prevent non-browser requests from accessing your API.
+- Allowed CORS origins: A comma delimited value of allowed CORS origins. Use the default of '\*' to allow all origins. This is useful to lockdown your API and only allow your own website to embed the images directly. Note this will not prevent non-browser requests from accessing your API.
 
 **Cloud Functions:**
 
