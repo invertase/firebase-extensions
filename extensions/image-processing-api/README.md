@@ -81,7 +81,7 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 * Cloud Storage bucket for images: The Cloud Storage bucket where images that are to be processed are located. API requests with input urls or paths that are not inside this bucket will be dropped.
 
 
-* Allowed CORS origins.: A comma delimited value of allowed CORS origins. Use the default of '*' to allow all origins. This is useful to lockdown your API and only allow your own website to embed the images directly. Note this will not prevent non-browser requests from accessing your API.
+* Allowed CORS origins: A comma delimited value of allowed CORS origins. Use the default of '*' to allow all origins. This is useful to lockdown your API and only allow your own website to embed the images directly. Note this will not prevent non-browser requests from accessing your API.
 
 
 
