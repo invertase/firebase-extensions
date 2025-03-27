@@ -1,6 +1,10 @@
-## Version 0.1.2
+## Version 0.2.1
 
 chore - bump node runtime to nodejs20
+
+docs - fix documentation according to functionality of the extension
+
+fix - npm audit and fix other vulnerabilities
 
 ## Version 0.1.1
 
