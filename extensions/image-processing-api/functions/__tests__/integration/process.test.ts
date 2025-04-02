@@ -1,7 +1,6 @@
 // __tests__/integration/process.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import express, { Response } from 'express';
-import { Operation } from '../../src/types';
 
 // Mock utils BEFORE importing them
 vi.mock('../../src/utils', () => {
@@ -78,7 +77,6 @@ vi.mock('sharp', () => {
 
 // Import AFTER defining mocks
 import { createMockRequest } from '../mocks/request.mock';
-import * as utils from '../../src/utils';
 import {
   asValidatedOperations,
   jsonAsValidatedOperations,
@@ -87,7 +85,8 @@ import {
 // Create mock processImageRequest function
 const processImageRequest = vi
   .fn()
-  .mockImplementation(async (validatedOperations, res, req) => {
+  // @ts-ignore
+  .mockImplementation(async (validatedOperations, res) => {
     // Mock implementation that doesn't actually make HTTP requests
     res.writeHead(200, { 'Content-Type': 'image/jpeg' });
     res.end(Buffer.from('processed image data'));
