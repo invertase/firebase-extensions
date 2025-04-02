@@ -1,7 +1,7 @@
-Image Processing Extension
+# Image Processing Extension
 Use this extension to optimize and transform images via a powerful HTTP API with over 30 image operations for enhancing and manipulating your images.
 
-How It Works
+## How It Works
 When you install this extension, it deploys a Cloud Function that exposes an HTTP API. All requests must be sent to the /process endpoint of the function. You perform image operations by passing an operations query parameter—a URL-encoded JSON string defining the operations to execute.
 
 Example
@@ -31,6 +31,35 @@ Then, make your GET request to your Cloud Function using the correct endpoint. F
 ```
 https://<your-configured-region>-<your-project-id>.cloudfunctions.net/<extension-instance-id>/process${params}
 ```
+
+### Using Relative URLs (type: 'path')
+
+In addition to fetching images via remote URLs, this extension also supports relative paths through the type: 'path' input type. This is useful when you're serving images from your own domain (e.g. through a CDN, proxy, or local server during development).
+
+When you use type: 'path', the extension will prepend the hostname of the incoming request to the path to construct the full image URL.
+
+```ts
+const operations = [
+  {
+    operation: 'input',
+    type: 'path',
+    path: '/images/photo.jpg',
+  },
+  {
+    operation: 'resize',
+    width: 800,
+    height: 600,
+  },
+  {
+    operation: 'output',
+    format: 'jpeg',
+  },
+];
+
+const params = `?operations=${encodeURIComponent(JSON.stringify(operations))}`;
+```
+
+### Javascript Utility Library
 
 The extension also comes with a JavaScript utility library for simplifying the creation of operations:
 

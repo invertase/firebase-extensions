@@ -171,8 +171,14 @@ app.get(
 
 // Express requires the function to have 4 arguments for a handler
 // to be treated as an error handler.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use(function handleError(error: Error, req: Request, res: Response) {
+
+app.use(function handleError(
+  error: Error,
+  req: Request,
+  res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  next: express.NextFunction,
+) {
   if (error instanceof StructError || error instanceof AssertionError) {
     functions.logger.warn(error.message, {
       url: req.url,
@@ -211,5 +217,7 @@ if (process.env.EXPRESS_SERVER === 'true') {
   );
 } else {
   firebase.initializeApp();
-  exports.handler = functions.https.onRequest(app);
+  exports.handler = functions
+    .runWith({ timeoutSeconds: 540, memory: '512MB' })
+    .https.onRequest(app);
 }

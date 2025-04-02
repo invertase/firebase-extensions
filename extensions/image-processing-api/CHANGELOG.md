@@ -1,3 +1,9 @@
+## Version 0.2.1
+
+feat - support relative URLs
+
+chore - modernize/fix tests
+
 ## Version 0.2.0
 
 chore - bump node runtime to nodejs20
