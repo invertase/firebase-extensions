@@ -15,10 +15,12 @@
  */
 import * as superstruct from 'superstruct';
 import sharp from 'sharp';
+import express from 'express';
 
 export type ActionBuilder = (
   validatedOperation: ValidatedOperation,
   imageMetadata: sharp.Metadata | null,
+  req?: express.Request,
 ) => OperationAction[] | Promise<OperationAction[]>;
 
 export type OperationBuilder = {

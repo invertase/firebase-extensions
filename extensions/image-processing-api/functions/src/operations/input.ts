@@ -15,6 +15,7 @@
  */
 
 import * as superstruct from 'superstruct';
+import express from 'express';
 
 import * as utils from '../utils';
 import { Operation, OperationAction, OperationBuilder } from '../types';
@@ -46,6 +47,15 @@ const structFromUrl = superstruct.object({
   operation: superstruct.literal(name),
   type: superstruct.literal('url'),
   url: superstruct.string(),
+});
+
+/**
+ * A path url of an image. The request hostname will be prepended to this path.
+ */
+const structFromPath = superstruct.object({
+  operation: superstruct.literal(name),
+  type: superstruct.literal('path'),
+  path: superstruct.string(),
 });
 
 /**
@@ -110,11 +120,13 @@ const structCreateNewImage = superstruct.object({
 const struct = superstruct.union([
   structFromGcs,
   structFromUrl,
+  structFromPath,
   structCreateNewImage,
 ]);
 
 export type OperationInputGcs = superstruct.Infer<typeof structFromGcs>;
 export type OperationInputUrl = superstruct.Infer<typeof structFromUrl>;
+export type OperationInputPath = superstruct.Infer<typeof structFromPath>;
 export type OperationInputCreateNew = superstruct.Infer<
   typeof structCreateNewImage
 >;
@@ -122,6 +134,7 @@ export type OperationInputCreateNew = superstruct.Infer<
 export type OperationInput =
   | OperationInputGcs
   | OperationInputUrl
+  | OperationInputPath
   | OperationInputCreateNew;
 
 export const operationInput: OperationBuilder = {
@@ -135,12 +148,14 @@ export const operationInput: OperationBuilder = {
         return structFromGcs.create(rawOptions);
       case 'url':
         return structFromUrl.create(rawOptions);
+      case 'path':
+        return structFromPath.create(rawOptions);
     }
     throw new AssertionError({
       message: `'${rawOptions.type}' is not a valid input 'type'.`,
     });
   },
-  async build(operation) {
+  async build(operation, _fileMetadata, req) {
     const options = operation.options as OperationInput;
 
     switch (options.type) {
@@ -150,6 +165,8 @@ export const operationInput: OperationBuilder = {
         return await fetchGcsFile(options);
       case 'url':
         return await fetchUrl(options);
+      case 'path':
+        return await fetchPathUrl(options, req);
     }
   },
 };
@@ -165,6 +182,57 @@ async function fetchUrl(options: OperationInput): Promise<OperationAction[]> {
     {
       method: 'constructor',
       arguments: [await fetchImageBufferFromUrl(options.url)],
+    },
+  ];
+}
+
+async function fetchPathUrl(
+  options: OperationInput,
+  req?: express.Request,
+): Promise<OperationAction[]> {
+  if (options.type !== 'path') return [];
+
+  if (!req) {
+    throw new AssertionError({
+      message: 'Request object is required for path type inputs.',
+    });
+  }
+
+  // Extract hostname from request
+  const origin = (req.headers.origin as string) || '';
+  const referer = (req.headers.referer as string) || '';
+  const host = req.headers.host || '';
+
+  let baseUrl = '';
+
+  // Try to get the base URL from various sources
+  if (origin) {
+    baseUrl = origin;
+  } else if (referer) {
+    try {
+      const url = new URL(referer);
+      baseUrl = `${url.protocol}//${url.host}`;
+    } catch (e) {
+      // Invalid URL format in referer
+    }
+  } else if (host) {
+    const protocol = req.secure ? 'https:' : 'http:';
+    baseUrl = `${protocol}//${host}`;
+  }
+
+  if (!baseUrl) {
+    throw new AssertionError({
+      message: `Could not determine request hostname for path URL.`,
+    });
+  }
+
+  // Construct the full URL
+  const fullUrl = `${baseUrl}${options.path}`;
+
+  return [
+    {
+      method: 'constructor',
+      arguments: [await fetchImageBufferFromUrl(fullUrl)],
     },
   ];
 }

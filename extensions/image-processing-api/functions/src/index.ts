@@ -40,6 +40,7 @@ import sharp from 'sharp';
 async function processImageRequest(
   validatedOperations: ValidatedOperation[],
   res: Response,
+  req: Request,
 ): Promise<void> {
   const firstOperation = validatedOperations[0];
   const lastOperation = validatedOperations[validatedOperations.length - 1];
@@ -62,7 +63,7 @@ async function processImageRequest(
   let instance: sharp.Sharp | null = null;
   for (let i = 0; i < validatedOperations.length; i++) {
     const validatedOperation = validatedOperations[i];
-    instance = await applyValidatedOperation(instance, validatedOperation);
+    instance = await applyValidatedOperation(instance, validatedOperation, req);
   }
 
   const finalFileMetadata = omitKeys(
@@ -142,7 +143,7 @@ app.get(
     const validatedOperations: ValidatedOperation[] =
       jsonAsValidatedOperations(operations);
     const [processError] = await a2a(
-      processImageRequest(validatedOperations, res),
+      processImageRequest(validatedOperations, res, req),
     );
     if (processError) {
       return next(processError);
@@ -160,7 +161,7 @@ app.get(
     const validatedOperations: ValidatedOperation[] =
       asValidatedOperations(operationsString);
     const [processError] = await a2a(
-      processImageRequest(validatedOperations, res),
+      processImageRequest(validatedOperations, res, req),
     );
     if (processError) {
       return next(processError);
