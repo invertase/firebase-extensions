@@ -1,3 +1,7 @@
+## Version 0.2.1
+
+feat - add hostname param
+
 ## Version 0.2.0
 
 chore - bump node runtime to nodejs20
