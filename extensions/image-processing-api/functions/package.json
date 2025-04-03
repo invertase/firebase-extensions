@@ -10,7 +10,6 @@
     "emulator:local": "FIREBASE_STORAGE_EMULATOR_HOST='localhost:9199' firebase ext:dev:emulators:start --test-config=__tests__/test-firebase.json --test-params=__tests__/test-params.env --project=extensions-testing --import=./__tests__/data",
     "generate-readme": "firebase ext:info .. --markdown > ../README.md",
     "deploy": "firebase ext:install ../ --project=extensions-testing",
-    "postinstall": "npm run copy-types || exit 0",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",

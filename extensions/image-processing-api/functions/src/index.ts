@@ -33,7 +33,7 @@ import {
   fileMetadataBufferKeys,
   omitKeys,
 } from './utils';
-import { Operation, ValidatedOperation } from './types';
+import { NotFoundError, Operation, ValidatedOperation } from './types';
 import { extensionConfiguration } from './config';
 import sharp from 'sharp';
 
@@ -173,13 +173,19 @@ app.get(
 // to be treated as an error handler.
 
 app.use(function handleError(
-  error: Error,
+  error: Error & { statusCode?: number },
   req: Request,
   res: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: express.NextFunction,
 ) {
-  if (error instanceof StructError || error instanceof AssertionError) {
+  if (error instanceof NotFoundError) {
+    functions.logger.warn(error.message, {
+      url: req.url,
+      query: req.query,
+    });
+    res.status(error.statusCode).send(error.message);
+  } else if (error instanceof StructError || error instanceof AssertionError) {
     functions.logger.warn(error.message, {
       url: req.url,
       query: req.query,
@@ -187,9 +193,7 @@ app.use(function handleError(
     res.status(400).send(error.message);
   } else {
     functions.logger.error(
-      'An error occurred processing a request, please report this issue to the GitHub ' +
-        'repository for this extension and include this log entry with your report (omit any ' +
-        'sensitive data).',
+      'An error occurred processing a request, please report this issue to the GitHub repository for this extension and include this log entry with your report (omit any sensitive data).',
       {
         url: req.url,
         query: req.query,

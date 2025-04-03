@@ -18,7 +18,12 @@ import * as superstruct from 'superstruct';
 import express from 'express';
 
 import * as utils from '../utils';
-import { Operation, OperationAction, OperationBuilder } from '../types';
+import {
+  NotFoundError,
+  Operation,
+  OperationAction,
+  OperationBuilder,
+} from '../types';
 import { AssertionError } from 'assert';
 import { fetchImageBufferFromUrl } from '../utils';
 import { extensionConfiguration } from '../config';
@@ -197,42 +202,25 @@ async function fetchPathUrl(
       message: 'Request object is required for path type inputs.',
     });
   }
+  // const forwardedProto = req.headers['x-forwarded-proto'] || req.protocol;
+  const forwardedHost = req.headers['x-forwarded-host'] || req.headers['host'];
 
-  // Extract hostname from request
-  const origin = (req.headers.origin as string) || '';
-  const referer = (req.headers.referer as string) || '';
-  const host = req.headers.host || '';
-
-  let baseUrl = '';
-
-  // Try to get the base URL from various sources
-  if (origin) {
-    baseUrl = origin;
-  } else if (referer) {
-    try {
-      const url = new URL(referer);
-      baseUrl = `${url.protocol}//${url.host}`;
-    } catch (e) {
-      // Invalid URL format in referer
-    }
-  } else if (host) {
-    const protocol = req.secure ? 'https:' : 'http:';
-    baseUrl = `${protocol}//${host}`;
+  if (!forwardedHost) {
+    throw new NotFoundError('Request host is not defined.');
   }
 
-  if (!baseUrl) {
-    throw new AssertionError({
-      message: `Could not determine request hostname for path URL.`,
-    });
+  const fullUrl = `https://${forwardedHost}${options.path}`;
+  let imageBuffer: Buffer;
+  try {
+    imageBuffer = await fetchImageBufferFromUrl(fullUrl);
+  } catch (error) {
+    throw new NotFoundError(`Image not found at ${fullUrl}`);
   }
-
-  // Construct the full URL
-  const fullUrl = `${baseUrl}${options.path}`;
 
   return [
     {
       method: 'constructor',
-      arguments: [await fetchImageBufferFromUrl(fullUrl)],
+      arguments: [imageBuffer],
     },
   ];
 }
