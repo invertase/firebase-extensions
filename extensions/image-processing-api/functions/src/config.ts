@@ -19,4 +19,5 @@ export const extensionConfiguration = {
   corsAllowList: (process.env.CORS_ORIGIN_ALLOW_LIST || '*')
     .split(',')
     .map(s => s.trim()),
+  hostname: process.env.HOSTNAME || null,
 };

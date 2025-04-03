@@ -156,6 +156,9 @@ export const operationInput: OperationBuilder = {
 
 async function fetchUrl(options: OperationInput): Promise<OperationAction[]> {
   if (options.type !== 'url') return [];
+  if (extensionConfiguration.hostname && options.url.startsWith('/')) {
+    options.url = `https://${extensionConfiguration.hostname}${options.url}`;
+  }
   if (!options.url.startsWith('http')) {
     throw new AssertionError({
       message: `'${options.url}' does not appear to be a valid http url.`,
