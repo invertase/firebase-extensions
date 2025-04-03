@@ -1,10 +1,13 @@
 # Image Processing Extension
+
 Use this extension to optimize and transform images via a powerful HTTP API with over 30 image operations for enhancing and manipulating your images.
 
 ## How It Works
+
 When you install this extension, it deploys a Cloud Function that exposes an HTTP API. All requests must be sent to the /process endpoint of the function. You perform image operations by passing an operations query parameter—a URL-encoded JSON string defining the operations to execute.
 
 ### Example
+
 Define your operations like so:
 
 ```js
@@ -73,6 +76,7 @@ const operations = [
   },
 ];
 ```
+
 is equivalent to the earlier given example. The url `https://example.com/image.jpg` is constructed within the extension.
 
 Note that this will **only** apply to paths that begin with a forward slash `/`, and **only** when the hostname parameter is set.
