@@ -139,6 +139,12 @@ class ImageProcessingApi {
         type: 'url',
         url: options.url,
       };
+    } else if ('path' in options) {
+      this.#input = {
+        operation: 'input',
+        type: 'path',
+        path: options.path,
+      };
     } else {
       this.#input = {
         operation: 'input',

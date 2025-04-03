@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import express from 'express';
 import { AssertionError } from 'assert';
 import sharp, { SharpOptions } from 'sharp';
 import superstruct from 'superstruct';
@@ -232,10 +233,11 @@ export function asValidatedOperations(input: string): ValidatedOperation[] {
 export async function asBuiltOperation(
   validatedOperation: ValidatedOperation,
   fileMetadata: sharp.Metadata | null,
+  req?: express.Request,
 ): Promise<BuiltOperation> {
   const actionBuilder =
     builderForOperation(validatedOperation)?.build || defaultActionsBuilder;
-  let builtActions = actionBuilder(validatedOperation, fileMetadata);
+  let builtActions = actionBuilder(validatedOperation, fileMetadata, req);
   if (builtActions instanceof Promise) {
     builtActions = await builtActions;
   }
@@ -248,6 +250,7 @@ export async function asBuiltOperation(
 export async function applyValidatedOperation(
   instance: sharp.Sharp | null,
   validatedOperation: ValidatedOperation,
+  req?: express.Request,
 ): Promise<sharp.Sharp> {
   let currentInstance = instance;
   const currentMetadata = currentInstance
@@ -256,6 +259,7 @@ export async function applyValidatedOperation(
   const builtOperation = await asBuiltOperation(
     validatedOperation,
     currentMetadata,
+    req,
   );
   for (let i = 0; i < builtOperation.actions.length; i++) {
     const action = builtOperation.actions[i];

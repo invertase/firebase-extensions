@@ -4,10 +4,12 @@
 
 **Description**: Use this extension to optimize and transform images via a powerful HTTP API with over 30 different image operations to enhance and manipulate your images.
 
-**Details**: Image Processing Extension
+
+
+**Details**: # Image Processing Extension
 Use this extension to optimize and transform images via a powerful HTTP API with over 30 image operations for enhancing and manipulating your images.
 
-How It Works
+## How It Works
 When you install this extension, it deploys a Cloud Function that exposes an HTTP API. All requests must be sent to the /process endpoint of the function. You perform image operations by passing an operations query parameter—a URL-encoded JSON string defining the operations to execute.
 
 Example
@@ -37,6 +39,35 @@ Then, make your GET request to your Cloud Function using the correct endpoint. F
 ```
 https://<your-configured-region>-<your-project-id>.cloudfunctions.net/<extension-instance-id>/process${params}
 ```
+
+### Using Relative URLs (type: 'path')
+
+In addition to fetching images via remote URLs, this extension also supports relative paths through the type: 'path' input type. This is useful when you're serving images from your own domain (e.g. through a CDN, proxy, or local server during development).
+
+When you use type: 'path', the extension will prepend the hostname of the incoming request to the path to construct the full image URL.
+
+```ts
+const operations = [
+  {
+    operation: 'input',
+    type: 'path',
+    path: '/images/photo.jpg',
+  },
+  {
+    operation: 'resize',
+    width: 800,
+    height: 600,
+  },
+  {
+    operation: 'output',
+    format: 'jpeg',
+  },
+];
+
+const params = `?operations=${encodeURIComponent(JSON.stringify(operations))}`;
+```
+
+### Javascript Utility Library
 
 The extension also comes with a JavaScript utility library for simplifying the creation of operations:
 
@@ -70,24 +101,37 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
   - Cloud Storage
   - Cloud Functions (Node.js 10+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
 
+
+
+
 **Configuration Parameters:**
 
-- Cloud Functions location: Where do you want to deploy the functions created for this extension? You usually want a location close to your Storage bucket. For help selecting a location, refer to the [location selection guide](https://firebase.google.com/docs/functions/locations).
+* Cloud Functions location: Where do you want to deploy the functions created for this extension? You usually want a location close to your Storage bucket. For help selecting a location, refer to the [location selection guide](https://firebase.google.com/docs/functions/locations).
 
-- Cloud Storage bucket for images: The Cloud Storage bucket where images that are to be processed are located. API requests with input urls or paths that are not inside this bucket will be dropped.
+* Cloud Storage bucket for images: The Cloud Storage bucket where images that are to be processed are located. API requests with input urls or paths that are not inside this bucket will be dropped.
 
-- Allowed CORS origins: A comma delimited value of allowed CORS origins. Use the default of '\*' to allow all origins. This is useful to lockdown your API and only allow your own website to embed the images directly. Note this will not prevent non-browser requests from accessing your API.
+
+* Allowed CORS origins: A comma delimited value of allowed CORS origins. Use the default of '*' to allow all origins. This is useful to lockdown your API and only allow your own website to embed the images directly. Note this will not prevent non-browser requests from accessing your API.
+
+
+
 
 **Cloud Functions:**
 
-- **handler:** Serves a API accepting incoming HTTP requests.
+* **handler:** Serves a API accepting incoming HTTP requests.
+
+
 
 **APIs Used**:
 
-- storage-component.googleapis.com (Reason: Needed to use Cloud Storage)
+* storage-component.googleapis.com (Reason: Needed to use Cloud Storage)
+
+
 
 **Access Required**:
 
+
+
 This extension will operate with the following project IAM roles:
 
-- storage.admin (Reason: Allows the extension to read images in Cloud Storage)
+* storage.admin (Reason: Allows the extension to read images in Cloud Storage)

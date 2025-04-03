@@ -33,13 +33,14 @@ import {
   fileMetadataBufferKeys,
   omitKeys,
 } from './utils';
-import { Operation, ValidatedOperation } from './types';
+import { NotFoundError, Operation, ValidatedOperation } from './types';
 import { extensionConfiguration } from './config';
 import sharp from 'sharp';
 
 async function processImageRequest(
   validatedOperations: ValidatedOperation[],
   res: Response,
+  req: Request,
 ): Promise<void> {
   const firstOperation = validatedOperations[0];
   const lastOperation = validatedOperations[validatedOperations.length - 1];
@@ -62,7 +63,7 @@ async function processImageRequest(
   let instance: sharp.Sharp | null = null;
   for (let i = 0; i < validatedOperations.length; i++) {
     const validatedOperation = validatedOperations[i];
-    instance = await applyValidatedOperation(instance, validatedOperation);
+    instance = await applyValidatedOperation(instance, validatedOperation, req);
   }
 
   const finalFileMetadata = omitKeys(
@@ -142,7 +143,7 @@ app.get(
     const validatedOperations: ValidatedOperation[] =
       jsonAsValidatedOperations(operations);
     const [processError] = await a2a(
-      processImageRequest(validatedOperations, res),
+      processImageRequest(validatedOperations, res, req),
     );
     if (processError) {
       return next(processError);
@@ -160,7 +161,7 @@ app.get(
     const validatedOperations: ValidatedOperation[] =
       asValidatedOperations(operationsString);
     const [processError] = await a2a(
-      processImageRequest(validatedOperations, res),
+      processImageRequest(validatedOperations, res, req),
     );
     if (processError) {
       return next(processError);
@@ -170,9 +171,21 @@ app.get(
 
 // Express requires the function to have 4 arguments for a handler
 // to be treated as an error handler.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use(function handleError(error: Error, req: Request, res: Response) {
-  if (error instanceof StructError || error instanceof AssertionError) {
+
+app.use(function handleError(
+  error: Error & { statusCode?: number },
+  req: Request,
+  res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  next: express.NextFunction,
+) {
+  if (error instanceof NotFoundError) {
+    functions.logger.warn(error.message, {
+      url: req.url,
+      query: req.query,
+    });
+    res.status(error.statusCode).send(error.message);
+  } else if (error instanceof StructError || error instanceof AssertionError) {
     functions.logger.warn(error.message, {
       url: req.url,
       query: req.query,
@@ -180,9 +193,7 @@ app.use(function handleError(error: Error, req: Request, res: Response) {
     res.status(400).send(error.message);
   } else {
     functions.logger.error(
-      'An error occurred processing a request, please report this issue to the GitHub ' +
-        'repository for this extension and include this log entry with your report (omit any ' +
-        'sensitive data).',
+      'An error occurred processing a request, please report this issue to the GitHub repository for this extension and include this log entry with your report (omit any sensitive data).',
       {
         url: req.url,
         query: req.query,
@@ -210,5 +221,7 @@ if (process.env.EXPRESS_SERVER === 'true') {
   );
 } else {
   firebase.initializeApp();
-  exports.handler = functions.https.onRequest(app);
+  exports.handler = functions
+    .runWith({ timeoutSeconds: 540, memory: '512MB' })
+    .https.onRequest(app);
 }

@@ -106,14 +106,18 @@ export function hasOwnProperty(target: unknown, property: string): boolean {
 }
 
 export function expressAsyncHandlerWrapper(
-  handler: express.RequestHandler,
+  handler: (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => Promise<unknown>, // use `unknown` or `void`
 ): express.RequestHandler {
   return (
     req: express.Request,
     res: express.Response,
     next: express.NextFunction,
   ) => {
-    return Promise.resolve(handler(req, res, next)).catch(next);
+    handler(req, res, next).catch(next);
   };
 }
 

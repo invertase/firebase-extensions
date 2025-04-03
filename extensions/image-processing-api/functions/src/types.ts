@@ -15,10 +15,12 @@
  */
 import * as superstruct from 'superstruct';
 import sharp from 'sharp';
+import express from 'express';
 
 export type ActionBuilder = (
   validatedOperation: ValidatedOperation,
   imageMetadata: sharp.Metadata | null,
+  req?: express.Request,
 ) => OperationAction[] | Promise<OperationAction[]>;
 
 export type OperationBuilder = {
@@ -64,4 +66,27 @@ export interface OperationAction {
    */
   method: string;
   arguments: unknown[];
+}
+
+/**
+ * Custom error class for operation related errors.
+ */
+export class OperationError extends Error {
+  public statusCode: number;
+
+  constructor(message: string, statusCode = 400) {
+    super(message);
+    this.name = 'OperationError';
+    this.statusCode = statusCode;
+  }
+}
+
+/**
+ * NotFoundError extends OperationError with a default status code of 404.
+ */
+export class NotFoundError extends OperationError {
+  constructor(message = 'Not Found') {
+    super(message, 404);
+    this.name = 'NotFoundError';
+  }
 }

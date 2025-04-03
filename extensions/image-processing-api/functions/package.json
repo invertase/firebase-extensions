@@ -9,10 +9,11 @@
     "dev": "EXPRESS_SERVER=true ../../../node_modules/.bin/nodemon",
     "emulator:local": "FIREBASE_STORAGE_EMULATOR_HOST='localhost:9199' firebase ext:dev:emulators:start --test-config=__tests__/test-firebase.json --test-params=__tests__/test-params.env --project=extensions-testing --import=./__tests__/data",
     "generate-readme": "firebase ext:info .. --markdown > ../README.md",
-    "test:watch": "jest --config=./jest.config.js --watch",
-    "test": "FIREBASE_STORAGE_EMULATOR_HOST='localhost:9199' firebase ext:dev:emulators:exec ./node_modules/.bin/jest --test-config=__tests__/test-firebase.json --test-params=__tests__/test-params.env --project=extensions-testing --import=./__tests__/data",
     "deploy": "firebase ext:install ../ --project=extensions-testing",
-    "postinstall": "npm run copy-types || exit 0"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
   },
   "engines": {
     "node": "20"
@@ -20,7 +21,6 @@
   "main": "lib/index.js",
   "dependencies": {
     "@types/cors": "^2.8.10",
-    "@types/jest": "^29.5.14",
     "@types/lodash.get": "^4.4.6",
     "@types/sharp": "0.28.3",
     "a2a": "^0.2.0",
@@ -45,8 +45,9 @@
     "exec": "../../../node_modules/.bin/ts-node src/index.ts"
   },
   "devDependencies": {
+    "@vitest/ui": "^3.1.1",
     "firebase-functions-test": "^3.4.1",
-    "jest": "^29.7.0"
+    "vitest": "^3.1.1"
   },
   "private": true
 }
