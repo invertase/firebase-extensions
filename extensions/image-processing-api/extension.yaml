@@ -1,5 +1,5 @@
 name: image-processing-api
-version: 0.2.0
+version: 0.2.1
 specVersion: v1beta
 
 displayName: Image Processing API
@@ -119,3 +119,13 @@ params:
     example: '*.example.com,invertase.io'
     default: '*'
     required: true
+
+  - param: HOSTNAME
+    label: Hostname
+    description: >
+      The hostname to fetch images from. This is used to generate the image URLs
+      in the response. Include ONLY the hostname, without any protocol or path.
+      The protocol https:// will be added automatically.
+    type: string
+    example: 'example.com'
+    required: false

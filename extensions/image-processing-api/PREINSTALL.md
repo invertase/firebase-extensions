@@ -1,10 +1,10 @@
-Image Processing Extension
+# Image Processing Extension
 Use this extension to optimize and transform images via a powerful HTTP API with over 30 image operations for enhancing and manipulating your images.
 
-How It Works
+## How It Works
 When you install this extension, it deploys a Cloud Function that exposes an HTTP API. All requests must be sent to the /process endpoint of the function. You perform image operations by passing an operations query parameter—a URL-encoded JSON string defining the operations to execute.
 
-Example
+### Example
 Define your operations like so:
 
 ```js
@@ -50,6 +50,32 @@ const params = `?operations=${output.toEncodedJSONString()}`;
 ```
 
 View the [official documentation](https://extensions.invertase.dev/image-processing-api) for full usage examples.
+
+### Relative paths
+
+The extension provides a hostname parameter, allowing you to query the function with local paths (starting with `/`).
+
+As an example, if we set the hostname parameter to "example.com" then the following operation:
+
+```js
+const operations = [
+  {
+    operation: 'input',
+    type: 'url',
+    url: '/image.jpg',
+  },
+  {
+    operation: 'grayscale',
+  },
+  {
+    operation: 'output',
+    format: 'webp',
+  },
+];
+```
+is equivalent to the earlier given example. The url `https://example.com/image.jpg` is constructed within the extension.
+
+Note that this will **only** apply to paths that begin with a forward slash `/`, and **only** when the hostname parameter is set.
 
 #### Additional setup
 
