@@ -111,7 +111,7 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 * Allowed CORS origins: A comma delimited value of allowed CORS origins. Use the default of '*' to allow all origins. This is useful to lockdown your API and only allow your own website to embed the images directly. Note this will not prevent non-browser requests from accessing your API.
 
 
-* Hostname: The hostname to fetch images from. This is used to generate the image URLs in the response. Include ONLY the hostname, without any protocol or path. The protocol https:// will be added automatically.
+* Hostname: An optional hostname to fetch images from. This can used to construct the original image URL in the response. Include ONLY the hostname, without any protocol or path. The protocol https:// will be added automatically. This parameter is needed if you would like to query using local path names such as /my/image.jpg. instead of the full URL.
 
 
 

@@ -123,9 +123,10 @@ params:
   - param: HOSTNAME
     label: Hostname
     description: >
-      The hostname to fetch images from. This is used to generate the image URLs
+      An optional hostname to fetch images from. This can used to construct the original image URL
       in the response. Include ONLY the hostname, without any protocol or path.
-      The protocol https:// will be added automatically.
+      The protocol https:// will be added automatically. This parameter is needed if you would like
+      to query using local path names such as /my/image.jpg. instead of the full URL.
     type: string
     example: 'example.com'
     required: false
