@@ -19,6 +19,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "@genkit-ai/googleai": "^1.4.0",
     "@types/cors": "^2.8.10",
     "@types/jest": "^29.5.14",
     "@types/lodash.get": "^4.4.6",
@@ -31,6 +32,7 @@
     "file-type": "^16.5.0",
     "firebase-admin": "^13.2.0",
     "firebase-functions": "^6.3.2",
+    "genkit": "^1.4.0",
     "helmet": "^4.6.0",
     "sharp": "^0.33.5",
     "superstruct": "^0.15.2",
