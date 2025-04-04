@@ -15,7 +15,7 @@
  */
 
 import { AssertionError } from 'assert';
-import sharp, { SharpOptions } from 'sharp';
+import sharp from 'sharp';
 import superstruct from 'superstruct';
 
 import { omitKey, omitUndefinedValues } from '../utils';
@@ -56,6 +56,7 @@ import { operationTint } from './tint';
 import { operationGrayScale } from './grayscale';
 import { operationModulate } from './modulate';
 import { operationLinear } from './linear';
+import { callGenkit, operationGenkit } from './genkit';
 
 export * from './input';
 export * from './output';
@@ -115,6 +116,7 @@ const builders: { [key: string]: OperationBuilder } = {
   grayscale: operationGrayScale,
   modulate: operationModulate,
   linear: operationLinear,
+  genkit: operationGenkit,
 };
 
 export function builderForOperation(operation: Operation): OperationBuilder {
@@ -259,8 +261,27 @@ export async function applyValidatedOperation(
   );
   for (let i = 0; i < builtOperation.actions.length; i++) {
     const action = builtOperation.actions[i];
+
+    // Handle our custom external API action.
+    if (action.method === 'genkitCall' && currentInstance) {
+      // Retrieve the prompt from the action arguments.
+      const promptParam = action.arguments[0];
+      const buffer = await currentInstance.toBuffer();
+      const base64Image = buffer.toString('base64');
+      // Call the external API with the image and prompt.
+      const newBase64 = await callGenkit({
+        image: base64Image,
+        prompt: promptParam,
+      });
+      const newBuffer = Buffer.from(newBase64, 'base64');
+      currentInstance = sharp(newBuffer);
+      continue;
+    }
+
     if (action.method == 'constructor') {
-      currentInstance = sharp(...(action.arguments as SharpOptions[]));
+      currentInstance = sharp(
+        ...(action.arguments as Parameters<typeof sharp>),
+      );
     } else if (currentInstance != null) {
       currentInstance = (
         currentInstance[action.method] as (...args: unknown[]) => sharp.Sharp
