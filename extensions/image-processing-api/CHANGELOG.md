@@ -1,3 +1,7 @@
+## Version 0.2.2
+
+fix - downgrade to storage.objectAdmin role
+
 ## Version 0.2.1
 
 feat - add hostname param
