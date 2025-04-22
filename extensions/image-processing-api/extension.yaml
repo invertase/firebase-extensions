@@ -1,5 +1,5 @@
 name: image-processing-api
-version: 0.2.1
+version: 0.2.2
 specVersion: v1beta
 
 displayName: Image Processing API
@@ -27,7 +27,7 @@ apis:
     reason: Needed to use Cloud Storage
 
 roles:
-  - role: storage.admin
+  - role: storage.objectAdmin
     reason: Allows the extension to read images in Cloud Storage
 
 resources:
