@@ -26,7 +26,7 @@ resources:
     description: Returns the latest notice document type along with any acknowledgment documents. Optionally, a version can be specified to return a specific notice.
     properties:
       location: ${LOCATION}
-      runtime: nodejs14
+      runtime: nodejs18
       httpsTrigger: {}
 
   - name: acknowledgeNotice
@@ -34,7 +34,7 @@ resources:
     description: Acknowledges a notice by ID.
     properties:
       location: ${LOCATION}
-      runtime: nodejs14
+      runtime: nodejs18
       httpsTrigger: {}
 
   - name: unacknowledgeNotice
@@ -42,7 +42,7 @@ resources:
     description: Unacknowledges a notice by ID.
     properties:
       location: ${LOCATION}
-      runtime: nodejs14
+      runtime: nodejs18
       httpsTrigger: {}
 
   - name: getAcknowledgments
@@ -50,7 +50,7 @@ resources:
     description: Returns a list of all acknowledgments in creation order, including the notice document.
     properties:
       location: ${LOCATION}
-      runtime: nodejs14
+      runtime: nodejs18
       httpsTrigger: {}
 
   - name: createIndex
@@ -58,7 +58,7 @@ resources:
     description: A function used to help with creating Firestore indices that are required for this extension.
     properties:
       location: ${LOCATION}
-      runtime: nodejs14
+      runtime: nodejs18
       httpsTrigger: {}
 params:
   - param: LOCATION
