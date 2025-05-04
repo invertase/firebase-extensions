@@ -20,4 +20,6 @@ export const extensionConfiguration = {
     .split(',')
     .map(s => s.trim()),
   hostname: process.env.HOSTNAME || null,
+  googleApiKey: process.env.GOOGLE_API_KEY || null,
+  geminiPrompt: process.env.GEMINI_PROMPT || null,
 };

@@ -56,6 +56,8 @@ import { operationTint } from './tint';
 import { operationGrayScale } from './grayscale';
 import { operationModulate } from './modulate';
 import { operationLinear } from './linear';
+import { callGemini, operationGemini } from './gemini';
+import { extensionConfiguration } from '../config';
 
 export * from './input';
 export * from './output';
@@ -115,6 +117,7 @@ const builders: { [key: string]: OperationBuilder } = {
   grayscale: operationGrayScale,
   modulate: operationModulate,
   linear: operationLinear,
+  gemini: operationGemini,
 };
 
 export function builderForOperation(operation: Operation): OperationBuilder {
@@ -259,6 +262,32 @@ export async function applyValidatedOperation(
   );
   for (let i = 0; i < builtOperation.actions.length; i++) {
     const action = builtOperation.actions[i];
+
+    if (action.method === 'gemini' && currentInstance) {
+      const promptParam = extensionConfiguration.geminiPrompt;
+
+      if (!promptParam) {
+        throw new AssertionError({
+          message: 'Gemini prompt is not set in the configuration.',
+        });
+      }
+      if (!extensionConfiguration.googleApiKey) {
+        throw new AssertionError({
+          message: 'Google API key is not set in the configuration.',
+        });
+      }
+
+      const buffer = await currentInstance.toBuffer();
+
+      const newBuffer = await callGemini({
+        imageBuffer: buffer,
+        prompt: promptParam,
+      });
+
+      currentInstance = sharp(newBuffer);
+      continue;
+    }
+
     if (action.method == 'constructor') {
       currentInstance = sharp(...(action.arguments as SharpOptions[]));
     } else if (currentInstance != null) {
@@ -271,3 +300,7 @@ export async function applyValidatedOperation(
   }
   return currentInstance as sharp.Sharp;
 }
+
+process.on('unhandledRejection', err => {
+  console.error('Unhandled rejection:', err);
+});
