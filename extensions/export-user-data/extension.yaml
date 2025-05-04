@@ -25,7 +25,7 @@ resources:
     description: Triggers an export and returns a unique export ID.
     properties:
       location: ${LOCATION}
-      runtime: nodejs14
+      runtime: nodejs18
       httpsTrigger: {}
       availableMemoryMb: 8192
       timeout: 540s
